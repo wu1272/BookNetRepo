@@ -39,7 +39,7 @@ const Login = ({ history }) => {
           <input name="password" type="password" placeholder="Password" />
         </label>
         <button type="submit">Log in</button>
-        <button onClick={() => history.push("/signup")}>Sign Up</button>
+        <button onClick={() => history.push("/")}>Back</button>
       </form>
     </div>
   );

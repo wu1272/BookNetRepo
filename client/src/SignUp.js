@@ -10,7 +10,7 @@ const SignUp = ({ history }) => {
       await app
         .auth()
         .createUserWithEmailAndPassword(email.value, password.value);
-      history.push("/");
+      history.push("/home");
     } catch (error) {
       alert(error);
     }
@@ -28,8 +28,8 @@ const SignUp = ({ history }) => {
           Password
           <input name="password" type="password" placeholder="Password" />
         </label>
-        <button onClick={() => history.push("/")}>Login</button>
         <button type="submit">Sign Up</button>
+        <button onClick={() => history.push("/")}>Back</button>
       </form>
     </div>
   );

@@ -16,6 +16,30 @@ class Home extends Component {
       .then(users => this.setState({users}, () => console.log('Users fetched...', users)));
   }
 
+
+  deleteAccount() {
+    app.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        console.log(user.email)
+        console.log(user)
+
+        if (user) {
+          // User is signed in.
+          user.delete().then(function() {
+          // User deleted.
+          console.log("User was deleted succesfully")
+          }).catch(function(error) {
+            // An error happened.
+            console.log("Error deleting user")
+          });
+      } else {
+        console.log("Error: user does not exist")
+      }
+    }
+    });
+  }
+
+
   render() {
     return (
       <div>
@@ -26,6 +50,7 @@ class Home extends Component {
         )}
         </ul>
         <button onClick={() => app.auth().signOut()}>Sign out</button>
+        <button onClick={() => this.deleteAccount()}>Delete Account</button>
       </div>
     );
   }
