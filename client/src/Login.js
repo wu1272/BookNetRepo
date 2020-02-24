@@ -1,7 +1,22 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { withRouter, Redirect } from "react-router";
 import app from "./base.js";
+import Modal from 'react-modal'
 import { AuthContext } from "./Auth.js";
+
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+
+// Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
+Modal.setAppElement('#root')
 
 const Login = ({ history }) => {
   const handleLogin = useCallback(
@@ -19,6 +34,22 @@ const Login = ({ history }) => {
     },
     [history]
   );
+
+  // Code for modal //
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  function openModal(e) {
+    e.preventDefault()
+    setIsOpen(true);
+  }
+
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+  }
+
+  function closeModal(){
+    setIsOpen(false);
+  }
 
   function sendPassRecovery(e) {
     e.preventDefault()
@@ -40,9 +71,17 @@ const Login = ({ history }) => {
     return <Redirect to="/home" />;
   }
 
+
   return (
     <div>
       <h1>Log in</h1>
+      <Modal
+          isOpen={modalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Example Modal"
+        ></Modal>
       <form onSubmit={handleLogin}>
         <label>
           Email
@@ -53,7 +92,7 @@ const Login = ({ history }) => {
           <input name="password" type="password" placeholder="Password" />
         </label>
         <button type="submit">Log in</button>
-        <button onClick={sendPassRecovery}>Forgot Password?</button>
+        <button onClick={openModal}>Forgot Password?</button>
       </form>
     </div>
   );
