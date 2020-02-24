@@ -20,6 +20,18 @@ const Login = ({ history }) => {
     [history]
   );
 
+  function sendPassRecovery() {
+    var auth = firebase.auth();
+    var emailAddress = "user@example.com";
+
+    auth.sendPasswordResetEmail(emailAddress).then(function() {
+      // Email sent.
+    }).catch(function(error) {
+      // An error happened.
+      alert(error)
+    });
+  }
+
   const { currentUser } = useContext(AuthContext);
 
   if (currentUser) {
@@ -39,7 +51,7 @@ const Login = ({ history }) => {
           <input name="password" type="password" placeholder="Password" />
         </label>
         <button type="submit">Log in</button>
-        <button>Forgot Password?</button>
+        <button onClick={sendPassRecovery}>Forgot Password?</button>
       </form>
     </div>
   );
