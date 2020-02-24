@@ -37,6 +37,7 @@ const Login = ({ history }) => {
 
   // Code for modal //
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [emailRecov, setEmailRecov] = useState('')
 
   function openModal(e) {
     e.preventDefault()
@@ -53,8 +54,9 @@ const Login = ({ history }) => {
 
   function sendPassRecovery(e) {
     e.preventDefault()
+    console.log(emailRecov)
     const auth = app.auth();
-    const emailAddress = "user@example.com";
+    const emailAddress = emailRecov
 
     auth.sendPasswordResetEmail(emailAddress).then(function() {
       // Email sent.
@@ -84,8 +86,8 @@ const Login = ({ history }) => {
         >
           <h3>Send Password Recovery Email</h3>
           <p>Don't worry! You may have forgotten your password, but we can help you out.<br/>Enter your username below and we'll email you a link to reset your password.</p>
-          <input name="emailRecov" type="email" placeholder="Email" />
-          <button style={{marginLeft: '5px'}}>Send Email</button>
+          <input name="emailRecovery" type="email" placeholder="Email" onChange={event => setEmailRecov(event.target.value)} />
+          <button style={{marginLeft: '5px'}} onClick={sendPassRecovery}>Send Email</button>
 
       </Modal>
       <form onSubmit={handleLogin}>
