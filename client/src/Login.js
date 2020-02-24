@@ -20,12 +20,14 @@ const Login = ({ history }) => {
     [history]
   );
 
-  function sendPassRecovery() {
-    var auth = firebase.auth();
-    var emailAddress = "user@example.com";
+  function sendPassRecovery(e) {
+    e.preventDefault()
+    const auth = app.auth();
+    const emailAddress = "user@example.com";
 
     auth.sendPasswordResetEmail(emailAddress).then(function() {
       // Email sent.
+      alert("Email sent to ", emailAddress)
     }).catch(function(error) {
       // An error happened.
       alert(error)
