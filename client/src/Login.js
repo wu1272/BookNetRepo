@@ -81,7 +81,13 @@ const Login = ({ history }) => {
           onRequestClose={closeModal}
           style={customStyles}
           contentLabel="Example Modal"
-        ></Modal>
+        >
+          <h3>Send Password Recovery Email</h3>
+          <p>Don't worry! You may have forgotten your password, but we can help you out.<br/>Enter your username below and we'll email you a link to reset your password.</p>
+          <input name="emailRecov" type="email" placeholder="Email" />
+          <button style={{marginLeft: '5px'}}>Send Email</button>
+
+      </Modal>
       <form onSubmit={handleLogin}>
         <label>
           Email
