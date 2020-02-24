@@ -54,13 +54,13 @@ const Login = ({ history }) => {
 
   function sendPassRecovery(e) {
     e.preventDefault()
-    console.log(emailRecov)
     const auth = app.auth();
     const emailAddress = emailRecov
 
     auth.sendPasswordResetEmail(emailAddress).then(function() {
       // Email sent.
-      alert("Email sent to ", emailAddress)
+      setIsOpen(false)
+      alert("Password Reset Email Sent.")
     }).catch(function(error) {
       // An error happened.
       alert(error)
