@@ -8,6 +8,7 @@ const Profile = () => {
     <div>
       <h2>Profile</h2>
       <form>
+        <h3>Change Name</h3>
         <label>
           <input type="text" id="firstname" name="firstname" required="required" pattern="[A-Za-z]{2,32}" placeholder="First Name"></input>
         </label>

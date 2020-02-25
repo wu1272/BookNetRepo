@@ -41,6 +41,19 @@ var firebaseConfig = {
   };
   firebase.initializeApp(firebaseConfig)
 
+
+  //default hard-coded array of users to confirm back can send to front
+  app.get('/api/users', (req, res) => {
+    const users = [
+      {id: 1, firstName: 'John', lastName: 'Doe'},
+      {id: 2, firstName: 'John', lastName: 'Dough'},
+      {id: 3, firstName: 'Jane', lastName: 'Doh'}
+    ];
+    res.json(users);
+  });
+
+
+  //
   app.get('/api/users', (req, res) => {
     const users = [
       {id: 1, firstName: 'John', lastName: 'Doe'},
@@ -102,6 +115,12 @@ var firebaseConfig = {
     writeUserData(req.body.firstname, req.body.lastname, req.body.userid)
   });
 
+  //delete user from database with path users/userID
+  app.post('/api/remove', urlParser, function (req, res) {
+    var userid = req.body.userid;
+    //console.log(req.body);
+    deleteUserData(req.body.userid)
+  });
   
   app.delete('/', function (req, res) {
     console.log("HTTP DELETE Request");
