@@ -9,12 +9,10 @@ const Profile = () => {
       <h2>Profile</h2>
       <form>
         <label>
-          First Name
-                    <input type="text" id="firstname" name="firstname" required="required" pattern="[A-Za-z]{1,32}" placeholder="First Name"></input>
+          <input type="text" id="firstname" name="firstname" required="required" pattern="[A-Za-z]{2,32}" placeholder="First Name"></input>
         </label>
         <label>
-          Last Name
-                    <input type="text" id="lastname" name="lastname" required="required" pattern="[A-Za-z]{1,32}" placeholder="Last Name"></input>
+          <input type="text" id="lastname" name="lastname" required="required" pattern="[A-Za-z]{2,32}" placeholder="Last Name"></input>
         </label>
         <input id="submit" type="submit" value="Submit" onClick={(e) => { sendUserID(e) }} />
       </form>

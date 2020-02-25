@@ -44,14 +44,19 @@ var firebaseConfig = {
   app.get('/api/users', (req, res) => {
     const users = [
       {id: 1, firstName: 'John', lastName: 'Doe'},
+      {id: 2, firstName: 'John', lastName: 'Dough'},
+      {id: 3, firstName: 'Jane', lastName: 'Doh'}
     ];
     //writeUserData(firstName, lastName, userID);
     res.json(users);
   });
 
-  app.get('/hi', function (req, res) {
-    readUserData('John', 'Doe');
-  });
+
+  //delete user data from database
+  function deleteUserData(userID) {
+    admin.database().ref('users/' + userID).remove();
+  }
+
 
   //write data about user to database
   function writeUserData(firstName, lastName, userID) {
@@ -82,17 +87,13 @@ var firebaseConfig = {
     });
   }
     
-
-
-
-
   
   app.put('/', function (req, res) {
     console.log("HTTP Put Request");
     res.send("HTTP PUT Request");
   });
 
-  
+  //read from axios post in frontend, write name to firebase using users/userID path
   app.post('/api/name', urlParser, function (req, res) {
     var firstName = JSON.stringify(req.body.firstname);
     var lastName = JSON.stringify(req.body.lastname);
@@ -101,19 +102,6 @@ var firebaseConfig = {
     writeUserData(req.body.firstname, req.body.lastname, req.body.userid)
   });
 
-  // axios
-  // .post('/api/name', {
-  //   firstname: 'bob',
-  //   lastname: 'ob',
-  //   userid: '12345'
-  // })
-  // .then(res => {
-  //   console.log(req.body)
-  //   console.log(res)
-  // })
-  // .catch(error => {
-  //   console.error(error)
-  // })
   
   app.delete('/', function (req, res) {
     console.log("HTTP DELETE Request");
