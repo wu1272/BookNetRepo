@@ -14,6 +14,7 @@ class Home extends Component {
     fetch('/api/users')
       .then(res => res.json())
       .then(users => this.setState({users}, () => console.log('Users fetched...', users)));
+    
   }
 
 
@@ -51,6 +52,7 @@ class Home extends Component {
         </ul>
         <button onClick={() => app.auth().signOut()}>Sign out</button>
         <button onClick={() => this.deleteAccount()}>Delete Account</button>
+        <button onClick={() => window.location.href='/profile'}>Profile</button>
       </div>
     );
   }

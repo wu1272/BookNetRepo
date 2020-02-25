@@ -29,7 +29,6 @@ const SignUp = ({ history }) => {
           <input name="password" type="password" placeholder="Password" />
         </label>
         <button type="submit">Sign Up</button>
-        <button onClick={() => history.push("/")}>Back</button>
       </form>
     </div>
   );
