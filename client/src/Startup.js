@@ -5,8 +5,8 @@ class Startup extends Component {
     return (
       <div>
         <h2>Welcome to BookNet!</h2>
-        <button onClick={() => window.location.href='/login'}>Login</button>
-        <button onClick={() => window.location.href='/signup'}>Sign Up</button>
+        <button onClick={() => window.location.href = '/login'}>Login</button>
+        <button onClick={() => window.location.href = '/signup'}>Sign Up</button>
       </div>
     );
   }
