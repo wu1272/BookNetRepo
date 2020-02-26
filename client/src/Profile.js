@@ -1,12 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import app from "./base.js";
 import axios from "axios";
 
 const Profile = () => {
 
-
+  app.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // User is signed in.
+      document.getElementById("currentEmailLabel").textContent = "Email: " + user.email
+    } else {
+      // No user is signed in.
+      window.location.href = '/'
+    }
+  });
+  
   function updateEmail() {
-    var user = app.auth().currentUser;
+    var user = app.auth().onAuthStateChanged()
     var newEmail = ""
 
     user.updateEmail(newEmail).then(function() {
@@ -20,6 +29,8 @@ const Profile = () => {
     <div>
       <h2>Profile</h2>
       
+      <label id="currentEmailLabel">Email: </label>
+
       <form>
         <h3>Change Name</h3>
         <label>
