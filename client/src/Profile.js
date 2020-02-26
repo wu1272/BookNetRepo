@@ -21,22 +21,25 @@ Modal.setAppElement('#root')
 
 const Profile = () => {
 
-  // Code for modal //
-  const [modalIsOpen, setIsOpen] = useState(false);
+  // Code for modals //
+  const [changeEmailModalIsOpen, setEmailModalIsOpen] = useState(false);
   const [newUserEmail, setNewUserEmail] = useState('')
-
-  function openModal(e) {
-    e.preventDefault()
-    setIsOpen(true);
-  }
+  const [confimPass, setConfirmPass] = useState('')
 
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
   }
 
-  function closeModal(){
-    setIsOpen(false);
+  function openEmailModal(e) {
+    e.preventDefault()
+    setEmailModalIsOpen(true)
   }
+
+  function closeEmailModal() {
+    setEmailModalIsOpen(false)
+  }
+
+
 
 
   // Display email of user in profile
@@ -51,7 +54,7 @@ const Profile = () => {
       var editUserEmailButton = document.createElement('button')
       editUserEmailButton.innerHTML = '<i class="fa fa-cog"></i>'
       editUserEmailButton.style = 'margin: 5px'
-      editUserEmailButton.onclick = openModal
+      editUserEmailButton.onclick = openEmailModal
       document.getElementById("currentEmailText").appendChild(editUserEmailButton)
     
     } else {
@@ -77,7 +80,7 @@ const Profile = () => {
           user.updateEmail(newUserEmail).then(function() {
             // Update successful.
             alert("Email set to: " + newUserEmail)
-            closeModal()
+            closeEmailModal()
           }).catch(function(error) {
             // An error happened.
             alert(error)
@@ -97,15 +100,16 @@ const Profile = () => {
   return (
     <div>
       <Modal
-          isOpen={modalIsOpen}
+          isOpen={changeEmailModalIsOpen}
           onAfterOpen={afterOpenModal}
-          onRequestClose={closeModal}
+          onRequestClose={closeEmailModal}
           style={customStyles}
           contentLabel="Example Modal" >
 
           <h3>Update Email</h3>
           <p>Enter a new email for us to attempt to update below</p>
-          <input id="modalInput" name="newUserEmail" type="email" placeholder="New Email" onChange={event => setNewUserEmail(event.target.value)} />
+          <input name="newUserEmail" type="email" placeholder="New Email" onChange={event => setNewUserEmail(event.target.value)} />
+          <input name="confirmPass" type="password" placeholder="password" onChange={event => setConfirmPass(event.target.value)} />
           <button style={{marginLeft: '5px'}} onClick={updateEmail}>Update Email</button>
 
         </Modal>
@@ -114,7 +118,7 @@ const Profile = () => {
       <h2>Profile</h2>
       
       
-      <label id="currentEmailText"><strong>Email: </strong> <button onClick={openModal}><i class="fa fa-cog"></i></button></label>
+      <label id="currentEmailText"><strong>Email: </strong> <button onClick={openEmailModal}><i class="fa fa-cog"></i></button></label>
         
       <form>
         <h3>Change Name</h3>
