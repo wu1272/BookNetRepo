@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useState } from "react";
 import { withRouter, Redirect } from "react-router";
 import app from "./base.js";
 import Modal from "react-modal"
+import "./login.css"
 import { AuthContext } from "./Auth.js";
 
 const customStyles = {
@@ -75,7 +76,8 @@ const Login = ({ history }) => {
 
 
   return (
-    <div>
+    <div className="wrapper">
+      <div className="form-wrapper">
       <h1>Log in</h1>
       <Modal
           isOpen={modalIsOpen}
@@ -91,17 +93,22 @@ const Login = ({ history }) => {
 
       </Modal>
       <form onSubmit={handleLogin}>
-        <label>
-          Email
+        <div className="email">
+        <label htmlFor="email">
           <input name="email" type="email" placeholder="Email" />
         </label>
-        <label>
-          Password
+        </div>
+        <div className="password">
+        <label htmlFor="password">
           <input name="password" type="password" placeholder="Password" />
         </label>
+        </div>
+        <div className="createAccount">
         <button type="submit">Log in</button>
         <button onClick={openModal}>Forgot Password?</button>
+        </div>
       </form>
+    </div>
     </div>
   );
 };
