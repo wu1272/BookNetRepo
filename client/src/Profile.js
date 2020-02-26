@@ -72,32 +72,13 @@ const Profile = () => {
       //check if user is non null
       if(user) {
 
-        // TODO: get user to provide current password
-        var cred = app.auth.EmailAuthProvider.credential(
-          currentUserEmail,
-          confimPass
-        );
 
-        user.reauthenticateWithCredential(cred).then(function() {
-          // User re-authenticated.
-
-          // Attempt to update email
-          user.updateEmail(newUserEmail).then(function() {
-            // Update successful.
-            alert("Email set to: " + newUserEmail)
-            closeEmailModal()
-          }).catch(function(error) {
-            // An error happened.
-            alert(error)
-          });
-
-        }).catch(function(error) {
-          // An error happened.
-        });
-
-        
+        app.auth().signInWithEmailAndPassword(currentUserEmail, confimPass)
+            .then(function(userCredential) {
+              userCredential.user.updateEmail(newUserEmail)
+            })
       }else {
-
+        alert("User Not Signed In")
       }
     })
   }
