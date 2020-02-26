@@ -6,13 +6,13 @@ import Modal from "react-modal"
 
 // CSS style for modal popout 
 const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
   }
 };
 
@@ -41,9 +41,8 @@ const Profile = () => {
     setEmailModalIsOpen(false)
   }
 
-
   // Display email of user in profile
-  app.auth().onAuthStateChanged(function (user) {
+  app.auth().onAuthStateChanged(function(user) {
     if (user) {
       // User is signed in.
       // Display user email 
@@ -57,13 +56,11 @@ const Profile = () => {
       editUserEmailButton.style = 'margin: 5px'
       editUserEmailButton.onclick = openEmailModal
       document.getElementById("currentEmailText").appendChild(editUserEmailButton)
-
     } else {
       // No user is signed in.
       window.location.href = '/'
     }
   });
-
 
   //Call to firebase to update user email 
   function updateEmail() {
@@ -84,7 +81,7 @@ const Profile = () => {
     <div className="wrapper">
       <div className="form-wrapper">
         <h1>Profile</h1>
-
+    
         <Modal class="modal"
           isOpen={changeEmailModalIsOpen}
           onAfterOpen={afterOpenModal}
@@ -228,7 +225,7 @@ export default Profile;
 
 
 
-{/* <form method="POST" action="/api/name" >
+/* <form method="POST" action="/api/name" >
 <label>
     First Name
     <input type="text" id="firstname" name="firstname" placeholder="First Name"></input>
@@ -238,4 +235,4 @@ export default Profile;
     <input type="text" id="lastname" name="lastname" placeholder="Last Name"></input>
 </label>
 <input type="submit" value="Submit"></input>
-</form> */}
+</form> */
