@@ -1,39 +1,102 @@
-import React from 'react';
+import React, { useState } from 'react';
 import app from "./base.js";
 import axios from "axios";
+import Modal from "react-modal"
+
+// CSS style for modal popout 
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+
+
+// Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
+Modal.setAppElement('#root')
 
 const Profile = () => {
 
+  // Code for modal //
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [newUserEmail, setNewUserEmail] = useState('')
+
+  function openModal(e) {
+    e.preventDefault()
+    setIsOpen(true);
+  }
+
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+  }
+
+  function closeModal(){
+    setIsOpen(false);
+  }
+
+
+  // Display email of user in profile
   app.auth().onAuthStateChanged(function(user) {
     if (user) {
       // User is signed in.
-      document.getElementById("currentEmailLabel").innerHTML = "Email: " + user.email + ' <i class="fa fa-cog"></i>'
+      // Display user email 
+      document.getElementById("currentEmailText").innerHTML = '<strong>Email: </strong>' + user.email
+
+      //create gear button for opening modal 
+      //<button onClick={openModal}><i class="fa fa-cog"></i></button>
+      var editUserEmailButton = document.createElement('button')
+      editUserEmailButton.innerHTML = '<i class="fa fa-cog"></i>'
+      editUserEmailButton.style = 'margin: 5px'
+      editUserEmailButton.onclick = openModal
+      document.getElementById("currentEmailText").appendChild(editUserEmailButton)
+    
     } else {
       // No user is signed in.
       window.location.href = '/'
     }
   });
   
+
+  //Call to firebase to update user email 
   function updateEmail() {
     var user = app.auth().onAuthStateChanged()
     var newEmail = ""
 
     user.updateEmail(newEmail).then(function() {
       // Update successful.
+      closeModal()
     }).catch(function(error) {
       // An error happened.
+      alert(error)
     });
   }
 
   return (
     <div>
+      <Modal
+          isOpen={modalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Example Modal" >
+
+          <h3>Update Email</h3>
+          <p>Enter a new email for us to attempt to update below</p>
+          <input id="modalInput" name="newUserEmail" type="email" placeholder="New Email" onChange={event => setNewUserEmail(event.target.value)} />
+          <button style={{marginLeft: '5px'}} onClick={updateEmail}>Update Email</button>
+
+        </Modal>
+
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
       <h2>Profile</h2>
       
-      <label id="currentEmailLabel">Email: 
-      <i class="fa fa-cog"></i>
-      </label>
-
+      
+      <label id="currentEmailText"><strong>Email: </strong> <button onClick={openModal}><i class="fa fa-cog"></i></button></label>
+        
       <form>
         <h3>Change Name</h3>
         <label>
