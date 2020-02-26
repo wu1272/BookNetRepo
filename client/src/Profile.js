@@ -3,6 +3,18 @@ import app from "./base.js";
 import axios from "axios";
 
 const Profile = () => {
+
+
+  function updateEmail() {
+    var user = firebase.auth().currentUser;
+
+    user.updateEmail("user@example.com").then(function() {
+      // Update successful.
+    }).catch(function(error) {
+      // An error happened.
+    });
+  }
+
   return (
     <div>
       <h2>Profile</h2>
@@ -19,6 +31,8 @@ const Profile = () => {
       <button onClick={() => window.location.href = '/home'}>Home</button>
     </div>
   );
+
+
   function sendUserID() {
     app.auth().onAuthStateChanged(function (user) {
       // console.log(document.getElementById("firstname").value);
