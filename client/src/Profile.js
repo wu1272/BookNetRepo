@@ -23,6 +23,7 @@ const Profile = () => {
 
   // Code for modals //
   const [changeEmailModalIsOpen, setEmailModalIsOpen] = useState(false);
+  const [currentUserEmail, setCurrentUserEmail] = useState('')
   const [newUserEmail, setNewUserEmail] = useState('')
   const [confimPass, setConfirmPass] = useState('')
 
@@ -47,6 +48,7 @@ const Profile = () => {
     if (user) {
       // User is signed in.
       // Display user email 
+      setCurrentUserEmail(user.email)
       document.getElementById("currentEmailText").innerHTML = '<strong>Email: </strong>' + user.email
 
       //create gear button for opening modal 
@@ -71,9 +73,12 @@ const Profile = () => {
       if(user) {
 
         // TODO: get user to provide current password
-        var credential
+        var cred = app.auth.EmailAuthProvider.credential(
+          currentUserEmail,
+          confimPass
+        );
 
-        user.reauthenticateWithCredential(credential).then(function() {
+        user.reauthenticateWithCredential(cred).then(function() {
           // User re-authenticated.
 
           // Attempt to update email
@@ -107,7 +112,7 @@ const Profile = () => {
           contentLabel="Example Modal" >
 
           <h3>Update Email</h3>
-          <p>Enter a new email for us to attempt to update below</p>
+          <p>Enter new email below</p>
           <input name="newUserEmail" type="email" placeholder="New Email" onChange={event => setNewUserEmail(event.target.value)} />
           <input name="confirmPass" type="password" placeholder="password" onChange={event => setConfirmPass(event.target.value)} />
           <button style={{marginLeft: '5px'}} onClick={updateEmail}>Update Email</button>
