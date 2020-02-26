@@ -1,24 +1,154 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import app from "./base.js";
 import axios from "axios";
+import "./profile.css"
+import Modal from "react-modal"
+
+// CSS style for modal popout 
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)'
+  }
+};
+
+
+// Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
+Modal.setAppElement('#root')
 
 const Profile = () => {
+
+  // Code for modals //
+  const [changeEmailModalIsOpen, setEmailModalIsOpen] = useState(false);
+  const [currentUserEmail, setCurrentUserEmail] = useState('')
+  const [newUserEmail, setNewUserEmail] = useState('')
+  const [confimPass, setConfirmPass] = useState('')
+
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+  }
+
+  function openEmailModal(e) {
+    e.preventDefault()
+    setEmailModalIsOpen(true)
+  }
+
+  function closeEmailModal() {
+    setEmailModalIsOpen(false)
+  }
+
+
+  // Display email of user in profile
+  app.auth().onAuthStateChanged(function (user) {
+    if (user) {
+      // User is signed in.
+      // Display user email 
+      setCurrentUserEmail(user.email)
+      document.getElementById("currentEmailText").innerHTML = '<strong>Email: </strong>' + user.email
+
+      //create gear button for opening modal 
+      //<button onClick={openModal}><i class="fa fa-cog"></i></button>
+      var editUserEmailButton = document.createElement('button')
+      editUserEmailButton.innerHTML = '<i class="fa fa-cog"></i>'
+      editUserEmailButton.style = 'margin: 5px'
+      editUserEmailButton.onclick = openEmailModal
+      document.getElementById("currentEmailText").appendChild(editUserEmailButton)
+
+    } else {
+      // No user is signed in.
+      window.location.href = '/'
+    }
+  });
+
+
+  //Call to firebase to update user email 
+  function updateEmail() {
+    app.auth().onAuthStateChanged(function (user) {
+      //check if user is non null
+      if (user) {
+        app.auth().signInWithEmailAndPassword(currentUserEmail, confimPass)
+          .then(function (userCredential) {
+            userCredential.user.updateEmail(newUserEmail)
+          })
+      } else {
+        alert("User Not Signed In")
+      }
+    })
+  }
+
   return (
-    <div>
-      <h2>Profile</h2>
-      <form>
-        <h3>Change Name</h3>
-        <label>
-          <input type="text" id="firstname" name="firstname" required="required" pattern="[A-Za-z]{2,32}" placeholder="First Name"></input>
-        </label>
-        <label>
-          <input type="text" id="lastname" name="lastname" required="required" pattern="[A-Za-z]{2,32}" placeholder="Last Name"></input>
-        </label>
-        <input id="submit" type="submit" value="Submit" onClick={(e) => { sendUserID(e) }} />
-      </form>
-      <button onClick={() => window.location.href = '/home'}>Home</button>
+    <div className="wrapper">
+      <div className="form-wrapper">
+        <h1>Profile</h1>
+
+        <Modal class="modal"
+          isOpen={changeEmailModalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeEmailModal}
+          style={customStyles}
+          contentLabel="Example Modal" >
+
+          <h3>Update Email</h3>
+          <p>Enter new email below</p>
+          <input name="newUserEmail" type="email" placeholder="New Email" onChange={event => setNewUserEmail(event.target.value)} />
+          <input name="confirmPass" type="password" placeholder="Password" onChange={event => setConfirmPass(event.target.value)} />
+          <button style={{ marginLeft: '5px' }} onClick={(e) => { updateEmail(e) }}>Update Email</button>
+
+        </Modal>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+
+        <label id="currentEmailText"><strong>Email: </strong> <button onClick={openEmailModal}><i class="fa fa-cog"></i></button></label>
+
+
+        <form>
+          <h2>Change Name</h2>
+          <div className="firstName">
+            <label htmlFor="firstName">
+              <input type="text" id="firstname" name="firstname" required="required" pattern="[A-Za-z]{2,32}" placeholder="First Name"></input>
+            </label>
+          </div>
+          <div className="lastName">
+            <label htmlFor="lastName">
+              <input type="text" id="lastname" name="lastname" required="required" pattern="[A-Za-z]{2,32}" placeholder="Last Name"></input>
+            </label>
+          </div>
+          <div className="createAccount">
+            <input id="submit" type="submit" value="Update Name!" onClick={(e) => { sendUserID(e) }} />
+          </div>
+        </form>
+
+
+        <form>
+          <h2>Change Password</h2>
+          <div className="password">
+            <label htmlFor="password">
+              <input type="password" id="password" name="password" required="required" placeholder="Password"></input>
+            </label>
+          </div>
+          <div className="password">
+            <label htmlFor="password">
+              <input type="password" id="password2" name="password1" required="required" placeholder="Verify Password"></input>
+            </label>
+          </div>
+          <div className="createAccount">
+            <input id="submitPW" type="submit" value="Update Password!" onClick={(e) => { updatePW(e) }} />
+          </div>
+        </form>
+        <div className="createAccount">
+        <button onClick={(e) => { deleteAccount(e) }}>Delete Account</button>
+        </div>
+        <div className="createAccount">
+          <button className="input" onClick={() => window.location.href = '/home'}>Home</button>
+        </div>
+      </div>
     </div>
   );
+
   function sendUserID() {
     app.auth().onAuthStateChanged(function (user) {
       // console.log(document.getElementById("firstname").value);
@@ -42,6 +172,51 @@ const Profile = () => {
         })
     });
   };
+
+  function updatePW() {
+    app.auth().onAuthStateChanged(function (user) {
+      if (document.getElementById("password").value === document.getElementById("password2").value) {
+        var newPassword = document.getElementById("password").value;
+        user.updatePassword(newPassword).then(function () {
+          // Update successful.
+        }).catch(function (error) {
+          // An error happened.
+        });
+      }
+    });
+  };
+
+  function deleteAccount() {
+    if (!window.confirm("Are you sure you want to delete your account?")) {
+      return;
+    }
+    else {
+      app.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          axios.post('/api/remove', {
+            userid: user.uid
+          })
+            .then(function (response) {
+              console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+          // User is signed in.
+          console.log(user.uid);
+          user.delete().then(function () {
+            // User deleted.
+            console.log("User was deleted succesfully")
+          }).catch(function (error) {
+            // An error happened.
+            console.log("Error deleting user")
+          });
+        } else {
+          console.log("Error: user does not exist")
+        }
+      });
+    }
+  }
 }
 
 

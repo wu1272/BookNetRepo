@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import { withRouter } from "react-router";
 import app from "./base";
+import "./signup.css"
 import axios from "axios";
 
 const SignUp = ({ history }) => {
@@ -29,26 +30,41 @@ const SignUp = ({ history }) => {
   }, [history]);
 
   return (
-    <div>
+    <div className="wrapper">
+      <div className="form-wrapper">
       <h1>Sign up</h1>
       <form onSubmit={handleSignUp}>
-        <label>
+        <div className="firstName">
+        <label htmlFor="firstName">
           <input type="text" id="firstname" name="firstname" required="required" pattern="[A-Za-z]{2,32}" placeholder="First Name"></input>
         </label>
-        <label>
+        </div>
+        <div className="lastName">
+        <label htmlFor="lastName">
           <input type="text" id="lastname" name="lastname" required="required" pattern="[A-Za-z]{2,32}" placeholder="Last Name"></input>
         </label>
-        <label>
-          <input name="email" type="email" placeholder="Email" />
+        </div>
+        <div className="email">
+        <p>Please enter valid purdue email address:</p>
+        <label htmlFor="email">
+          <input name="email" type="email" defaultValue="@purdue.edu" pattern=".*\@purdue.edu$" placeholder="Email" />
         </label>
-        <label>
+        </div>
+        <div className="password">
+        <label htmlFor="password">
           <input name="password" type="password" placeholder="Password" />
         </label>
-        <label>
+        </div>
+        <div className="password">
+        <label htmlFor="password">
           <input name="password2" type="password" required="required" placeholder="Verify Password" />
         </label>
+        </div>
+        <div className="createAccount">
         <button type="submit">Sign Up</button>
+        </div>
       </form>
+      </div>
     </div>
   );
   function sendUserID(firstname, lastname, userid) {

@@ -54,12 +54,14 @@ html, body {
     margin-left: 5px;
 }
 .btn:hover {
-    color: #000;
-    border: #fff 3px;
+    color: #519e8a;
+    background-color: #fff;
+    border: 2px solid #519e8a;
 }
 .btn2:hover {
-    color: #000;
-    border: #fff 3px;
+    color: #519e8a;
+    background-color: #fff;
+    border: 2px solid #519e8a;
 }
 ul {
     padding:0;
