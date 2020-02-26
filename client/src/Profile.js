@@ -63,16 +63,35 @@ const Profile = () => {
 
   //Call to firebase to update user email 
   function updateEmail() {
-    var user = app.auth().onAuthStateChanged()
-    var newEmail = ""
+    app.auth().onAuthStateChanged(function (user) {
+      //check if user is non null
+      if(user) {
 
-    user.updateEmail(newEmail).then(function() {
-      // Update successful.
-      closeModal()
-    }).catch(function(error) {
-      // An error happened.
-      alert(error)
-    });
+        // TODO: get user to provide current password
+        var credential
+
+        user.reauthenticateWithCredential(credential).then(function() {
+          // User re-authenticated.
+
+          // Attempt to update email
+          user.updateEmail(newUserEmail).then(function() {
+            // Update successful.
+            alert("Email set to: " + newUserEmail)
+            closeModal()
+          }).catch(function(error) {
+            // An error happened.
+            alert(error)
+          });
+
+        }).catch(function(error) {
+          // An error happened.
+        });
+
+        
+      }else {
+
+      }
+    })
   }
 
   return (
@@ -146,7 +165,7 @@ export default Profile;
 
 
 
-{/* <form method="POST" action="/api/name" >
+/* <form method="POST" action="/api/name" >
 <label>
     First Name
     <input type="text" id="firstname" name="firstname" placeholder="First Name"></input>
@@ -156,4 +175,4 @@ export default Profile;
     <input type="text" id="lastname" name="lastname" placeholder="Last Name"></input>
 </label>
 <input type="submit" value="Submit"></input>
-</form> */}
+</form> */
