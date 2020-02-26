@@ -6,9 +6,10 @@ const Profile = () => {
 
 
   function updateEmail() {
-    var user = firebase.auth().currentUser;
+    var user = app.auth().currentUser;
+    var newEmail = ""
 
-    user.updateEmail("user@example.com").then(function() {
+    user.updateEmail(newEmail).then(function() {
       // Update successful.
     }).catch(function(error) {
       // An error happened.
@@ -18,6 +19,7 @@ const Profile = () => {
   return (
     <div>
       <h2>Profile</h2>
+      
       <form>
         <h3>Change Name</h3>
         <label>
