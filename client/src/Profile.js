@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './users.css';
 import app from "./base.js";
 import axios from "axios";
 
