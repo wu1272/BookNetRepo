@@ -7,7 +7,7 @@ const Profile = () => {
   app.auth().onAuthStateChanged(function(user) {
     if (user) {
       // User is signed in.
-      document.getElementById("currentEmailLabel").textContent = "Email: " + user.email
+      document.getElementById("currentEmailLabel").innerHTML = "Email: " + user.email + ' <i class="fa fa-cog"></i>'
     } else {
       // No user is signed in.
       window.location.href = '/'
@@ -27,9 +27,12 @@ const Profile = () => {
 
   return (
     <div>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
       <h2>Profile</h2>
       
-      <label id="currentEmailLabel">Email: </label>
+      <label id="currentEmailLabel">Email: 
+      <i class="fa fa-cog"></i>
+      </label>
 
       <form>
         <h3>Change Name</h3>
