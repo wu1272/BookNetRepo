@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+.outer {
+    /* credit to Sharon McCutcheon and unsplash.com for the photo */
+    background:url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80');
+    background-size:cover;
+    background-position:center;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:0 20px;
+}
+.inner {
+    max-width: 500px;
+    margin-left: 150px;
+    text-align: center;
+}
+.inner h1 {
+    color: #111;
+    font-family: 'Oswald';
+    font-size: 100px;
+    letter-spacing: 1px;
+    line-height: 1;
+    text-align: center;
+}
+.btn {
+    border-radius: 18px;
+    font-family: 'Raleway', sans-serif;
+    color: #000;
+    font-size: 135%;
+    padding: 15px 20px;
+    border: solid #000 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+.btn2 {
+    border-radius: 18px;
+    font-family: 'Raleway', sans-serif;
+    color: #000;
+    font-size: 135%;
+    padding: 15px 20px;
+    border: solid #000 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    position: relative;
+    margin-left: 5px;
+}
+.btn:hover {
+    color: #000;
+    border: #fff 3px;
+}
+.btn2:hover {
+    color: #000;
+    border: #fff 3px;
+}
