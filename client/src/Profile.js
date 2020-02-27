@@ -151,7 +151,7 @@ const Profile = () => {
             <input id="submitPW" type="submit" value="Update Password!" onClick={(e) => { updatePW(e) }} />
           </div>
         </form>
-        <div className="createAccount">
+        <div className="deleteAccount">
           <button onClick={(e) => { deleteAccount(e) }}>Delete Account</button>
         </div>
         <div className="createAccount">
