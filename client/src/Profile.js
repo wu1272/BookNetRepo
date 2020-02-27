@@ -67,12 +67,24 @@ const Profile = () => {
     app.auth().onAuthStateChanged(function (user) {
       //check if user is non null
       if (user) {
+
         app.auth().signInWithEmailAndPassword(currentUserEmail, confimPass)
           .then(function (userCredential) {
-            userCredential.user.updateEmail(newUserEmail)
+            userCredential.user.updateEmail(newUserEmail).then(function () {
+              //Email updated 
+              alert("Email address updated to " + newUserEmail)
+              setCurrentUserEmail(newUserEmail)
+            }).catch(function(error) {
+              //Error updating email 
+              alert("ERROR: Could not update user email")
+            })
+          }).catch(function(error) {
+            alert("ERROR: Invalid Password")
           })
+
+
       } else {
-        alert("User Not Signed In")
+        alert("ERROR: User Not Signed In")
       }
     })
   }
