@@ -6,13 +6,13 @@ import Modal from "react-modal"
 
 // CSS style for modal popout 
 const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)'
   }
 };
 
@@ -42,7 +42,7 @@ const Profile = () => {
   }
 
   // Display email of user in profile
-  app.auth().onAuthStateChanged(function(user) {
+  app.auth().onAuthStateChanged(function (user) {
     if (user) {
       // User is signed in.
       // Display user email 
@@ -66,25 +66,28 @@ const Profile = () => {
   function updateEmail() {
     app.auth().onAuthStateChanged(function (user) {
       //check if user is non null
-      if (user) {
+      if (/@purdue\.edu$/.test(newUserEmail)) {
 
-        app.auth().signInWithEmailAndPassword(currentUserEmail, confimPass)
-          .then(function (userCredential) {
-            userCredential.user.updateEmail(newUserEmail).then(function () {
-              //Email updated 
-              alert("Email address updated to " + newUserEmail)
-              setCurrentUserEmail(newUserEmail)
-            }).catch(function(error) {
-              //Error updating email 
-              alert("ERROR: Could not update user email")
+        if (user) {
+          app.auth().signInWithEmailAndPassword(currentUserEmail, confimPass)
+            .then(function (userCredential) {
+              userCredential.user.updateEmail(newUserEmail).then(function () {
+                //Email updated 
+                alert("Email address updated to " + newUserEmail)
+                setCurrentUserEmail(newUserEmail)
+              }).catch(function (error) {
+                //Error updating email 
+                alert("ERROR: Could not update user email")
+              })
+            }).catch(function (error) {
+              alert("ERROR: Invalid Password")
             })
-          }).catch(function(error) {
-            alert("ERROR: Invalid Password")
-          })
-
-
-      } else {
-        alert("ERROR: User Not Signed In")
+        } else {
+          alert("ERROR: User Not Signed In")
+        }
+      }
+      else {
+        alert("Enter a valid @purdue.edu address!")
       }
     })
   }
@@ -93,7 +96,7 @@ const Profile = () => {
     <div className="wrapper">
       <div className="form-wrapper">
         <h1>Profile</h1>
-    
+
         <Modal class="modal"
           isOpen={changeEmailModalIsOpen}
           onAfterOpen={afterOpenModal}
@@ -103,7 +106,7 @@ const Profile = () => {
 
           <h3>Update Email</h3>
           <p>Enter new email below</p>
-          <input name="newUserEmail" type="email" placeholder="New Email" onChange={event => setNewUserEmail(event.target.value)} />
+          <input name="newUserEmail" type="email" defaultValue="@purdue.edu" placeholder="New Email" onChange={event => setNewUserEmail(event.target.value)} />
           <input name="confirmPass" type="password" placeholder="Password" onChange={event => setConfirmPass(event.target.value)} />
           <button style={{ marginLeft: '5px' }} onClick={(e) => { updateEmail(e) }}>Update Email</button>
 
@@ -148,8 +151,8 @@ const Profile = () => {
             <input id="submitPW" type="submit" value="Update Password!" onClick={(e) => { updatePW(e) }} />
           </div>
         </form>
-        <div className="createAccount">
-        <button onClick={(e) => { deleteAccount(e) }}>Delete Account</button>
+        <div className="deleteAccount">
+          <button onClick={(e) => { deleteAccount(e) }}>Delete Account</button>
         </div>
         <div className="createAccount">
           <button className="input" onClick={() => window.location.href = '/home'}>Home</button>
@@ -184,14 +187,30 @@ const Profile = () => {
 
   function updatePW() {
     app.auth().onAuthStateChanged(function (user) {
-      if (document.getElementById("password").value === document.getElementById("password2").value) {
-        var newPassword = document.getElementById("password").value;
-        user.updatePassword(newPassword).then(function () {
-          // Update successful.
-        }).catch(function (error) {
-          // An error happened.
-        });
+      if (document.getElementById("password").value !== document.getElementById("password2").value) {
+        alert("Error: passwords don't match!");
       }
+      else {
+          var psswd1 = document.getElementById("password").value;
+    
+          if (psswd1.length < 6) {
+            alert("Please enter a valid password, 6 character or more!")
+          }
+          else {
+            var newPassword = document.getElementById("password").value;
+            user.updatePassword(newPassword).then(function () {
+            // Update successful.
+          
+            }).catch(function (error) {
+            // An error happened.
+              alert("Please enter a valid password, 6 character or more!")
+            });
+
+            alert("Your password has been updated! Now you will be redirected to the login page")
+
+          }
+      }
+      
     });
   };
 

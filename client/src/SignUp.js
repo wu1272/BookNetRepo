@@ -11,6 +11,9 @@ const SignUp = ({ history }) => {
     if (password.value !== password2.value) {
       alert("Make sure you have typed the same password twice!");
     }
+    else if (!(/@purdue\.edu$/.test(email.value))) {
+      alert("Enter a valid @purdue.edu address!")
+    }
     else {
       try {
         await app
@@ -47,7 +50,7 @@ const SignUp = ({ history }) => {
         <div className="email">
         <p>Please enter valid purdue email address:</p>
         <label htmlFor="email">
-          <input name="email" type="email" defaultValue="@purdue.edu" pattern=".*\@purdue.edu$" placeholder="Email" />
+          <input name="email" type="email" defaultValue="@purdue.edu" placeholder="Email" />
         </label>
         </div>
         <div className="password">
