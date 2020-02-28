@@ -187,14 +187,30 @@ const Profile = () => {
 
   function updatePW() {
     app.auth().onAuthStateChanged(function (user) {
-      if (document.getElementById("password").value === document.getElementById("password2").value) {
-        var newPassword = document.getElementById("password").value;
-        user.updatePassword(newPassword).then(function () {
-          // Update successful.
-        }).catch(function (error) {
-          // An error happened.
-        });
+      if (document.getElementById("password").value !== document.getElementById("password2").value) {
+        alert("Error: passwords don't match!");
       }
+      else {
+          var psswd1 = document.getElementById("password").value;
+    
+          if (psswd1.length < 6) {
+            alert("Please enter a valid password, 6 character or more!")
+          }
+          else {
+            var newPassword = document.getElementById("password").value;
+            user.updatePassword(newPassword).then(function () {
+            // Update successful.
+          
+            }).catch(function (error) {
+            // An error happened.
+              alert("Please enter a valid password, 6 character or more!")
+            });
+
+            alert("Your password has been updated! Now you will be redirected to the login page")
+
+          }
+      }
+      
     });
   };
 
