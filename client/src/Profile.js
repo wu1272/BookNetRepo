@@ -27,6 +27,8 @@ const Profile = () => {
   const [currentUserEmail, setCurrentUserEmail] = useState('')
   const [newUserEmail, setNewUserEmail] = useState('')
   const [confimPass, setConfirmPass] = useState('')
+  const [userImage, setUserImage] = useState('')
+
 
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
@@ -47,6 +49,7 @@ const Profile = () => {
       // User is signed in.
       // Display user email 
       setCurrentUserEmail(user.email)
+      setUserImage(user.photoURL)
       document.getElementById("currentEmailText").innerHTML = '<strong>Email: </strong>' + user.email
 
       //create gear button for opening modal 
@@ -97,6 +100,7 @@ const Profile = () => {
       <div className="form-wrapper">
         <h1>Profile</h1>
 
+        <img src={userImage} alt="Uploaded images" height="250" width="250" />
         <Modal class="modal"
           isOpen={changeEmailModalIsOpen}
           onAfterOpen={afterOpenModal}

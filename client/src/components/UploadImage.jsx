@@ -11,7 +11,6 @@ const UploadImage = () => {
     const [imageURL, setImageURL] = useState('')
 
 
-
     function handleFile(e) {
         if(e.target.files[0]){
             setImageFile(e.target.files[0])
@@ -38,7 +37,7 @@ const UploadImage = () => {
                     
                     () => {
                         storageref.ref(user.email + '/Profile Picture/').child('picture').getDownloadURL().then(url => {
-                            console.log(url)
+                            user.updateProfile({photoURL: url})
                             setImageURL(url)
                         })
 
