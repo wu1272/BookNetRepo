@@ -92,6 +92,7 @@ const UploadImage = () => {
         </h1>
         <img style={style.border} src={imageURL} alt="Uploaded images" height="250" width="250"/>
         <h6> Choose file and click Upload button to change Profile picture </h6>
+        <button className="input" onClick={() => window.location.href = '/Profile'}>Back to Profile</button>
         </div>
         
     )

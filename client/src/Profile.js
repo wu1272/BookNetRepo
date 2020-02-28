@@ -101,6 +101,7 @@ const Profile = () => {
         <h1>Profile</h1>
 
         <img src={userImage} alt="Uploaded images" height="250" width="250" />
+        <button className="input" onClick={() => window.location.href = '/components/UploadImage'}>Upload Profile Image</button>
         <Modal class="modal"
           isOpen={changeEmailModalIsOpen}
           onAfterOpen={afterOpenModal}
