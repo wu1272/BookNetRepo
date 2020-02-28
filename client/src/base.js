@@ -1,8 +1,5 @@
 import * as firebase from "firebase/app";
 import "firebase/auth";
-import 'firebase/storage';
-import 'firebase/database';
-
 
 const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_KEY,
@@ -13,10 +10,4 @@ const app = firebase.initializeApp({
   messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID
 });
 
-const storage = firebase.storage();
-//added in new database
-const database= firebase.database();
-
-  export {
-      storage, database, app as default
-  }
+export default app;
