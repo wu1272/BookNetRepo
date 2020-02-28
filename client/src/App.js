@@ -8,12 +8,14 @@ import SignUp from "./SignUp";
 import Profile from "./Profile";
 import { AuthProvider } from "./Auth";
 import PrivateRoute from "./PrivateRoute";
+import UploadImage from "./components/UploadImage";
 
 const App = () => {
   return (
     <AuthProvider>
       <Router>
         <div>
+          <Route exact path="/components/UploadImage" component={UploadImage} />
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/" component={Startup} />
           <PrivateRoute exact path="/home" component={Home} />
