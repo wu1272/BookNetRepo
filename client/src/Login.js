@@ -1,8 +1,7 @@
 import React, { useCallback, useContext, useState } from "react";
 import { withRouter, Redirect } from "react-router";
 import app from "./base.js";
-import Modal from "react-modal"
-import "./login.css"
+import Modal from 'react-modal'
 import { AuthContext } from "./Auth.js";
 
 const customStyles = {
@@ -76,8 +75,7 @@ const Login = ({ history }) => {
 
 
   return (
-    <div className="wrapper">
-      <div className="form-wrapper">
+    <div>
       <h1>Log in</h1>
       <Modal
           isOpen={modalIsOpen}
@@ -87,33 +85,25 @@ const Login = ({ history }) => {
           contentLabel="Example Modal"
         >
           <h3>Reset Password</h3>
-          <p>Don't worry! You may have forgotten your password, but we can help you out.<br/>Enter your email below and we'll email you a link to reset your password.</p>
+          <p>Don't worry! You may have forgotten your password, but we can help you out.<br/>Enter your username below and we'll email you a link to reset your password.</p>
           <input name="emailRecovery" type="email" placeholder="Email" onChange={event => setEmailRecov(event.target.value)} />
           <button style={{marginLeft: '5px'}} onClick={sendPassRecovery}>Send Email</button>
 
       </Modal>
       <form onSubmit={handleLogin}>
-        <div className="email">
-        <label htmlFor="email">
+        <label>
+          Email
           <input name="email" type="email" placeholder="Email" />
         </label>
-        </div>
-        <div className="password">
-        <label htmlFor="password">
+        <label>
+          Password
           <input name="password" type="password" placeholder="Password" />
         </label>
-        </div>
-        <div className="createAccount">
         <button type="submit">Log in</button>
         <button onClick={openModal}>Forgot Password?</button>
-        </div>
       </form>
-    </div>
     </div>
   );
 };
 
 export default withRouter(Login);
-
-
-
