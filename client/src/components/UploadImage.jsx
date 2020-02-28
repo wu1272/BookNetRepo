@@ -91,7 +91,7 @@ const UploadImage = () => {
         <h1>
 
         </h1>
-        <img style={style.border} src={{imageURL} || 'https://upload.wikimedia.org/wikipedia/commons/c/c3/NGC_4414_%28NASA-med%29.jpg'} alt="Uploaded images" height="250" width="250"/>
+        <img style={style.border} src={imageURL} alt="Uploaded images" height="250" width="250"/>
         <h6> Choose file and click Upload button to change Profile picture </h6>
         </div>
         
