@@ -1,42 +1,18 @@
 
+button {
+    border-radius: 18px;
+    font-family: 'Raleway', sans-serif;
+    color: #000;
+    font-size: 135%;
+    padding: 15px 20px;
+    border: solid #000 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
 
-.inner h1 {
-    color: #111;
-    font-family: 'Oswald';
-    font-size: 100px;
-    letter-spacing: 1px;
-    line-height: 1;
-    text-align: center;
-}
-.btn {
-    border-radius: 18px;
-    font-family: 'Raleway', sans-serif;
-    color: #000;
-    font-size: 135%;
-    padding: 15px 20px;
-    border: solid #000 2px;
-    text-transform: uppercase;
-    text-decoration: none;
-}
-.btn2 {
-    border-radius: 18px;
-    font-family: 'Raleway', sans-serif;
-    color: #000;
-    font-size: 135%;
-    padding: 15px 20px;
-    border: solid #000 2px;
-    text-transform: uppercase;
-    text-decoration: none;
-    position: relative;
-    margin-left: 5px;
-}
-.btn:hover {
+button:hover {
     color: #519e8a;
     background-color: #fff;
     border: 2px solid #519e8a;
 }
-.btn2:hover {
-    color: #519e8a;
-    background-color: #fff;
-    border: 2px solid #519e8a;
-}
+
