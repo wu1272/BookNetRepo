@@ -1,12 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway');
-@import url('https://fonts.googleapis.com/css?family=Oswald');
 
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-}
 .outer {
     /* credit to Sharon McCutcheon and unsplash.com for the photo */
     background:url('./landing_background.jpg');
