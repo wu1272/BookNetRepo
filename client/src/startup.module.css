@@ -1,18 +1,2 @@
 
-button {
-    border-radius: 18px;
-    font-family: 'Raleway', sans-serif;
-    color: #000;
-    font-size: 135%;
-    padding: 15px 20px;
-    border: solid #000 2px;
-    text-transform: uppercase;
-    text-decoration: none;
-}
-
-button:hover {
-    color: #519e8a;
-    background-color: #fff;
-    border: 2px solid #519e8a;
-}
 
