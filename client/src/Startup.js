@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import "./startup.module.css"
+//import "./startup.module.css"
 
 class Startup extends Component {
   render() {

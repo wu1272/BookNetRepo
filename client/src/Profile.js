@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import app from "./base.js";
 import axios from "axios";
-import "./profile.css"
+import "./profile.module.css"
 import Modal from "react-modal"
 
 // CSS style for modal popout 

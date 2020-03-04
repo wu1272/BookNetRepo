@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { withRouter } from "react-router";
 import app from "./base";
-import "./signup.css"
+import "./signup.module.css"
 import axios from "axios";
 
 const SignUp = ({ history }) => {

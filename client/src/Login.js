@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useState } from "react";
 import { withRouter, Redirect } from "react-router";
 import app from "./base.js";
 import Modal from "react-modal"
-import "./login.css"
+import "./login.module.css"
 import { AuthContext } from "./Auth.js";
 
 const customStyles = {
