@@ -54,19 +54,15 @@ var firebaseConfig = {
 
 
   //get booksNeeded from database     
-  function getBooks(userID) {
-    var booksNeededPath = admin.database().ref('users/' + userID + '/booksNeeded');
-    booksNeededPath.on('value', function(snapshot) {
+  function getBooks(userID, ISBN) {
+    var booksNeededPath = admin.database().ref('users/' + userID + '/booksNeeded/' + ISBN);
+    booksNeededPath.once('value')
+      .then (function(snapshot) {
       var titles = new Array()
 
-      //console.log(snapshot.val());
-      snapshot.forEach(function(child) {
-        child.forEach(function(title) {
-          //console.log(title.val())
-          titles.push(title.val())
-        });
-      });
-      //console.log(titles)
+      var title = snapshot.child("title").val();
+      titles.push(title);
+      console.log(titles)
       return titles;
     });
   }
@@ -83,10 +79,10 @@ var firebaseConfig = {
 
   //get books needed from database and send to frontend
   app.get('/api/getBooksNeeded', (req, res) => {
-    var books = getBooks('taJ6elpogCXeOSu9oStdJRpIZQS2');
+    var books = getBooks('taJ6elpogCXeOSu9oStdJRpIZQS2', 100);
     console.log(books);
     var images = BlockID();
-    console.log(images);
+    //console.log(images);
     res.json(books);
   });
 
