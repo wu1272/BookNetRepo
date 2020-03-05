@@ -27,9 +27,12 @@ const Profile = () => {
   // Code for modals //
   const [changeEmailModalIsOpen, setEmailModalIsOpen] = useState(false)
   const [uploadPhotoModalIsOpen, setUploadPhotoModalIsOpen] = useState(false)
+  const [updateNameModalIsOpen, setUpdateNameModalIsOpen] = useState(false)
   const [currentUserEmail, setCurrentUserEmail] = useState('')
   const [newUserEmail, setNewUserEmail] = useState('')
   const [confimPass, setConfirmPass] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
  
 
 
@@ -55,6 +58,16 @@ const Profile = () => {
     setUploadPhotoModalIsOpen(false)  
     window.location.reload(true)
   }
+
+  function openUpdateNameModal(e) {
+    e.preventDefault()
+    setUpdateNameModalIsOpen(true)
+}
+
+function closeUpdateNameModal() {
+  setUpdateNameModalIsOpen(false)
+  window.location.reload(true)
+}
 
 
 
@@ -116,7 +129,9 @@ const Profile = () => {
       // Display user email 
       setCurrentUserEmail(user.email)
       setUserImage(user.photoURL)
-      document.getElementById("currentEmailText").innerHTML = '<strong>Email: </strong>' + user.email
+      setFirstName(user.displayName)
+      document.getElementById("currentEmailText").innerHTML = '<strong>Email: </strong>' + currentUserEmail
+      document.getElementById("currentNameText").innerHTML = '<strong>Name: </strong>' + firstName
                                                        
 
       //create gear button for opening modal   
@@ -125,6 +140,12 @@ const Profile = () => {
       editUserEmailButton.innerHTML = '<i class="fa fa-cog"></i>'
       editUserEmailButton.onclick = openEmailModal
       document.getElementById("currentEmailText").appendChild(editUserEmailButton)
+
+      var editNameButton = document.createElement('button')
+      editNameButton.className = styles.gearButton
+      editNameButton.innerHTML = '<i class="fa fa-cog"></i>'
+      editNameButton.onclick = openUpdateNameModal
+      document.getElementById("currentNameText").appendChild(editNameButton)
       
       
     } else {
@@ -202,6 +223,24 @@ const Profile = () => {
           
         </Modal>
 
+        <Modal 
+          contentLabel="Upload user name"
+          isOpen={updateNameModalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeUploadModal}
+          style={customStyles}
+          >
+
+          <div>
+            <input type="text" id="firstname" name="firstname" required="required" pattern="[A-Za-z]{2,32}" placeholder="First Name" onChange={event => setFirstName(event.target.value)}></input>
+            <input type="text" id="lastname" name="lastname" required="required" pattern="[A-Za-z]{2,32}" placeholder="Last Name" onChange={event => setLastName(event.target.value)}></input>
+            <button onClick={(e) => { sendUserID(e) }}>Update Name</button>
+          </div>    
+          
+        </Modal>
+
+
+
         <div>
         <h1>Profile</h1>
         </div>
@@ -212,18 +251,10 @@ const Profile = () => {
           </figure>
           <button className={styles.picButton} onClick={openUploadModal}>Upload Profile Image</button>
         </div>
-        
+
+        <div id="currentNameText"><strong>Name: </strong> <button className={styles.gearButton} onClick={openUpdateNameModal}><i class="fa fa-cog"></i></button></div>
+
         <div id="currentEmailText"><strong>Email: </strong> <button className={styles.gearButton} onClick={openEmailModal}><i class="fa fa-cog"></i></button></div>
-
-        <form>
-          <h3>Change Name</h3>
-          <div>
-            <input type="text" id="firstname" name="firstname" required="required" pattern="[A-Za-z]{2,32}" placeholder="First Name"></input>
-            <input type="text" id="lastname" name="lastname" required="required" pattern="[A-Za-z]{2,32}" placeholder="Last Name"></input>
-            <input id="submit" type="submit" value="Update Name!" onClick={(e) => { sendUserID(e) }} />
-          </div>  
-        </form>
-
 
         <form>
           <h3>Change Password</h3>
@@ -248,17 +279,22 @@ const Profile = () => {
       // console.log(document.getElementById("firstname").value);
       // console.log(document.getElementById("lastname").value);
       // console.log(user.uid);
+
+      console.log(firstName)
+      console.log(lastName)
+
       var regexCheck = /^[a-zA-Z]+/;
-      if ((!regexCheck.test(document.getElementById("firstname").value)
-        || (!regexCheck.test(document.getElementById("lastname").value)))) {
+      if ((!regexCheck.test(firstName)
+        || (!regexCheck.test(lastName)))) {
         return;
       }
       axios.post('/api/name', {
-        firstname: document.getElementById("firstname").value,
-        lastname: document.getElementById("lastname").value,
+        firstname: firstName,
+        lastname: lastName,
         userid: user.uid
       })
         .then(function (response) {
+          closeUpdateNameModal()
           console.log(response);
         })
         .catch(function (error) {
