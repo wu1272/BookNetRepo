@@ -52,7 +52,8 @@ const Profile = () => {
   }
 
   function closeUploadModal() {
-    setUploadPhotoModalIsOpen(false)
+    setUploadPhotoModalIsOpen(false)  
+    window.location.reload(true)
   }
 
 
@@ -205,7 +206,7 @@ const Profile = () => {
         <h1>Profile</h1>
 
         <div>
-          <img src={userImage || defaultProfilePic} alt="Uploaded images" height="250" width="250" />
+          <img id="profileImage" src={userImage || defaultProfilePic} alt="Uploaded images" height="250" width="250" />
           <button className={styles.picButton} onClick={openUploadModal}>Upload Profile Image</button>
         </div>
   
