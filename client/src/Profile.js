@@ -53,14 +53,16 @@ const Profile = () => {
       setCurrentUserEmail(user.email)
       setUserImage(user.photoURL)
       document.getElementById("currentEmailText").innerHTML = '<strong>Email: </strong>' + user.email
+                                                       
 
-      //create gear button for opening modal 
-      //<button onClick={openModal}><i class="fa fa-cog"></i></button>
+      //create gear button for opening modal   
       var editUserEmailButton = document.createElement('button')
+      editUserEmailButton.className = styles.gearButton
       editUserEmailButton.innerHTML = '<i class="fa fa-cog"></i>'
-      editUserEmailButton.style = 'margin: 5px'
       editUserEmailButton.onclick = openEmailModal
       document.getElementById("currentEmailText").appendChild(editUserEmailButton)
+      
+      
     } else {
       // No user is signed in.
       window.location.href = '/'
@@ -125,7 +127,7 @@ const Profile = () => {
           <button className={styles.picButton} onClick={() => window.location.href = '/components/UploadImage'}>Upload Profile Image</button>
         </div>
   
-        <label id="currentEmailText"><strong>Email: </strong> <button onClick={openEmailModal}><i class="fa fa-cog"></i></button></label>
+        <div id="currentEmailText"><strong>Email: </strong> <button className={styles.gearButton} onClick={openEmailModal}><i class="fa fa-cog"></i></button></div>
 
         <form>
           <h3>Change Name</h3>
