@@ -7,9 +7,11 @@ class Startup extends Component {
       <body>
         <section className="wrapper">
           <div class="form-wrapper">
-            <h1>Welcome to BookNet!</h1>
-            <button onClick={() => window.location.href = '/login'}>Login</button>
-            <button onClick={() => window.location.href = '/signup'}>Signup</button>
+            <div>
+              <h1>Welcome to BookNet!</h1>
+              <button onClick={() => window.location.href = '/login'}>Login</button>
+              <button onClick={() => window.location.href = '/signup'}>Signup</button>
+            </div>
           </div>
         </section>
       </body>

@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { withRouter } from "react-router";
 import app from "./base";
-import "./signup.module.css"
+import styles from  "./signup.module.css"
 import axios from "axios";
 
 const SignUp = ({ history }) => {
@@ -37,34 +37,25 @@ const SignUp = ({ history }) => {
       <div className="form-wrapper">
       <h1>Sign up</h1>
       <form onSubmit={handleSignUp}>
-        <div className="firstName">
+        <div>
     
           <input type="text" id="firstname" name="firstname" required="required" pattern="[A-Za-z]{2,32}" placeholder="First Name"></input>
-      
-        </div>
-        <div className="lastName">
-       
           <input type="text" id="lastname" name="lastname" required="required" pattern="[A-Za-z]{2,32}" placeholder="Last Name"></input>
         
         </div>
-        <div className="email">
+        
+        <div>
 
         <p>Please enter valid purdue email address:</p>
         
           <input name="email" type="email" defaultValue="@purdue.edu" placeholder="Email" />
-        
-        </div>
-        <div className="password">
-        
+          <br />
           <input name="password" type="password" placeholder="Password" />
-       
-        </div>
-        <div className="password">
-        
           <input name="password2" type="password" required="required" placeholder="Verify Password" />
-      
+        
         </div>
-        <div className="createAccount">
+        
+        <div>
           <button type="submit">Sign Up</button>
         </div>
       </form>
