@@ -25,11 +25,12 @@ Modal.setAppElement('#root')
 const Profile = () => {
 
   // Code for modals //
-  const [changeEmailModalIsOpen, setEmailModalIsOpen] = useState(false);
+  const [changeEmailModalIsOpen, setEmailModalIsOpen] = useState(false)
+  const [uploadPhotoModalIsOpen, setUploadPhotoModalIsOpen] = useState(false)
   const [currentUserEmail, setCurrentUserEmail] = useState('')
   const [newUserEmail, setNewUserEmail] = useState('')
   const [confimPass, setConfirmPass] = useState('')
-  const [userImage, setUserImage] = useState('')
+ 
 
 
   function afterOpenModal() {
@@ -44,6 +45,68 @@ const Profile = () => {
   function closeEmailModal() {
     setEmailModalIsOpen(false)
   }
+
+  function openUploadModal(e) {
+      e.preventDefault()
+      setUploadPhotoModalIsOpen(true)
+  }
+
+  function closeUploadModal() {
+    setUploadPhotoModalIsOpen(false)
+  }
+
+
+
+  /* Upload Photo code */
+  const [imageFile, setImageFile] = useState(null)
+  const [progressBar, setProgressBar] = useState(0)
+  const [userImage, setUserImage] = useState('')
+
+
+  function handleFile(e) {
+        if(e.target.files[0]){
+            setImageFile(e.target.files[0])
+        }
+    }
+
+
+  function handleUpload(e) {
+        var storageref = app.storage()
+        app.auth().onAuthStateChanged(function(user) {
+
+            if(user) {
+                const uploadTask = storageref.ref(user.email + `/Profile Picture/picture`).put(imageFile);
+
+                uploadTask.on('state_changed', (snapshot) => {
+                        //progress function ....
+                        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+                        setProgressBar(progress)
+                    }, 
+                    (error) => {
+                        //error function ...
+                        alert(error)
+                    },
+                    
+                    () => {
+                        storageref.ref(user.email + '/Profile Picture/').child('picture').getDownloadURL().then(url => {
+                            user.updateProfile({photoURL: url})
+                            setUserImage(url)
+                            closeUploadModal()
+                        })
+
+                    });   
+                    
+
+            }
+            
+        })
+    }
+
+
+    /* DONE WITH PHOTO UPLOAD CODE */
+
+
+
 
   // Display email of user in profile
   app.auth().onAuthStateChanged(function (user) {
@@ -104,13 +167,13 @@ const Profile = () => {
       <div className="form-wrapper">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
 
-
-      <Modal
+      <Modal 
+          contentLabel="Edit email modal"
           isOpen={changeEmailModalIsOpen}
           onAfterOpen={afterOpenModal}
           onRequestClose={closeEmailModal}
           style={customStyles}
-          contentLabel="Example Modal" >
+          >
 
           <h3>Update Email</h3>
           <p>Enter new email below</p>
@@ -120,11 +183,30 @@ const Profile = () => {
 
         </Modal>
 
+        <Modal 
+          contentLabel="Upload profile image"
+          isOpen={uploadPhotoModalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeUploadModal}
+          style={customStyles}
+          >
+
+          <h1> Profile Picture Update </h1>
+          <br/>
+          <input type="file" onChange={e => {handleFile(e)}}/>
+          <br/>
+          <progress value={progressBar} max="100"/>
+          <br/>
+          <button onClick={e => {handleUpload(e)}}>Upload</button>    
+          
+        </Modal>
+
+
         <h1>Profile</h1>
 
         <div>
           <img src={userImage || defaultProfilePic} alt="Uploaded images" height="250" width="250" />
-          <button className={styles.picButton} onClick={() => window.location.href = '/components/UploadImage'}>Upload Profile Image</button>
+          <button className={styles.picButton} onClick={openUploadModal}>Upload Profile Image</button>
         </div>
   
         <div id="currentEmailText"><strong>Email: </strong> <button className={styles.gearButton} onClick={openEmailModal}><i class="fa fa-cog"></i></button></div>
