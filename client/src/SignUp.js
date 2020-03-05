@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { withRouter } from "react-router";
 import app from "./base";
-import "./signup.css"
+import styles from  "./signup.module.css"
 import axios from "axios";
 
 const SignUp = ({ history }) => {
@@ -37,34 +37,26 @@ const SignUp = ({ history }) => {
       <div className="form-wrapper">
       <h1>Sign up</h1>
       <form onSubmit={handleSignUp}>
-        <div className="firstName">
-        <label htmlFor="firstName">
+        <div>
+    
           <input type="text" id="firstname" name="firstname" required="required" pattern="[A-Za-z]{2,32}" placeholder="First Name"></input>
-        </label>
-        </div>
-        <div className="lastName">
-        <label htmlFor="lastName">
           <input type="text" id="lastname" name="lastname" required="required" pattern="[A-Za-z]{2,32}" placeholder="Last Name"></input>
-        </label>
+        
         </div>
-        <div className="email">
+        
+        <div>
+
         <p>Please enter valid purdue email address:</p>
-        <label htmlFor="email">
+        
           <input name="email" type="email" defaultValue="@purdue.edu" placeholder="Email" />
-        </label>
-        </div>
-        <div className="password">
-        <label htmlFor="password">
+          <br />
           <input name="password" type="password" placeholder="Password" />
-        </label>
-        </div>
-        <div className="password">
-        <label htmlFor="password">
           <input name="password2" type="password" required="required" placeholder="Verify Password" />
-        </label>
+        
         </div>
-        <div className="createAccount">
-        <button type="submit">Sign Up</button>
+        
+        <div>
+          <button type="submit">Sign Up</button>
         </div>
       </form>
       </div>

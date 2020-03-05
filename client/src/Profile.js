@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import app from "./base.js";
 import axios from "axios";
-import "./profile.css"
+import styles from "./profile.module.css"
 import Modal from "react-modal"
 
 // CSS style for modal popout 
@@ -98,11 +98,10 @@ const Profile = () => {
   return (
     <div className="wrapper">
       <div className="form-wrapper">
-        <h1>Profile</h1>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
 
-        <img src={userImage} alt="Uploaded images" height="250" width="250" />
-        <button className="input" onClick={() => window.location.href = '/components/UploadImage'}>Upload Profile Image</button>
-        <Modal class="modal"
+
+      <Modal
           isOpen={changeEmailModalIsOpen}
           onAfterOpen={afterOpenModal}
           onRequestClose={closeEmailModal}
@@ -117,50 +116,38 @@ const Profile = () => {
 
         </Modal>
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+        <h1>Profile</h1>
 
+        <div>
+          <img src={userImage} alt="Uploaded images" height="250" width="250" />
+          <button onClick={() => window.location.href = '/components/UploadImage'}>Upload Profile Image</button>
+        </div>
+  
         <label id="currentEmailText"><strong>Email: </strong> <button onClick={openEmailModal}><i class="fa fa-cog"></i></button></label>
 
-
         <form>
-          <h2>Change Name</h2>
-          <div className="firstName">
-            <label htmlFor="firstName">
-              <input type="text" id="firstname" name="firstname" required="required" pattern="[A-Za-z]{2,32}" placeholder="First Name"></input>
-            </label>
-          </div>
-          <div className="lastName">
-            <label htmlFor="lastName">
-              <input type="text" id="lastname" name="lastname" required="required" pattern="[A-Za-z]{2,32}" placeholder="Last Name"></input>
-            </label>
-          </div>
-          <div className="createAccount">
+          <h3>Change Name</h3>
+          <div>
+            <input type="text" id="firstname" name="firstname" required="required" pattern="[A-Za-z]{2,32}" placeholder="First Name"></input>
+            <input type="text" id="lastname" name="lastname" required="required" pattern="[A-Za-z]{2,32}" placeholder="Last Name"></input>
             <input id="submit" type="submit" value="Update Name!" onClick={(e) => { sendUserID(e) }} />
-          </div>
+          </div>  
         </form>
 
 
         <form>
-          <h2>Change Password</h2>
-          <div className="password">
-            <label htmlFor="password">
+          <h3>Change Password</h3>
+          <div>
               <input type="password" id="password" name="password" required="required" placeholder="Password"></input>
-            </label>
-          </div>
-          <div className="password">
-            <label htmlFor="password">
               <input type="password" id="password2" name="password1" required="required" placeholder="Verify Password"></input>
-            </label>
-          </div>
-          <div className="createAccount">
-            <input id="submitPW" type="submit" value="Update Password!" onClick={(e) => { updatePW(e) }} />
+              <input id="submitPW" type="submit" value="Update Password!" onClick={(e) => { updatePW(e) }} />
           </div>
         </form>
-        <div className="deleteAccount">
+        <div className={styles.deleteAccount}>
           <button onClick={(e) => { deleteAccount(e) }}>Delete Account</button>
         </div>
-        <div className="createAccount">
-          <button className="input" onClick={() => window.location.href = '/home'}>Home</button>
+        <div>
+          <button onClick={() => window.location.href = '/home'}>Home</button>
         </div>
       </div>
     </div>

@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import "./startup.css"
+import "./startup.module.css"
 
 class Startup extends Component {
   render() {
     return (
       <body>
-        <section class="outer">
-          <div class="inner">
-            <h1>Welcome to BookNet!</h1>
-            <button class="btn" onClick={() => window.location.href = '/login'}>Login</button>
-            <button class="btn2" onClick={() => window.location.href = '/signup'}>Signup</button>
+        <section className="wrapper">
+          <div class="form-wrapper">
+            <div>
+              <h1>Welcome to BookNet!</h1>
+              <button onClick={() => window.location.href = '/login'}>Login</button>
+              <button onClick={() => window.location.href = '/signup'}>Signup</button>
+            </div>
           </div>
         </section>
       </body>

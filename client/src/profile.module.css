@@ -1,0 +1,11 @@
+  .deleteAccount button {
+    background-color: red;
+    color: #fff;
+    border: 2px solid red;
+  }
+  
+  .deleteAccount button:hover {
+    color: red;
+    background-color: #fff;
+    border: 2px solid red;
+  }

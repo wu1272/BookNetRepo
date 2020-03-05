@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './home.css';
+import './home.module.css';
 import app from "./base.js";
 
 class Home extends Component {
@@ -24,8 +24,8 @@ class Home extends Component {
 
   render() {
     return (
-      <section class="outer">
-        <div class="inner">
+      <section class="wrapper">
+        <div class="form-wrapper">
           <h1>Hello <span id="emailAddress"></span>!</h1>
           <h2>Users</h2>
           <ul>
@@ -33,9 +33,12 @@ class Home extends Component {
               <li key={user.id}>{user.firstName} {user.lastName}</li>
             )}
           </ul>
-          <button class="btn" onClick={() => app.auth().signOut()}>Sign out</button>
-          <button class="btn2" onClick={() => window.location.href = '/profile'}>Profile</button>
+          <div>
+            <button onClick={() => window.location.href = '/profile'}>Profile</button>
+            <button onClick={() => app.auth().signOut()}>Sign out</button>
+          </div>
         </div>
+        
       </section>
     );
   }
