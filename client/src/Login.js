@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useState } from "react";
 import { withRouter, Redirect } from "react-router";
 import app from "./base.js";
 import Modal from "react-modal"
-import "./login.module.css"
+import styles from "./login.module.css"
 import { AuthContext } from "./Auth.js";
 
 const customStyles = {
@@ -13,6 +13,7 @@ const customStyles = {
     bottom                : 'auto',
     marginRight           : '-50%',
     transform             : 'translate(-50%, -50%)'
+    
   }
 };
 
@@ -79,33 +80,29 @@ const Login = ({ history }) => {
     <div className="wrapper">
       <div className="form-wrapper">
       <h1>Log in</h1>
-      <Modal
+      <Modal 
           isOpen={modalIsOpen}
           onAfterOpen={afterOpenModal}
           onRequestClose={closeModal}
           style={customStyles}
           contentLabel="Example Modal"
         >
-          <h3>Reset Password</h3>
+          <h1>Reset Password</h1>
           <p>Don't worry! You may have forgotten your password, but we can help you out.<br/>Enter your email below and we'll email you a link to reset your password.</p>
-          <input name="emailRecovery" type="email" placeholder="Email" onChange={event => setEmailRecov(event.target.value)} />
-          <button style={{marginLeft: '5px'}} onClick={sendPassRecovery}>Send Email</button>
+          <input className="modalInput" name="emailRecovery" type="email" placeholder="Email" onChange={event => setEmailRecov(event.target.value)} />
+          <br/><button className="modalButton" onClick={sendPassRecovery}>Send Email</button>
 
       </Modal>
       <form onSubmit={handleLogin}>
-        <div className="email">
-        <label htmlFor="email">
+        <div>
           <input name="email" type="email" placeholder="Email" />
-        </label>
-        </div>
-        <div className="password">
-        <label htmlFor="password">
           <input name="password" type="password" placeholder="Password" />
-        </label>
+
         </div>
-        <div className="createAccount">
-        <button type="submit">Log in</button>
-        <button onClick={openModal}>Forgot Password?</button>
+    
+        <div>
+          <button type="submit">Log in</button>
+          <button onClick={openModal}>Forgot Password?</button>
         </div>
       </form>
     </div>
