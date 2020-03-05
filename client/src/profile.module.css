@@ -9,3 +9,8 @@
     background-color: #fff;
     border: 2px solid red;
   }
+
+  .picButton {
+    width: auto;
+    padding: .5em;
+  }

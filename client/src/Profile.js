@@ -17,6 +17,8 @@ const customStyles = {
 };
 
 
+let defaultProfilePic = "https://cdn0.iconfinder.com/data/icons/iphone-black-people-svg-icons/40/agent_user_stock_spy_mail_help_hat_vehicle_vector_trustee-512.png"
+
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement('#root')
 
@@ -119,8 +121,8 @@ const Profile = () => {
         <h1>Profile</h1>
 
         <div>
-          <img src={userImage} alt="Uploaded images" height="250" width="250" />
-          <button onClick={() => window.location.href = '/components/UploadImage'}>Upload Profile Image</button>
+          <img src={userImage || defaultProfilePic} alt="Uploaded images" height="250" width="250" />
+          <button className={styles.picButton} onClick={() => window.location.href = '/components/UploadImage'}>Upload Profile Image</button>
         </div>
   
         <label id="currentEmailText"><strong>Email: </strong> <button onClick={openEmailModal}><i class="fa fa-cog"></i></button></label>
