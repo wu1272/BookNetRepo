@@ -53,16 +53,63 @@ var firebaseConfig = {
   });
 
 
-  //
-  app.get('/api/users', (req, res) => {
-    const users = [
-      {id: 1, firstName: 'John', lastName: 'Doe'},
-      {id: 2, firstName: 'John', lastName: 'Dough'},
-      {id: 3, firstName: 'Jane', lastName: 'Doh'}
-    ];
-    //writeUserData(firstName, lastName, userID);
-    res.json(users);
+  //get booksNeeded from database     
+  function getBooks(userID) {
+    var booksNeededPath = admin.database().ref('users/' + userID + '/booksNeeded');
+    booksNeededPath.on('value', function(snapshot) {
+      var titles = new Array()
+
+      //console.log(snapshot.val());
+      snapshot.forEach(function(child) {
+        child.forEach(function(title) {
+          //console.log(title.val())
+          titles.push(title.val())
+        });
+      });
+      //console.log(titles)
+      return titles;
+    });
+  }
+
+  //random function that returns a WORKING array 
+  function BlockID() {
+    var IDs = new Object();
+        IDs['s'] = "Images/Block_01.png";
+        IDs['g'] = "Images/Block_02.png";
+        IDs['C'] = "Images/Block_03.png";
+        IDs['d'] = "Images/Block_04.png";
+    return IDs;
+  }
+
+  //get books needed from database and send to frontend
+  app.get('/api/getBooksNeeded', (req, res) => {
+    var books = getBooks('taJ6elpogCXeOSu9oStdJRpIZQS2');
+    console.log(books);
+    var images = BlockID();
+    console.log(images);
+    res.json(books);
   });
+
+
+  //write booksNeeded to database
+  function addBooks(userID, ISBN, title, author) {  
+    admin.database().ref('users/' + userID + '/booksNeeded/' + ISBN).set({
+      title: title,
+      author: author
+    });
+  }
+
+  //add books needed to database
+  app.get('/api/setBooksNeeded', (req, res) => {
+    addBooks('taJ6elpogCXeOSu9oStdJRpIZQS2', 100, 'Harry Potter', 'JK Rowling');
+  });
+
+
+
+
+
+//USER FUNCTIONS START HERE
+
 
 
   //delete user data from database
@@ -126,6 +173,10 @@ var firebaseConfig = {
     console.log("HTTP DELETE Request");
     res.send("HTTP DELETE Request");
   });
+
+
+
+//SERVER ON PORT 5000
 
   var server = app.listen(5000, function () {
 
