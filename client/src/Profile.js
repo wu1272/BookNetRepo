@@ -56,7 +56,7 @@ const Profile = () => {
 
   function closeUploadModal() {
     setUploadPhotoModalIsOpen(false)  
-    window.location.reload(true)
+    //window.location.reload(true)
   }
 
   function openUpdateNameModal(e) {
@@ -66,7 +66,6 @@ const Profile = () => {
 
 function closeUpdateNameModal() {
   setUpdateNameModalIsOpen(false)
-  window.location.reload(true)
 }
 
 
@@ -227,7 +226,7 @@ function closeUpdateNameModal() {
           contentLabel="Upload user name"
           isOpen={updateNameModalIsOpen}
           onAfterOpen={afterOpenModal}
-          onRequestClose={closeUploadModal}
+          onRequestClose={closeUpdateNameModal}
           style={customStyles}
           >
 
