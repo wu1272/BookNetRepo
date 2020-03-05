@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import bookshelf from './bookshelf.jpg';
-import './book.css';
 import app from "../base.js";
 
 const UploadImage = () => {
@@ -66,7 +64,6 @@ const UploadImage = () => {
     };
     
     var letterStyle = {
-        backgroundImage: `url(${bookshelf})`,
         padding: 10,
         margin: 10,
     
