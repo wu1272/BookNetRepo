@@ -164,7 +164,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="wrapper">
+    <div className={styles.wrapper}>
       <div className="form-wrapper">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
 
@@ -202,14 +202,17 @@ const Profile = () => {
           
         </Modal>
 
-
-        <h1>Profile</h1>
-
         <div>
-          <img id="profileImage" src={userImage || defaultProfilePic} alt="Uploaded images" height="250" width="250" />
+        <h1>Profile</h1>
+        </div>
+        
+        <div>
+          <figure>
+            <img id={styles.profileImage} src={userImage || defaultProfilePic} alt="Uploaded images" width="250vw"  />
+          </figure>
           <button className={styles.picButton} onClick={openUploadModal}>Upload Profile Image</button>
         </div>
-  
+        
         <div id="currentEmailText"><strong>Email: </strong> <button className={styles.gearButton} onClick={openEmailModal}><i class="fa fa-cog"></i></button></div>
 
         <form>
