@@ -34,6 +34,7 @@ class Home extends Component {
             )}
           </ul>
           <div>
+            <button onClick={() => window.location.href = '/search'}>Search</button>
             <button onClick={() => window.location.href = '/profile'}>Profile</button>
             <button onClick={() => app.auth().signOut()}>Sign out</button>
           </div>

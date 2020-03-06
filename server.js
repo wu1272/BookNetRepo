@@ -88,16 +88,24 @@ var firebaseConfig = {
 
 
   //write booksNeeded to database
-  function addBooks(userID, ISBN, title, author) {  
+  function setBooksNeeded(userID, ISBN, title, author) {  
     admin.database().ref('users/' + userID + '/booksNeeded/' + ISBN).set({
       title: title,
       author: author
     });
   }
 
-  //add books needed to database
-  app.get('/api/setBooksNeeded', (req, res) => {
-    addBooks('taJ6elpogCXeOSu9oStdJRpIZQS2', 100, 'Harry Potter', 'JK Rowling');
+  // //add books needed to database
+  // app.get('/api/setBooksNeeded', (req, res) => {
+  //   addBooks('taJ6elpogCXeOSu9oStdJRpIZQS2', 100, 'Harry Potter', 'JK Rowling');
+  // });
+
+  app.post('/api/setBooksNeeded', urlParser, function (req, res) {
+    var userid = req.body.userid;
+    var ISBN = req.body.ISBN;
+    var title = req.body.title;
+    var author = req.body.author;
+    setBooksNeeded(req.body.userid, req.body.ISBN, req.body.title, req.body.author);
   });
 
 
