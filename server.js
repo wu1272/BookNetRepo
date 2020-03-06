@@ -54,11 +54,10 @@ var firebaseConfig = {
 
 
   
-
 //GET BOOKSNEEDED
 
   //get ALL booksNeeded from database     
-  function getBooksNeeded(titles, userID, ISBN, callback) {
+  function getBooksNeeded(titles, userID, callback) {
     var booksNeededPath = admin.database().ref('users/' + userID + '/booksNeeded/');
     booksNeededPath.once('value')
       .then (function(snapshot) {
@@ -73,7 +72,7 @@ var firebaseConfig = {
   //get books needed from database and send to frontend
   app.get('/api/getBooksNeeded', (req, res) => {
     var titles = [];
-    getBooks(titles, 'taJ6elpogCXeOSu9oStdJRpIZQS2', 999, function() {
+    getBooksNeeded(titles, 'taJ6elpogCXeOSu9oStdJRpIZQS2', function() {
       console.log(titles);
       res.json(titles);
     });
