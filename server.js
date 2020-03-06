@@ -53,39 +53,35 @@ var firebaseConfig = {
   });
 
 
-  //get booksNeeded from database     
-  function getBooks(userID, ISBN) {
-    var booksNeededPath = admin.database().ref('users/' + userID + '/booksNeeded/' + ISBN);
+  
+
+//GET BOOKSNEEDED
+
+  //get ALL booksNeeded from database     
+  function getBooksNeeded(titles, userID, ISBN, callback) {
+    var booksNeededPath = admin.database().ref('users/' + userID + '/booksNeeded/');
     booksNeededPath.once('value')
       .then (function(snapshot) {
-      var titles = new Array()
-
-      var title = snapshot.child("title").val();
-      titles.push(title);
-      console.log(titles)
-      return titles;
+      snapshot.forEach(function(child) {
+        var title = child.child("title").val();
+        titles.push(title);
+      });
+      callback();
     });
-  }
-
-  //random function that returns a WORKING array 
-  function BlockID() {
-    var IDs = new Object();
-        IDs['s'] = "Images/Block_01.png";
-        IDs['g'] = "Images/Block_02.png";
-        IDs['C'] = "Images/Block_03.png";
-        IDs['d'] = "Images/Block_04.png";
-    return IDs;
   }
 
   //get books needed from database and send to frontend
   app.get('/api/getBooksNeeded', (req, res) => {
-    var books = getBooks('taJ6elpogCXeOSu9oStdJRpIZQS2', 100);
-    console.log(books);
-    var images = BlockID();
-    //console.log(images);
-    res.json(books);
+    var titles = [];
+    getBooks(titles, 'taJ6elpogCXeOSu9oStdJRpIZQS2', 999, function() {
+      console.log(titles);
+      res.json(titles);
+    });
   });
 
+
+
+//SET BOOKSNEEDED
 
   //write booksNeeded to database
   function setBooksNeeded(userID, ISBN, title, author) {  
@@ -94,11 +90,6 @@ var firebaseConfig = {
       author: author
     });
   }
-
-  // //add books needed to database
-  // app.get('/api/setBooksNeeded', (req, res) => {
-  //   addBooks('taJ6elpogCXeOSu9oStdJRpIZQS2', 100, 'Harry Potter', 'JK Rowling');
-  // });
 
   app.post('/api/setBooksNeeded', urlParser, function (req, res) {
     var userid = req.body.userid;
