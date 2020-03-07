@@ -132,8 +132,8 @@ function closeUpdateNameModal() {
       var userId = user.uid
       app.database().ref('users/' + userId).once('value').then(function (snapshot) {
         //console.log(snapshot.val())
-        let uFirstName = (snapshot.val() && snapshot.val().firstname) || 'Anonymous'
-        let uLastName = (snapshot.val() && snapshot.val().lastname) || 'Anonymous'
+        let uFirstName = (snapshot.val() && snapshot.val().firstname) || 'NoFirstNameError'
+        let uLastName = (snapshot.val() && snapshot.val().lastname) || 'NoLastNameError'
       
         setFirstName(uFirstName)
         //console.log(uLastName)
@@ -293,12 +293,25 @@ function closeUpdateNameModal() {
       // console.log(document.getElementById("lastname").value);
       // console.log(user.uid);
 
-
       var regexCheck = /^[a-zA-Z]+/;
       if ((!regexCheck.test(newFirstName)
         || (!regexCheck.test(newLastName)))) {
         return;
       }
+
+      app.database().ref('users/' + user.uid + '/').set({
+        firstname: newFirstName,
+        lastname: newLastName
+      }).then(function() {
+        alert("Username updated to: " + newFirstName + " " + newLastName)
+        closeUpdateNameModal()
+      }).catch(function(error) {
+        alert(error)
+        closeUpdateNameModal()
+      })
+
+
+      /*
       axios.post('/api/name', {
         firstname: newFirstName,
         lastname: newLastName,
@@ -306,12 +319,18 @@ function closeUpdateNameModal() {
       })
         .then(function (response) {
           closeUpdateNameModal()
-          console.log(response);
+          alert("Username updated to: " + newFirstName + " " + newLastName)
+         
         })
         .catch(function (error) {
           console.log(error);
         })
+
+        */
+
     });
+
+
   };
 
   function updatePW() {
@@ -376,9 +395,6 @@ function closeUpdateNameModal() {
   }
 }
 
-
-// componentDidMount() {
-//   document.getElementById("submit").onclick = this.sendUserID();
-// }    
+  
 
 export default Profile;
