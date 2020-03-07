@@ -31,6 +31,8 @@ const Profile = () => {
   const [currentUserEmail, setCurrentUserEmail] = useState('')
   const [newUserEmail, setNewUserEmail] = useState('')
   const [confimPass, setConfirmPass] = useState('')
+  const [newFirstName, setNewFirstName] = useState('')
+  const [newLastName, setNewLastName] = useState('')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
  
@@ -65,11 +67,8 @@ const Profile = () => {
 }
 
 function closeUpdateNameModal() {
-  setUpdateNameModalIsOpen(false)
+    setUpdateNameModalIsOpen(false)
 }
-
-
-
   /* Upload Photo code */
   const [imageFile, setImageFile] = useState(null)
   const [progressBar, setProgressBar] = useState(0)
@@ -121,16 +120,30 @@ function closeUpdateNameModal() {
 
 
 
-  // Display email of user in profile
+  // Display information of user in profile
   app.auth().onAuthStateChanged(function (user) {
     if (user) {
       // User is signed in.
       // Display user email 
       setCurrentUserEmail(user.email)
       setUserImage(user.photoURL)
-      setFirstName(user.displayName)
+
+      //get first and last name
+      var userId = user.uid
+      app.database().ref('users/' + userId).once('value').then(function (snapshot) {
+        //console.log(snapshot.val())
+        let uFirstName = (snapshot.val() && snapshot.val().firstname) || 'Anonymous'
+        let uLastName = (snapshot.val() && snapshot.val().lastname) || 'Anonymous'
+      
+        setFirstName(uFirstName)
+        console.log(uLastName)
+        setLastName(uLastName)
+        
+      }) 
+
+      
       document.getElementById("currentEmailText").innerHTML = '<strong>Email: </strong>' + currentUserEmail
-      document.getElementById("currentNameText").innerHTML = '<strong>Name: </strong>' + firstName
+      document.getElementById("currentNameText").innerHTML = '<strong>Name: </strong>' + firstName + ' ' + lastName
                                                        
 
       //create gear button for opening modal   
@@ -231,8 +244,8 @@ function closeUpdateNameModal() {
           >
 
           <div>
-            <input type="text" id="firstname" name="firstname" required="required" pattern="[A-Za-z]{2,32}" placeholder="First Name" onChange={event => setFirstName(event.target.value)}></input>
-            <input type="text" id="lastname" name="lastname" required="required" pattern="[A-Za-z]{2,32}" placeholder="Last Name" onChange={event => setLastName(event.target.value)}></input>
+            <input type="text" id="firstname" name="firstname" required="required" pattern="[A-Za-z]{2,32}" placeholder="First Name" onChange={event => setNewFirstName(event.target.value)}></input>
+            <input type="text" id="lastname" name="lastname" required="required" pattern="[A-Za-z]{2,32}" placeholder="Last Name" onChange={event => setNewLastName(event.target.value)}></input>
             <button onClick={(e) => { sendUserID(e) }}>Update Name</button>
           </div>    
           
@@ -274,22 +287,21 @@ function closeUpdateNameModal() {
   );
 
   function sendUserID() {
+  
     app.auth().onAuthStateChanged(function (user) {
       // console.log(document.getElementById("firstname").value);
       // console.log(document.getElementById("lastname").value);
       // console.log(user.uid);
 
-      console.log(firstName)
-      console.log(lastName)
 
       var regexCheck = /^[a-zA-Z]+/;
-      if ((!regexCheck.test(firstName)
-        || (!regexCheck.test(lastName)))) {
+      if ((!regexCheck.test(newFirstName)
+        || (!regexCheck.test(newLastName)))) {
         return;
       }
       axios.post('/api/name', {
-        firstname: firstName,
-        lastname: lastName,
+        firstname: newFirstName,
+        lastname: newLastName,
         userid: user.uid
       })
         .then(function (response) {
@@ -370,17 +382,3 @@ function closeUpdateNameModal() {
 // }    
 
 export default Profile;
-
-
-
-/* <form method="POST" action="/api/name" >
-<label>
-    First Name
-    <input type="text" id="firstname" name="firstname" placeholder="First Name"></input>
-</label>
-<label>
-    Last Name
-    <input type="text" id="lastname" name="lastname" placeholder="Last Name"></input>
-</label>
-<input type="submit" value="Submit"></input>
-</form> */
