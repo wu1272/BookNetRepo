@@ -136,7 +136,7 @@ function closeUpdateNameModal() {
         let uLastName = (snapshot.val() && snapshot.val().lastname) || 'Anonymous'
       
         setFirstName(uFirstName)
-        console.log(uLastName)
+        //console.log(uLastName)
         setLastName(uLastName)
         
       }) 
