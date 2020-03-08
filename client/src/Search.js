@@ -22,7 +22,8 @@ function Search() {
                 setResult(data.data.items);
             })
         }
-        //setBooksNeeded("998", "Book of Life", "John Deere");
+        setBooksNeeded("998", "Book of Life", "John Deere");
+        setBooksAvailable("2000", "Notecards", "Hank Williams");
         return (
             <body className="landing">
             <div>
@@ -64,5 +65,23 @@ function Search() {
             }
         });
     }
+function setBooksAvailable(ISBN, title, author) {
+    app.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            axios.post('/api/setBooksAvailable', {
+                userid: user.uid,
+                ISBN: ISBN,
+                title: title,
+                author: author
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
+    });
+}
 
 export default Search

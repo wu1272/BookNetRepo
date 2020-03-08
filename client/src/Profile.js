@@ -146,6 +146,12 @@ const Profile = () => {
         <div className={styles.deleteAccount}>
           <button onClick={(e) => { deleteAccount(e) }}>Delete Account</button>
         </div>
+        <div className={styles.deleteBooksNeeded}>
+          <button onClick={(e) => { deleteBooksNeeded(e) }}>Delete Book Needed</button>
+        </div>
+        <div className={styles.deleteBooksAvailable}>
+          <button onClick={(e) => { deleteBooksAvailable(e) }}>Delete Book Available</button>
+        </div>
         <div>
           <button onClick={() => window.location.href = '/home'}>Home</button>
         </div>
@@ -239,6 +245,78 @@ const Profile = () => {
   }
 }
 
+function deleteBooksNeeded() {
+  if (!window.confirm("Are you sure you want to delete book?")) {
+    return;
+  }
+  else {
+    app.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        axios.post('/api/bookNeededRemove', {
+          userid: user.uid
+        })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+        // User is signed in.
+
+        
+
+        // console.log(user.uid);
+        // user.delete().then(function () {
+        //   // User deleted.
+        //   console.log("Book was deleted succesfully")
+        // }).catch(function (error) {
+        //   // An error happened.
+        //   console.log("Error deleting book")
+        // });
+
+      } else {
+        console.log("Error: book does not exist")
+      }
+    });
+  }
+}
+
+
+function deleteBooksAvailable() {
+  if (!window.confirm("Are you sure you want to delete book?")) {
+    return;
+  }
+  else {
+    app.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        axios.post('/api/bookAvailableRemove', {
+          userid: user.uid
+        })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+        // User is signed in.
+
+        
+
+        // console.log(user.uid);
+        // user.delete().then(function () {
+        //   // User deleted.
+        //   console.log("Book was deleted succesfully")
+        // }).catch(function (error) {
+        //   // An error happened.
+        //   console.log("Error deleting book")
+        // });
+
+      } else {
+        console.log("Error: book does not exist")
+      }
+    });
+  }
+}
 
 // componentDidMount() {
 //   document.getElementById("submit").onclick = this.sendUserID();

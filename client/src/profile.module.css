@@ -9,3 +9,16 @@
     background-color: #fff;
     border: 2px solid red;
   }
+
+  .deleteBooksNeeded button {
+    background-color: red;
+    color: #fff;
+    border: 2px solid red;
+  }
+  
+  .deleteBooksNeeded button:hover {
+    color: red;
+    background-color: #fff;
+    border: 2px solid red;
+  }
+

@@ -100,11 +100,41 @@ var firebaseConfig = {
 
 
 
+//Set books available
+  function setBooksAvailable(userID, ISBN, title, author) {  
+    admin.database().ref('users/' + userID + '/booksAvailable/' + ISBN).set({
+      title: title,
+      author: author
+    });
+  }
+
+  app.post('/api/setBooksAvailable', urlParser, function (req, res) {
+    var userid = req.body.userid;
+    var ISBN = req.body.ISBN;
+    var title = req.body.title;
+    var author = req.body.author;
+    setBooksAvailable(req.body.userid, req.body.ISBN, req.body.title, req.body.author);
+  });
+
+
 
 
 //USER FUNCTIONS START HERE
 
+function deleteBooksAvailable(userID) {
+  admin.database().ref('users/' + userID + '/booksAvailable/' + '2000').remove();
+}
 
+
+
+
+  //use this when working through - matt
+  //need a button to do this
+  //check the hard coded book gets deleted
+  //update so removes the path
+  function deleteBooksNeeded(userID) {
+    admin.database().ref('users/' + userID + '/booksNeeded/' + '998').remove();
+  }
 
   //delete user data from database
   function deleteUserData(userID) {
@@ -155,6 +185,26 @@ var firebaseConfig = {
     //console.log(req.body);
     writeUserData(req.body.firstname, req.body.lastname, req.body.userid)
   });
+
+
+  //work with this section but for deletion - matt
+  //have the same
+  app.post('/api/bookNeededRemove', urlParser, function (req, res) {
+    var userid = req.body.userid;
+    //console.log(req.body);
+    deleteBooksNeeded(req.body.userid)
+  });
+
+
+   //work with this section but for deletion - matt
+  //have the same
+  app.post('/api/bookAvailableRemove', urlParser, function (req, res) {
+    var userid = req.body.userid;
+    //console.log(req.body);
+    deleteBooksAvailable(req.body.userid)
+  });
+
+
 
   //delete user from database with path users/userID
   app.post('/api/remove', urlParser, function (req, res) {
