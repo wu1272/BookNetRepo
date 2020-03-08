@@ -83,8 +83,8 @@ var firebaseConfig = {
 //SET BOOKSNEEDED
 
   //write booksNeeded to database
-  function setBooksNeeded(userID, ISBN, title, author) {  
-    admin.database().ref('users/' + userID + '/booksNeeded/' + ISBN).set({
+  function setBooksNeeded(userID, bookID, title, author) {  
+    admin.database().ref('users/' + userID + '/booksNeeded/' + bookID).set({
       title: title,
       author: author
     });
@@ -92,10 +92,10 @@ var firebaseConfig = {
 
   app.post('/api/setBooksNeeded', urlParser, function (req, res) {
     var userid = req.body.userid;
-    var ISBN = req.body.ISBN;
+    var bookID = req.body.bookID;
     var title = req.body.title;
     var author = req.body.author;
-    setBooksNeeded(req.body.userid, req.body.ISBN, req.body.title, req.body.author);
+    setBooksNeeded(req.body.userid, req.body.bookID, req.body.title, req.body.author);
   });
 
 
