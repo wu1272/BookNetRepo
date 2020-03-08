@@ -233,9 +233,9 @@ function closePassModal() {
 
           <h3>Update Email</h3>
           <p>Enter new email below</p>
-          <input name="newUserEmail" type="email" defaultValue="@purdue.edu" placeholder="New Email" onChange={event => setNewUserEmail(event.target.value)} />
-          <input name="confirmPass" type="password" placeholder="Password" onChange={event => setConfirmPass(event.target.value)} />
-          <button style={{ marginLeft: '5px' }} onClick={(e) => { updateEmail(e) }}>Update Email</button>
+          <input className="modalInput" name="newUserEmail" type="email" defaultValue="@purdue.edu" placeholder="New Email" onChange={event => setNewUserEmail(event.target.value)} />
+          <br/><input className="modalInput" name="confirmPass" type="password" placeholder="Password" onChange={event => setConfirmPass(event.target.value)} />
+          <br/><button className="modalButton" onClick={(e) => { updateEmail(e) }}>Update Email</button>
 
         </Modal>
 
@@ -249,11 +249,11 @@ function closePassModal() {
 
           <h1> Profile Picture Update </h1>
           <br/>
-          <input type="file" onChange={e => {handleFile(e)}}/>
+          <input className="modalInput" type="file" onChange={e => {handleFile(e)}}/>
           <br/>
           <progress value={progressBar} max="100"/>
           <br/>
-          <button onClick={e => {handleUpload(e)}}>Upload</button>    
+          <button className="modalButton" onClick={e => {handleUpload(e)}}>Upload</button>    
           
         </Modal>
 
@@ -266,9 +266,9 @@ function closePassModal() {
           >
 
           <div>
-            <input type="text" id="firstname" name="firstname" required="required" pattern="[A-Za-z]{2,32}" placeholder="First Name" onChange={event => setNewFirstName(event.target.value)}></input>
-            <input type="text" id="lastname" name="lastname" required="required" pattern="[A-Za-z]{2,32}" placeholder="Last Name" onChange={event => setNewLastName(event.target.value)}></input>
-            <button onClick={(e) => { sendUserID(e) }}>Update Name</button>
+            <input className="modalInput" type="text" id="firstname" name="firstname" required="required" pattern="[A-Za-z]{2,32}" placeholder="First Name" onChange={event => setNewFirstName(event.target.value)}></input>
+            <br/><input className="modalInput" type="text" id="lastname" name="lastname" required="required" pattern="[A-Za-z]{2,32}" placeholder="Last Name" onChange={event => setNewLastName(event.target.value)}></input>
+            <br/><button className="modalButton" onClick={(e) => { sendUserID(e) }}>Update Name</button>
           </div>    
           
         </Modal>
@@ -284,10 +284,10 @@ function closePassModal() {
 
           <h1> Change Password </h1>
           <br/>
-          <input type="password"  name="password" required="required" placeholder="Current Password" onChange={event => setConfirmPass(event.target.value)}></input>
-          <input type="password"  name="password" required="required" placeholder="New Password" onChange={event => setNewPass(event.target.value)}></input>
-          <input type="password"  name="password1" required="required" placeholder="Re-Enter New Password" onChange={event => setConfirmNewPass(event.target.value)}></input>
-          <button id="submitPW" onClick={(e) => { updatePW(e) }}>Update Password</button>  
+          <input className="modalInput" type="password"  name="password" required="required" placeholder="Current Password" onChange={event => setConfirmPass(event.target.value)}></input>
+          <br/><input className="modalInput" type="password"  name="password" required="required" placeholder="New Password" onChange={event => setNewPass(event.target.value)}></input>
+          <br/><input className="modalInput" type="password"  name="password1" required="required" placeholder="Re-Enter New Password" onChange={event => setConfirmNewPass(event.target.value)}></input>
+          <br/><button className="modalButton" id="submitPW" onClick={(e) => { updatePW(e) }}>Update Password</button>  
           
         </Modal>
 
