@@ -1,3 +1,24 @@
+div {
+  font-size: large;
+}
+
+figure {
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    overflow:hidden;
+    margin: auto;
+}
+
+.wrapper {
+  height: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+  
   .deleteAccount button {
     background-color: red;
     color: #fff;
@@ -10,6 +31,20 @@
     border: 2px solid red;
   }
 
+
+  .picButton {
+    width: auto;
+    padding: .5em;
+  }
+
+  .gearButton {
+    width: auto;
+    margin-left: .2em;
+    border-radius: 0;
+    padding: .5em;
+    background-color: #fff;
+    color: #519e8a;
+
   .deleteBooksNeeded button {
     background-color: red;
     color: #fff;
@@ -20,5 +55,6 @@
     color: red;
     background-color: #fff;
     border: 2px solid red;
+
   }
 
