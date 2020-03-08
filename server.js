@@ -100,7 +100,7 @@ var firebaseConfig = {
 
 
 
-//Set books available
+//SET BOOKS AVAILABLE
   function setBooksAvailable(userID, ISBN, title, author) {  
     admin.database().ref('users/' + userID + '/booksAvailable/' + ISBN).set({
       title: title,
@@ -120,21 +120,6 @@ var firebaseConfig = {
 
 
 //USER FUNCTIONS START HERE
-
-function deleteBooksAvailable(userID) {
-  admin.database().ref('users/' + userID + '/booksAvailable/' + '2000').remove();
-}
-
-
-
-
-  //use this when working through - matt
-  //need a button to do this
-  //check the hard coded book gets deleted
-  //update so removes the path
-  function deleteBooksNeeded(userID) {
-    admin.database().ref('users/' + userID + '/booksNeeded/' + '998').remove();
-  }
 
   //delete user data from database
   function deleteUserData(userID) {
@@ -186,26 +171,6 @@ function deleteBooksAvailable(userID) {
     writeUserData(req.body.firstname, req.body.lastname, req.body.userid)
   });
 
-
-  //work with this section but for deletion - matt
-  //have the same
-  app.post('/api/bookNeededRemove', urlParser, function (req, res) {
-    var userid = req.body.userid;
-    //console.log(req.body);
-    deleteBooksNeeded(req.body.userid)
-  });
-
-
-   //work with this section but for deletion - matt
-  //have the same
-  app.post('/api/bookAvailableRemove', urlParser, function (req, res) {
-    var userid = req.body.userid;
-    //console.log(req.body);
-    deleteBooksAvailable(req.body.userid)
-  });
-
-
-
   //delete user from database with path users/userID
   app.post('/api/remove', urlParser, function (req, res) {
     var userid = req.body.userid;
@@ -218,6 +183,29 @@ function deleteBooksAvailable(userID) {
     res.send("HTTP DELETE Request");
   });
 
+  
+//BOOKSNEEDED AND AVAILABLE DELETION
+  function deleteBooksAvailable(userID) {
+    admin.database().ref('users/' + userID + '/booksAvailable/' + '2000').remove();
+  }
+  
+    function deleteBooksNeeded(userID) {
+      admin.database().ref('users/' + userID + '/booksNeeded/' + '998').remove();
+    }
+
+  //delete book from needBooks and availableBooks
+  //booksNeeded
+  app.post('/api/bookNeededRemove', urlParser, function (req, res) {
+    var userid = req.body.userid;
+    //console.log(req.body);
+    deleteBooksNeeded(req.body.userid)
+  });
+  //booksAvailable
+  app.post('/api/bookAvailableRemove', urlParser, function (req, res) {
+    var userid = req.body.userid;
+    //console.log(req.body);
+    deleteBooksAvailable(req.body.userid)
+  });
 
 
 //SERVER ON PORT 5000

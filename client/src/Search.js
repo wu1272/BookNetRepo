@@ -22,8 +22,8 @@ function Search() {
                 setResult(data.data.items);
             })
         }
-        setBooksNeeded("998", "Book of Life", "John Deere");
-        setBooksAvailable("2000", "Notecards", "Hank Williams");
+        // setBooksNeeded("998", "Book of Life", "John Deere");
+        // setBooksAvailable("2000", "Notecards", "Hank Williams");
         return (
             <body className="landing">
             <div>
