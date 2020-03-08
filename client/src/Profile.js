@@ -262,18 +262,6 @@ function deleteBooksNeeded() {
             console.log(error);
           })
         // User is signed in.
-
-        
-
-        // console.log(user.uid);
-        // user.delete().then(function () {
-        //   // User deleted.
-        //   console.log("Book was deleted succesfully")
-        // }).catch(function (error) {
-        //   // An error happened.
-        //   console.log("Error deleting book")
-        // });
-
       } else {
         console.log("Error: book does not exist")
       }
@@ -299,18 +287,6 @@ function deleteBooksAvailable() {
             console.log(error);
           })
         // User is signed in.
-
-        
-
-        // console.log(user.uid);
-        // user.delete().then(function () {
-        //   // User deleted.
-        //   console.log("Book was deleted succesfully")
-        // }).catch(function (error) {
-        //   // An error happened.
-        //   console.log("Error deleting book")
-        // });
-
       } else {
         console.log("Error: book does not exist")
       }
