@@ -38,8 +38,10 @@ figure {
 
   .gearButton {
     width: auto;
-    margin-left: 1em;
+    margin-left: .2em;
     border-radius: 0;
     padding: .5em;
+    background-color: #fff;
+    color: #519e8a;
   }
 
