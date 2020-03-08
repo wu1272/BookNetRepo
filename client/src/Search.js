@@ -4,6 +4,8 @@ import axios from "axios";
 import styles from "./search.module.css"
 
 
+
+
 function Search() {
         const[book, setBook] = useState("");
         const[result, setResult] = useState([]);
@@ -32,32 +34,35 @@ function Search() {
                     <button className={styles.tester} type="submit">Search</button>
                 </form>
                 {result.map(book => (
-                    <a href={book.volumeInfo.previewLink}>
+                    <button onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}>
                     <img src={book.volumeInfo.imageLinks.thumbnail} alt={book.title}/>
-                    </a>
+                    </button>
                 ))}
             </div>
             </body>
         );
-        }
+    }
 
 
-function setBooksNeeded(ISBN, title, author) {
-    app.auth().onAuthStateChanged(function (user) {
-        if (user) {
-            axios.post('/api/setBooksNeeded', {
-                userid: user.uid,
-                ISBN: ISBN,
-                title: title,
-                author: author
-            })
-                .then(function (response) {
-                    console.log(response);
+    function setBooksNeeded(e, book_id, book_title, book_authors) {
+        
+        app.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                axios.post('/api/setBooksNeeded', {
+                    userid: user.uid,
+                    bookID: book_id,
+                    title: book_title,
+                    author: book_authors,
+                    event: e
                 })
-                .catch(function (error) {
-                    console.log(error);
-                })
-        }
-    });
-}
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+            }
+        });
+    }
+
 export default Search
