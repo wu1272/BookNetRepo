@@ -53,64 +53,73 @@ var firebaseConfig = {
   });
 
 
-  //get booksNeeded from database     
-  function getBooks(userID) {
-    var booksNeededPath = admin.database().ref('users/' + userID + '/booksNeeded');
-    booksNeededPath.on('value', function(snapshot) {
-      var titles = new Array()
+  
+//GET BOOKSNEEDED
 
-      //console.log(snapshot.val());
+  //get ALL booksNeeded from database     
+  function getBooksNeeded(titles, userID, callback) {
+    var booksNeededPath = admin.database().ref('users/' + userID + '/booksNeeded/');
+    booksNeededPath.once('value')
+      .then (function(snapshot) {
       snapshot.forEach(function(child) {
-        child.forEach(function(title) {
-          //console.log(title.val())
-          titles.push(title.val())
-        });
+        var title = child.child("title").val();
+        titles.push(title);
       });
-      //console.log(titles)
-      return titles;
+      callback();
     });
-  }
-
-  //random function that returns a WORKING array 
-  function BlockID() {
-    var IDs = new Object();
-        IDs['s'] = "Images/Block_01.png";
-        IDs['g'] = "Images/Block_02.png";
-        IDs['C'] = "Images/Block_03.png";
-        IDs['d'] = "Images/Block_04.png";
-    return IDs;
   }
 
   //get books needed from database and send to frontend
   app.get('/api/getBooksNeeded', (req, res) => {
-    var books = getBooks('taJ6elpogCXeOSu9oStdJRpIZQS2');
-    console.log(books);
-    var images = BlockID();
-    console.log(images);
-    res.json(books);
+    var titles = [];
+    getBooksNeeded(titles, 'taJ6elpogCXeOSu9oStdJRpIZQS2', function() {
+      console.log(titles);
+      res.json(titles);
+    });
   });
 
 
+
+//SET BOOKSNEEDED
+
   //write booksNeeded to database
-  function addBooks(userID, ISBN, title, author) {  
-    admin.database().ref('users/' + userID + '/booksNeeded/' + ISBN).set({
+  function setBooksNeeded(userID, bookID, title, author) {  
+    admin.database().ref('users/' + userID + '/booksNeeded/' + bookID).set({
       title: title,
       author: author
     });
   }
 
-  //add books needed to database
-  app.get('/api/setBooksNeeded', (req, res) => {
-    addBooks('taJ6elpogCXeOSu9oStdJRpIZQS2', 100, 'Harry Potter', 'JK Rowling');
+  app.post('/api/setBooksNeeded', urlParser, function (req, res) {
+    var userid = req.body.userid;
+    var bookID = req.body.bookID;
+    var title = req.body.title;
+    var author = req.body.author;
+    setBooksNeeded(req.body.userid, req.body.bookID, req.body.title, req.body.author);
+  });
+
+
+
+//SET BOOKS AVAILABLE
+  function setBooksAvailable(userID, ISBN, title, author) {  
+    admin.database().ref('users/' + userID + '/booksAvailable/' + ISBN).set({
+      title: title,
+      author: author
+    });
+  }
+
+  app.post('/api/setBooksAvailable', urlParser, function (req, res) {
+    var userid = req.body.userid;
+    var ISBN = req.body.ISBN;
+    var title = req.body.title;
+    var author = req.body.author;
+    setBooksAvailable(req.body.userid, req.body.ISBN, req.body.title, req.body.author);
   });
 
 
 
 
-
 //USER FUNCTIONS START HERE
-
-
 
   //delete user data from database
   function deleteUserData(userID) {
@@ -174,6 +183,29 @@ var firebaseConfig = {
     res.send("HTTP DELETE Request");
   });
 
+  
+//BOOKSNEEDED AND AVAILABLE DELETION
+  function deleteBooksAvailable(userID) {
+    admin.database().ref('users/' + userID + '/booksAvailable/' + '2000').remove();
+  }
+  
+    function deleteBooksNeeded(userID) {
+      admin.database().ref('users/' + userID + '/booksNeeded/' + '998').remove();
+    }
+
+  //delete book from needBooks and availableBooks
+  //booksNeeded
+  app.post('/api/bookNeededRemove', urlParser, function (req, res) {
+    var userid = req.body.userid;
+    //console.log(req.body);
+    deleteBooksNeeded(req.body.userid)
+  });
+  //booksAvailable
+  app.post('/api/bookAvailableRemove', urlParser, function (req, res) {
+    var userid = req.body.userid;
+    //console.log(req.body);
+    deleteBooksAvailable(req.body.userid)
+  });
 
 
 //SERVER ON PORT 5000

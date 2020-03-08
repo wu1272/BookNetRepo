@@ -31,6 +31,7 @@ figure {
     border: 2px solid red;
   }
 
+
   .picButton {
     width: auto;
     padding: .5em;
@@ -43,5 +44,17 @@ figure {
     padding: .5em;
     background-color: #fff;
     color: #519e8a;
+
+  .deleteBooksNeeded button {
+    background-color: red;
+    color: #fff;
+    border: 2px solid red;
+  }
+  
+  .deleteBooksNeeded button:hover {
+    color: red;
+    background-color: #fff;
+    border: 2px solid red;
+
   }
 

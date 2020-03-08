@@ -5,7 +5,12 @@
 html {
   background:url('./landing_background.jpg') no-repeat;
   background-size: cover;
-  background-attachment: fixed;
+}
+
+.landing {
+  background:white;
+  background-size: cover;
+  
 }
 
 
