@@ -67,9 +67,9 @@ const Profile = () => {
 
   
   function updateImage() {
-    console.log("updating image")
+    //console.log("updating image")
     var image = document.getElementById("profileImage")
-    image.src = image.src.split("?")[0] + "?" + new Date().getTime();
+    image.src = updateImage
   }
 
   function openUpdateNameModal(e) {
