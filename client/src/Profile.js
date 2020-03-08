@@ -28,6 +28,7 @@ const Profile = () => {
   const [changeEmailModalIsOpen, setEmailModalIsOpen] = useState(false)
   const [uploadPhotoModalIsOpen, setUploadPhotoModalIsOpen] = useState(false)
   const [updateNameModalIsOpen, setUpdateNameModalIsOpen] = useState(false)
+  const [passModalIsOpen, setPassModalIsOpen] = useState(false)
   const [currentUserEmail, setCurrentUserEmail] = useState('')
   const [newUserEmail, setNewUserEmail] = useState('')
   const [confimPass, setConfirmPass] = useState('')
@@ -35,6 +36,8 @@ const Profile = () => {
   const [newLastName, setNewLastName] = useState('')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
+  const [newPass, setNewPass] = useState('')
+  const [confirmNewPass, setConfirmNewPass] = useState('')
  
 
 
@@ -77,6 +80,17 @@ const Profile = () => {
 function closeUpdateNameModal() {
     setUpdateNameModalIsOpen(false)
 }
+
+function openPassModal(e) {
+  e.preventDefault()
+  setPassModalIsOpen(true)
+}
+
+function closePassModal() {
+  setPassModalIsOpen(false)
+}
+
+
   /* Upload Photo code */
   const [imageFile, setImageFile] = useState(null)
   const [progressBar, setProgressBar] = useState(0)
@@ -260,6 +274,24 @@ function closeUpdateNameModal() {
         </Modal>
 
 
+        <Modal 
+          contentLabel="Update User Password"
+          isOpen={passModalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closePassModal}
+          style={customStyles}
+          >
+
+          <h1> Change Password </h1>
+          <br/>
+          <input type="password"  name="password" required="required" placeholder="Current Password" onChange={event => setConfirmPass(event.target.value)}></input>
+          <input type="password"  name="password" required="required" placeholder="New Password" onChange={event => setNewPass(event.target.value)}></input>
+          <input type="password"  name="password1" required="required" placeholder="Re-Enter New Password" onChange={event => setConfirmNewPass(event.target.value)}></input>
+          <button id="submitPW" onClick={(e) => { updatePW(e) }}>Update Password</button>  
+          
+        </Modal>
+
+
 
         <div>
         <h1>Profile</h1>
@@ -276,14 +308,8 @@ function closeUpdateNameModal() {
 
         <div id="currentEmailText"><strong>Email: </strong> <button className={styles.gearButton} onClick={openEmailModal}><i class="fa fa-cog"></i></button></div>
 
-        <form>
-          <h3>Change Password</h3>
-          <div>
-              <input type="password" id="password" name="password" required="required" placeholder="Password"></input>
-              <input type="password" id="password2" name="password1" required="required" placeholder="Verify Password"></input>
-              <input id="submitPW" type="submit" value="Update Password!" onClick={(e) => { updatePW(e) }} />
-          </div>
-        </form>
+        <div><button onClick={openPassModal}>Change password</button></div>
+
         <div className={styles.deleteAccount}>
           <button onClick={(e) => { deleteAccount(e) }}>Delete Account</button>
         </div>
@@ -343,27 +369,25 @@ function closeUpdateNameModal() {
 
   function updatePW() {
     app.auth().onAuthStateChanged(function (user) {
-      if (document.getElementById("password").value !== document.getElementById("password2").value) {
+      if (newPass !== confirmNewPass) {
         alert("Error: passwords don't match!");
       }
       else {
-          var psswd1 = document.getElementById("password").value;
-    
-          if (psswd1.length < 6) {
+
+          if (newPass.length < 6) {
             alert("Please enter a valid password, 6 character or more!")
           }
           else {
-            var newPassword = document.getElementById("password").value;
-            user.updatePassword(newPassword).then(function () {
-            // Update successful.
-          
-            }).catch(function (error) {
-            // An error happened.
-              alert("Please enter a valid password, 6 character or more!")
-            });
 
-            alert("Your password has been updated! Now you will be redirected to the login page")
-
+            app.auth().signInWithEmailAndPassword(currentUserEmail, confimPass)
+            .then(function (userCredential) {
+              userCredential.user.updatePassword(newPass).then(function () {
+                alert("Password updated succesfully!")
+                closePassModal()
+              }).catch(function (error) {
+                alert("Error updating password\nNew password may be same as before")
+              })
+            })
           }
       }
       
