@@ -44,6 +44,7 @@ figure {
     padding: .5em;
     background-color: #fff;
     color: #519e8a;
+  }
 
   .deleteBooksNeeded button {
     background-color: red;
