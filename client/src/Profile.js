@@ -58,7 +58,15 @@ const Profile = () => {
 
   function closeUploadModal() {
     setUploadPhotoModalIsOpen(false)  
+    updateImage()
     //window.location.reload(true)
+  }
+
+  
+  function updateImage() {
+    console.log("updating image")
+    var image = document.getElementById("profileImage")
+    image.src = image.src.split("?")[0] + "?" + new Date().getTime();
   }
 
   function openUpdateNameModal(e) {
@@ -259,7 +267,7 @@ function closeUpdateNameModal() {
         
         <div>
           <figure>
-            <img id={styles.profileImage} src={userImage || defaultProfilePic} alt="Uploaded images" width="250vw"  />
+            <img id="profileImage" src={userImage || defaultProfilePic} alt="Uploaded images" width="250vw"  />
           </figure>
           <button className={styles.picButton} onClick={openUploadModal}>Upload Profile Image</button>
         </div>
