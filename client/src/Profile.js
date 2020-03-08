@@ -61,7 +61,6 @@ const Profile = () => {
 
   function closeUploadModal() {
     setUploadPhotoModalIsOpen(false)  
-    updateImage()
     //window.location.reload(true)
   }
 
@@ -69,7 +68,8 @@ const Profile = () => {
   function updateImage() {
     //console.log("updating image")
     var image = document.getElementById("profileImage")
-    image.src = updateImage
+    image.src = userImage
+    setProgressBar(0)
   }
 
   function openUpdateNameModal(e) {
