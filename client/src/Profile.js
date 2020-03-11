@@ -316,7 +316,7 @@ function closePassModal() {
         <div className={styles.deleteBooksNeeded}>
           <button onClick={(e) => { deleteBooksNeeded(e) }}>Delete Book Needed</button>
         </div>
-        <div className={styles.deleteBooksAvailable}>
+        <div className={styles.deleteBooksNeeded}>
           <button onClick={(e) => { deleteBooksAvailable(e) }}>Delete Book Available</button>
         </div>
         <div>
