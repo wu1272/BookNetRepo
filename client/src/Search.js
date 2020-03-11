@@ -3,7 +3,7 @@ import app from "./base.js";
 import axios from "axios";
 import styles from "./search.module.css"
 
-
+let defaultBookPic = "https://static.vecteezy.com/system/resources/thumbnails/000/365/820/small/Basic_Elements__2818_29.jpg"
 
 
 function Search() {
@@ -22,8 +22,6 @@ function Search() {
                 setResult(data.data.items);
             })
         }
-        // setBooksNeeded("998", "Book of Life", "John Deere");
-        // setBooksAvailable("2000", "Notecards", "Hank Williams");
         return (
             <body className="landing">
             <div>
@@ -36,7 +34,9 @@ function Search() {
                 </form>
                 {result.map(book => (
                     <button onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}>
-                    <img src={book.volumeInfo.imageLinks.thumbnail} alt={book.title}/>
+                    <img src={
+                        ((book.volumeInfo.imageLinks) ? book.volumeInfo.imageLinks.thumbnail : defaultBookPic)
+                    } />
                     </button>
                 ))}
             </div>
