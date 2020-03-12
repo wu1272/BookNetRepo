@@ -39,19 +39,17 @@ function Search() {
                         <button onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Needed</button>
                     
                         <img src={((book.volumeInfo.imageLinks) ? book.volumeInfo.imageLinks.thumbnail : defaultBookPic)} />
-
-                        <button onClick={ (e) => { setBooksAvailable(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Available
-                       
-                        <input type="checkbox" class="hidden" name="trade" readonly="" tabindex="0" />
+                        
+                        <input type="checkbox" class="hidden" id="trade"/>
                         <label>For Trade</label>
 
-                        <input type="checkbox" class="hidden" name="donation" readonly="" tabindex="0" />
+                        <input type="checkbox" class="hidden" id="donation"/>
                         <label>For Donation</label>
 
-                        <input type="checkbox" class="hidden" name="sale" readonly="" tabindex="0" />
+                        <input type="checkbox" class="hidden" id="sale"/>
                         <label>For Sale</label>
-                        
-                        </button>
+
+                        <button onClick={ (e) => { setBooksAvailable(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Available</button>
                     </button>
                    
                 ))}
@@ -83,47 +81,53 @@ function Search() {
 function setBooksAvailable(e, book_id, book_title, book_authors) {
     app.auth().onAuthStateChanged(function (user) {
         if (user) {
-            var sale = document.getElementById("sale")
-            var donate = document.getElementById("donation")
-            var trade = document.getElementById("trade")
+            var sale = document.getElementById("sale").checked
+            var donate = document.getElementById("donation").checked
+            var trade = document.getElementById("trade").checked
+            
 
-            if (sale == null) {
-                sale = false;
+            //only send to backend if exactly 1 box is checked
+            var count = 0;
+            
+            if (sale) {
+                count++;
+            }
+            if (donate) {
+                count++;
+            }
+            if (trade) {
+                count++;
+            }
+
+            //user must select exactly 1 category
+            if (count == 0) {
+                alert("Please select a category: trade/sale/donation")
+            }
+            else if (count > 1) {
+                alert("Please select exactly 1 category!")
             }
             else {
-                sale = true;
-            }
-
-            if (donate == null) {
-                donate = false;
-            }
-            else {
-                donate = true;
-            }
-
-            if (trade == null) {
-                trade = false;
-            }
-            else {
-                trade = true;
-            }
-            console.log(sale)
-            axios.post('/api/setBooksAvailable', {
-                userid: user.uid,
-                    bookID: book_id,
-                    title: book_title,
-                    author: book_authors,
-                    sale: sale,
-                    donate: donate,
-                    trade: trade,
-                    event: e
-            })
-                .then(function (response) {
-                    console.log(response);
+                axios.post('/api/setBooksAvailable', {
+                    userid: user.uid,
+                        bookID: book_id,
+                        title: book_title,
+                        author: book_authors,
+                        sale: sale,
+                        donate: donate,
+                        trade: trade,
+                        event: e
                 })
-                .catch(function (error) {
-                    console.log(error);
-                })
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+                //alert user to book added and reload page to reset all variables
+                if(!alert('Added ' + book_title + " to your list of books available!")) {
+                    window.location.reload();
+                }
+            }
         }
     });
 }
