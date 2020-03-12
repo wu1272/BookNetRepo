@@ -6,6 +6,7 @@ import styles from "./search.module.css"
 let defaultBookPic = "https://static.vecteezy.com/system/resources/thumbnails/000/365/820/small/Basic_Elements__2818_29.jpg"
 
 
+
 function Search() {
         const[book, setBook] = useState("");
         const[result, setResult] = useState([]);
@@ -22,6 +23,7 @@ function Search() {
                 setResult(data.data.items);
             })
         }
+        //setBooksNeeded("998", "Book of Life", "John Deere");
         return (
             <body className="landing">
             <div>
@@ -33,10 +35,21 @@ function Search() {
                     <button className={styles.tester} type="submit">Search</button>
                 </form>
                 {result.map(book => (
-                    <button onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}>
-                    <img src={
-                        ((book.volumeInfo.imageLinks) ? book.volumeInfo.imageLinks.thumbnail : defaultBookPic)
-                    } />
+                    <button>
+                        <button onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Needed</button>
+                    
+                        <img src={((book.volumeInfo.imageLinks) ? book.volumeInfo.imageLinks.thumbnail : defaultBookPic)} />
+                        
+                        <input type="checkbox" class="hidden" id="trade"/>
+                        <label>For Trade</label>
+
+                        <input type="checkbox" class="hidden" id="donation"/>
+                        <label>For Donation</label>
+
+                        <input type="checkbox" class="hidden" id="sale"/>
+                        <label>For Sale</label>
+
+                        <button onClick={ (e) => { setBooksAvailable(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Available</button>
                     </button>
                 ))}
             </div>
@@ -45,8 +58,7 @@ function Search() {
     }
 
 
-    function setBooksNeeded(e, book_id, book_title, book_authors) {
-        
+    function setBooksNeeded(e, book_id, book_title, book_authors) {   
         app.auth().onAuthStateChanged(function (user) {
             if (user) {
                 axios.post('/api/setBooksNeeded', {
@@ -65,21 +77,56 @@ function Search() {
             }
         });
     }
-function setBooksAvailable(ISBN, title, author) {
+function setBooksAvailable(e, book_id, book_title, book_authors) {
     app.auth().onAuthStateChanged(function (user) {
         if (user) {
-            axios.post('/api/setBooksAvailable', {
-                userid: user.uid,
-                ISBN: ISBN,
-                title: title,
-                author: author
-            })
-                .then(function (response) {
-                    console.log(response);
+            var sale = document.getElementById("sale").checked
+            var donate = document.getElementById("donation").checked
+            var trade = document.getElementById("trade").checked
+            
+
+            //only send to backend if exactly 1 box is checked
+            var count = 0;
+            
+            if (sale) {
+                count++;
+            }
+            if (donate) {
+                count++;
+            }
+            if (trade) {
+                count++;
+            }
+
+            //user must select exactly 1 category
+            if (count == 0) {
+                alert("Please select a category: trade/sale/donation")
+            }
+            else if (count > 1) {
+                alert("Please select exactly 1 category!")
+            }
+            else {
+                axios.post('/api/setBooksAvailable', {
+                    userid: user.uid,
+                        bookID: book_id,
+                        title: book_title,
+                        author: book_authors,
+                        sale: sale,
+                        donate: donate,
+                        trade: trade,
+                        event: e
                 })
-                .catch(function (error) {
-                    console.log(error);
-                })
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+                //alert user to book added and reload page to reset all variables
+                if(!alert('Added ' + book_title + " to your list of books available!")) {
+                    window.location.reload();
+                }
+            }
         }
     });
 }
