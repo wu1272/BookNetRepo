@@ -51,6 +51,7 @@ function Search() {
 
                         <button onClick={ (e) => { setBooksAvailable(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Available</button>
                     </button>
+                   
                 ))}
             </div>
             </body>
