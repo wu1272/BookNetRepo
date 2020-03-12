@@ -10,12 +10,14 @@ import Search from "./Search";
 import { AuthProvider } from "./Auth";
 import PrivateRoute from "./PrivateRoute";
 import UploadImage from "./components/UploadImage";
+import BooksNeeded from "./BooksNeeded";
 
 const App = () => {
   return (
     <AuthProvider>
       <Router>
         <div>
+          <Route exact path="/booksNeeded" component={BooksNeeded} />
           <Route exact path="/search" component={Search} />
           <Route exact path="/components/UploadImage" component={UploadImage} />
           <Route exact path="/profile" component={Profile} />
