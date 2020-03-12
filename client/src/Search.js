@@ -6,6 +6,7 @@ import styles from "./search.module.css"
 let defaultBookPic = "https://static.vecteezy.com/system/resources/thumbnails/000/365/820/small/Basic_Elements__2818_29.jpg"
 
 
+
 function Search() {
         const[book, setBook] = useState("");
         const[result, setResult] = useState([]);
@@ -22,6 +23,7 @@ function Search() {
                 setResult(data.data.items);
             })
         }
+        //setBooksNeeded("998", "Book of Life", "John Deere");
         return (
             <body className="landing">
             <div>
@@ -33,11 +35,25 @@ function Search() {
                     <button className={styles.tester} type="submit">Search</button>
                 </form>
                 {result.map(book => (
-                    <button onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}>
-                    <img src={
-                        ((book.volumeInfo.imageLinks) ? book.volumeInfo.imageLinks.thumbnail : defaultBookPic)
-                    } />
+                    <button>
+                        <button onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Needed</button>
+                    
+                        <img src={((book.volumeInfo.imageLinks) ? book.volumeInfo.imageLinks.thumbnail : defaultBookPic)} />
+
+                        <button onClick={ (e) => { setBooksAvailable(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Available
+                       
+                        <input type="checkbox" class="hidden" name="trade" readonly="" tabindex="0" />
+                        <label>For Trade</label>
+
+                        <input type="checkbox" class="hidden" name="donation" readonly="" tabindex="0" />
+                        <label>For Donation</label>
+
+                        <input type="checkbox" class="hidden" name="sale" readonly="" tabindex="0" />
+                        <label>For Sale</label>
+                        
+                        </button>
                     </button>
+                   
                 ))}
             </div>
             </body>
@@ -45,8 +61,7 @@ function Search() {
     }
 
 
-    function setBooksNeeded(e, book_id, book_title, book_authors) {
-        
+    function setBooksNeeded(e, book_id, book_title, book_authors) {   
         app.auth().onAuthStateChanged(function (user) {
             if (user) {
                 axios.post('/api/setBooksNeeded', {
@@ -65,14 +80,43 @@ function Search() {
             }
         });
     }
-function setBooksAvailable(ISBN, title, author) {
+function setBooksAvailable(e, book_id, book_title, book_authors) {
     app.auth().onAuthStateChanged(function (user) {
         if (user) {
+            var sale = document.getElementById("sale")
+            var donate = document.getElementById("donation")
+            var trade = document.getElementById("trade")
+
+            if (sale == null) {
+                sale = false;
+            }
+            else {
+                sale = true;
+            }
+
+            if (donate == null) {
+                donate = false;
+            }
+            else {
+                donate = true;
+            }
+
+            if (trade == null) {
+                trade = false;
+            }
+            else {
+                trade = true;
+            }
+            console.log(sale)
             axios.post('/api/setBooksAvailable', {
                 userid: user.uid,
-                ISBN: ISBN,
-                title: title,
-                author: author
+                    bookID: book_id,
+                    title: book_title,
+                    author: book_authors,
+                    sale: sale,
+                    donate: donate,
+                    trade: trade,
+                    event: e
             })
                 .then(function (response) {
                     console.log(response);
