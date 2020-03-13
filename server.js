@@ -129,8 +129,9 @@ function deleteBooksAvailable(userID) {
   admin.database().ref('users/' + userID + '/booksAvailable/' + '2000').remove();
 }
 
-function deleteBooksNeeded(userID) {
-  admin.database().ref('users/' + userID + '/booksNeeded/' + '998').remove();
+function deleteBooksNeeded(userID, bookID) {
+  console.log("HERE:" + bookID)
+  admin.database().ref('users/' + userID + '/booksNeeded/' + bookID).remove();
 }
 
 
@@ -138,8 +139,9 @@ function deleteBooksNeeded(userID) {
 //booksNeeded
 app.post('/api/bookNeededRemove', urlParser, function (req, res) {
   var userid = req.body.userid;
+  var bookID = req.body.bookID;
   //console.log(req.body);
-  deleteBooksNeeded(req.body.userid)
+  deleteBooksNeeded(req.body.userid, req.body.bookID)
 });
 //booksAvailable
 app.post('/api/bookAvailableRemove', urlParser, function (req, res) {

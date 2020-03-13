@@ -103,7 +103,7 @@ function setBooksAvailable(e, book_id, book_title, book_authors) {
             }
 
             //user must select exactly 1 category
-            if (count == 0) {
+            if (count === 0) {
                 alert("Please select a category: trade/sale/donation")
             }
             else if (count > 1) {
