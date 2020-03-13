@@ -75,6 +75,9 @@ function Search() {
                     .catch(function (error) {
                         console.log(error);
                     })
+                if(!alert('Added ' + book_title + " to your list of books needed!")) {
+                    window.location.reload();
+                }
             }
         });
     }
