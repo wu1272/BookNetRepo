@@ -59,7 +59,7 @@ const SignUp = ({ history }) => {
           <button type="submit">Sign Up</button>
         </div>
         <div>
-          <button onClick={() => window.location.href = '/login'}>Login</button>
+          <button onClick={() => window.location.href = '/'}>Login</button>
         </div>
       </form>
       </div>
