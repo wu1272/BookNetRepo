@@ -34,6 +34,7 @@ function Search() {
                     </div>
                     <button className={styles.tester} type="submit">Search</button>
                 </form>
+                <button onClick={() => window.location.href = '/home'}>Home</button>
                 {result.map(book => (
                     <button>
                         <button onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Needed</button>
@@ -62,6 +63,9 @@ function Search() {
     function setBooksNeeded(e, book_id, book_title, book_authors) {   
         app.auth().onAuthStateChanged(function (user) {
             if (user) {
+                if (book_authors === undefined) {
+                    book_authors = "";
+                }
                 axios.post('/api/setBooksNeeded', {
                     userid: user.uid,
                     bookID: book_id,
@@ -110,6 +114,9 @@ function setBooksAvailable(e, book_id, book_title, book_authors) {
                 alert("Please select exactly 1 category!")
             }
             else {
+                if (book_authors === undefined) {
+                    book_authors = null;
+                }
                 axios.post('/api/setBooksAvailable', {
                     userid: user.uid,
                         bookID: book_id,
