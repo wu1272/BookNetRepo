@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import app from "./base.js";
 import axios from "axios";
 import styles from "./search.module.css"
@@ -17,7 +17,7 @@ function Search() {
         }
         function handleSubmit(event){
             event.preventDefault();
-            axios.get("https://www.googleapis.com/books/v1/volumes?q="+book+"&key=" + apiKey+"&maxResults=40")
+            axios.get("https://www.googleapis.com/books/v1/volumes?q="+book+"&key="+apiKey+"&maxResults=40")
             .then(data=> {
                 console.log(data);
                 setResult(data.data.items);

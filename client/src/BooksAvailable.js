@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './home.module.css';
 import app from "./base.js";
 import axios from "axios";
 
@@ -22,7 +21,6 @@ class BooksAvailable extends Component {
               //console.log(bookID);
               var btn = document.createElement("BUTTON");
               btn.id = i;
-              var id;
               btn.innerHTML = title;
               btn.setAttribute("value", bookID);
               btn.setAttribute("index", i);

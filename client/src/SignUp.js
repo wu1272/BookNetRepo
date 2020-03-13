@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { withRouter } from "react-router";
 import app from "./base";
-import styles from  "./signup.module.css"
+import "./signup.module.css"
 import axios from "axios";
 
 const SignUp = ({ history }) => {
@@ -57,6 +57,9 @@ const SignUp = ({ history }) => {
         
         <div>
           <button type="submit">Sign Up</button>
+        </div>
+        <div>
+          <button onClick={() => window.location.href = '/login'}>Login</button>
         </div>
       </form>
       </div>

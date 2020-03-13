@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useState } from "react";
 import { withRouter, Redirect } from "react-router";
 import app from "./base.js";
 import Modal from "react-modal"
-import styles from "./login.module.css"
+import "./login.module.css"
 import { AuthContext } from "./Auth.js";
 
 const customStyles = {
@@ -105,9 +105,12 @@ const Login = ({ history }) => {
     
         <div>
           <button type="submit">Log in</button>
-          <button onClick={openModal}>Forgot Password?</button>
         </div>
       </form>
+        <div>
+          <button onClick={() => window.location.href = '/signup'}>Sign Up</button>
+          <button onClick={openModal}>Forgot Password?</button>
+        </div>
     </div>
     </div>
   );
