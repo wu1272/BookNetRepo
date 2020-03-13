@@ -130,7 +130,7 @@ function deleteBooksAvailable(userID, bookID) {
 }
 
 function deleteBooksNeeded(userID, bookID) {
-  console.log("HERE:" + bookID)
+  //console.log("HERE:" + bookID)
   admin.database().ref('users/' + userID + '/booksNeeded/' + bookID).remove();
 }
 
