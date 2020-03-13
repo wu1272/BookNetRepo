@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import app from "./base.js";
 import axios from "axios";
 import styles from "./search.module.css"
@@ -17,7 +17,7 @@ function Search() {
         }
         function handleSubmit(event){
             event.preventDefault();
-            axios.get("https://www.googleapis.com/books/v1/volumes?q="+book+"&key=" + apiKey+"&maxResults=40")
+            axios.get("https://www.googleapis.com/books/v1/volumes?q="+book+"&key="+apiKey+"&maxResults=40")
             .then(data=> {
                 console.log(data);
                 setResult(data.data.items);
@@ -34,6 +34,7 @@ function Search() {
                     </div>
                     <button className={styles.tester} type="submit">Search</button>
                 </form>
+                <button onClick={() => window.location.href = '/home'}>Home</button>
                 {result.map(book => (
                     <button>
                         <button onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Needed</button>
@@ -62,6 +63,9 @@ function Search() {
     function setBooksNeeded(e, book_id, book_title, book_authors) {   
         app.auth().onAuthStateChanged(function (user) {
             if (user) {
+                if (book_authors === undefined) {
+                    book_authors = "";
+                }
                 axios.post('/api/setBooksNeeded', {
                     userid: user.uid,
                     bookID: book_id,
@@ -75,6 +79,9 @@ function Search() {
                     .catch(function (error) {
                         console.log(error);
                     })
+                if(!alert('Added ' + book_title + " to your list of books needed!")) {
+                    window.location.reload();
+                }
             }
         });
     }
@@ -100,13 +107,16 @@ function setBooksAvailable(e, book_id, book_title, book_authors) {
             }
 
             //user must select exactly 1 category
-            if (count == 0) {
+            if (count === 0) {
                 alert("Please select a category: trade/sale/donation")
             }
             else if (count > 1) {
                 alert("Please select exactly 1 category!")
             }
             else {
+                if (book_authors === undefined) {
+                    book_authors = null;
+                }
                 axios.post('/api/setBooksAvailable', {
                     userid: user.uid,
                         bookID: book_id,

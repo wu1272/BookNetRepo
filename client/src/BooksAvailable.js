@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import app from "./base.js";
 import axios from "axios";
 
-class BooksNeeded extends Component {
+class BooksAvailable extends Component {
 
   componentDidMount() {
     app.auth().onAuthStateChanged(function (user) {
       if (user) {
         var titles = [];
         var bookIDs = [];
-        getBooksNeededIDs(bookIDs, user.uid, function () {
+        getBooksAvailableIDs(bookIDs, user.uid, function () {
           //console.log(bookIDs);
 
-          getBooksNeeded(titles, user.uid, function () {
+          getBooksAvailable(titles, user.uid, function () {
             //document.getElementById("p3").innerHTML = titles;
             for (var i = 0; i < titles.length; i++) {
               var title = titles[i];
@@ -29,7 +29,7 @@ class BooksNeeded extends Component {
               btn.onclick = (function(id) {
                 return function() {
                   //console.log(id)
-                  deleteBooksNeeded(id)
+                  deleteBooksAvailable(id)
                 };
               }(bookIDs[i]));
             }
@@ -43,17 +43,17 @@ class BooksNeeded extends Component {
   render() {
     return (
       <div>
-        <h1>Books Needed</h1>
-        <p1>Click a book to remove it from your list of needed books.</p1>
+        <h1>Books Available</h1>
+        <p1>Click a book to remove it from your list of available books.</p1>
       </div>
     );
   }
 }
 
-//get ALL booksNeeded from database     
-function getBooksNeeded(titles, userID, callback) {
-  var booksNeededPath = app.database().ref('users/' + userID + '/booksNeeded/');
-  booksNeededPath.once('value')
+//get ALL booksAvailable from database     
+function getBooksAvailable(titles, userID, callback) {
+  var booksAvailablePath = app.database().ref('users/' + userID + '/booksAvailable/');
+  booksAvailablePath.once('value')
     .then(function (snapshot) {
       snapshot.forEach(function (child) {
         var title = child.child("title").val();
@@ -62,10 +62,10 @@ function getBooksNeeded(titles, userID, callback) {
       callback();
     });
 }
-//get ALL booksNeeded IDs from database     
-function getBooksNeededIDs(bookIDs, userID, callback) {
-  var booksNeededPath = app.database().ref('users/' + userID + '/booksNeeded/');
-  booksNeededPath.once('value')
+//get ALL booksAvailable IDs from database     
+function getBooksAvailableIDs(bookIDs, userID, callback) {
+  var booksAvailablePath = app.database().ref('users/' + userID + '/booksAvailable/');
+  booksAvailablePath.once('value')
     .then(function (snapshot) {
       snapshot.forEach(function (child) {
         var bookID = child.key;
@@ -75,12 +75,12 @@ function getBooksNeededIDs(bookIDs, userID, callback) {
     });
 }
 
-function deleteBooksNeeded(bookID) {
+function deleteBooksAvailable(bookID) {
   app.auth().onAuthStateChanged(function (user) {
     if (user) {
       //console.log(user.uid)
       //console.log(bookID)
-      axios.post('/api/bookNeededRemove', {
+      axios.post('/api/bookAvailableRemove', {
         userid: user.uid,
         bookID: bookID
       })
@@ -97,4 +97,4 @@ function deleteBooksNeeded(bookID) {
   });
 }
 
-export default BooksNeeded;
+export default BooksAvailable;
