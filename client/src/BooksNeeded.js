@@ -26,6 +26,10 @@ class BooksNeeded extends Component {
               btn.setAttribute("index", i);
               btn.setAttribute("text", title);
               document.body.appendChild(btn);
+              btn.style.width = '200px';
+              btn.style.marginLeft = '50%';
+              btn.style.position = 'relative';
+              btn.style.left = '-100px';
               btn.onclick = (function(id) {
                 return function() {
                   //console.log(id)

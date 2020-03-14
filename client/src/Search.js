@@ -23,7 +23,6 @@ function Search() {
                 setResult(data.data.items);
             })
         }
-        //setBooksNeeded("998", "Book of Life", "John Deere");
         return (
             <body className="landing">
             <div>
