@@ -37,10 +37,15 @@ function Search() {
                 <div></div>
                 {result.map(book => (
                     <button>
-                        <button onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Needed</button>
-                    
+
                         <img src={((book.volumeInfo.imageLinks) ? book.volumeInfo.imageLinks.thumbnail : defaultBookPic)} />
                         
+                        <div></div>
+
+                        <button className={styles.tester} onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Needed</button>
+                    
+                        <div>Or select one of the following options and click Book Available</div>
+                    
                         <input type="checkbox" class="hidden" id="trade"/>
                         <label>For Trade</label>
 
@@ -49,8 +54,8 @@ function Search() {
 
                         <input type="checkbox" class="hidden" id="sale"/>
                         <label>For Sale</label>
-
-                        <button onClick={ (e) => { setBooksAvailable(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Available</button>
+                        
+                        <button className={styles.tester} onClick={ (e) => { setBooksAvailable(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Available</button>
                     </button>
                    
                 ))}
