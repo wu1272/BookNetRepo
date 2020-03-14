@@ -33,7 +33,8 @@ function Search() {
                     </div>
                     <button className={styles.tester} type="submit">Search</button>
                 </form>
-                <button onClick={() => window.location.href = '/home'}>Home</button>
+                <button className={styles.tester} onClick={() => window.location.href = '/home'}>Home</button>
+                <div></div>
                 {result.map(book => (
                     <button>
                         <button onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Needed</button>
