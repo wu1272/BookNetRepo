@@ -36,7 +36,7 @@ function Search() {
                 <button className={styles.tester} onClick={() => window.location.href = '/home'}>Home</button>
                 <div></div>
                 {result.map(book => (
-                    <button>
+                    <ul>
 
                         <img src={((book.volumeInfo.imageLinks) ? book.volumeInfo.imageLinks.thumbnail : defaultBookPic)} />
                         
@@ -56,7 +56,7 @@ function Search() {
                         <label>For Sale</label>
                         
                         <button className={styles.tester} onClick={ (e) => { setBooksAvailable(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Available</button>
-                    </button>
+                    </ul>
                    
                 ))}
             </div>
