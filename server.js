@@ -57,13 +57,15 @@ app.get('/api/users', (req, res) => {
 //GET BOOKSNEEDED
 
 //get ALL booksNeeded from database     
-function getBooksNeeded(titles, userID, callback) {
+function getBooksNeeded(authors, titles, userID, callback) {
   var booksNeededPath = admin.database().ref('users/' + userID + '/booksNeeded/');
   booksNeededPath.once('value')
     .then(function (snapshot) {
       snapshot.forEach(function (child) {
         var title = child.child("title").val();
+        var author = child.child("author").child("0").val();
         titles.push(title);
+        authors.push(author);
       });
       callback();
     });
@@ -72,9 +74,12 @@ function getBooksNeeded(titles, userID, callback) {
 //get books needed from database and send to frontend
 app.get('/api/getBooksNeeded', (req, res) => {
   var titles = [];
-  getBooksNeeded(titles, 'taJ6elpogCXeOSu9oStdJRpIZQS2', function () {
+  var authors = [];
+  getBooksNeeded(authors, titles, 'taJ6elpogCXeOSu9oStdJRpIZQS2', function () {
     console.log(titles);
     res.json(titles);
+    console.log(authors);
+    res.json(authors);
   });
 });
 

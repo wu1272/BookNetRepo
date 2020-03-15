@@ -9,19 +9,24 @@ class BooksAvailable extends Component {
       if (user) {
         var titles = [];
         var bookIDs = [];
+        var authors = [];
         getBooksAvailableIDs(bookIDs, user.uid, function () {
           //console.log(bookIDs);
 
-          getBooksAvailable(titles, user.uid, function () {
+          getBooksAvailable(authors, titles, user.uid, function () {
             //document.getElementById("p3").innerHTML = titles;
             for (var i = 0; i < titles.length; i++) {
               var title = titles[i];
               var bookID = bookIDs[i];
+              var author = authors[i];
+              if (author == null) {
+                author = "Unknown";
+              }
               //console.log(title);
               //console.log(bookID);
               var btn = document.createElement("BUTTON");
               btn.id = i;
-              btn.innerHTML = title;
+              btn.innerHTML = title + "<br /><br />By: " + author;
               btn.setAttribute("value", bookID);
               btn.setAttribute("index", i);
               btn.setAttribute("text", title);
@@ -55,13 +60,15 @@ class BooksAvailable extends Component {
 }
 
 //get ALL booksAvailable from database     
-function getBooksAvailable(titles, userID, callback) {
+function getBooksAvailable(authors, titles, userID, callback) {
   var booksAvailablePath = app.database().ref('users/' + userID + '/booksAvailable/');
   booksAvailablePath.once('value')
     .then(function (snapshot) {
       snapshot.forEach(function (child) {
         var title = child.child("title").val();
+        var author = child.child("author").child("0").val();
         titles.push(title);
+        authors.push(author);
       });
       callback();
     });
