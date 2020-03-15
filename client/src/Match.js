@@ -29,7 +29,7 @@ class Match extends Component {
                     getEverySingleDamnBookAvailable(allBookIDsAvailable, function () {
                         //console.log(allBookIDsAvailable);
                         //console.log(bookIDs);
-                        console.log(allBookIDsNeeded.length);
+                        //console.log(allBookIDsNeeded.length);
                         
                         for (var i = 0; i < allBookIDsAvailable.length; i++) {
                             for (var j = 0; j < bookIDs.length; j++) {
@@ -59,14 +59,11 @@ class Match extends Component {
                                                     //console.log("hallelujah")
                                                     typeOfMatch = "trade";
                                                     btn.id = [bookAvailableIDs[b]];
-                                                    console.log(btn.id)
                                                     //bookbook.title is the one they have and I need
                                                     //allBookIDsNeeded[a][bookAvailableIDs[b]] is the one I have and they need
                                                     btn.innerHTML = bookbook.title + "<br /><br /> for your <br /><br />" + allBookIDsNeeded[a][bookAvailableIDs[b]].title;
-                                                    console.log(btn.innerHTML)
                                                     btn.setAttribute("typeOfMatch", typeOfMatch)
                                                     tradeMatches.push(btn)
-                                                    console.log(tradeMatches)
                                                 }
                                             }
                                             
