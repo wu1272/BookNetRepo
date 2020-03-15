@@ -28,11 +28,11 @@ class Home extends Component {
         <div class="form-wrapper">
           <h1>Hello <span id="emailAddress"></span>!</h1>
           <h2>Users</h2>
-          <ul>
+          <div>
             {this.state.users.map(user =>
               <li key={user.id}>{user.firstName} {user.lastName}</li>
             )}
-          </ul>
+          </div>
           <div>
             <button onClick={() => window.location.href = '/search'}>Search</button>
             <button onClick={() => window.location.href = '/booksNeeded'}>My Books Needed</button>
