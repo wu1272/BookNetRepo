@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import app from "./base.js";
 
+var tradeMatches = []
+var saleMatches = []
+var donateMatches = []
+
+
 class Match extends Component {
+
+    
 
     componentDidMount() {
         app.auth().onAuthStateChanged(function (user) {
@@ -19,55 +26,114 @@ class Match extends Component {
                                 var bookbook = allBookIDs[i][bookIDs[j]];
                                 if (bookbook !== undefined) {
                                     //console.log(bookbook);
-                                    var btn = document.createElement("BUTTON");
+                                    var btn = document.createElement("button");
                                     var typeOfMatch;
+
+                                    //set css
+                                    btn.style.width = "100%"
+                                    btn.style.padding = '25px'
+                                    
+
+                                    //set values 
+                                    btn.setAttribute("value", bookIDs[j]);
+                                    btn.setAttribute("text", bookbook.title);
+
+                                    //Add to proper list
                                     if (bookbook.trade) {
                                         typeOfMatch = "trade";
                                         btn.innerHTML = bookbook.title + " " + typeOfMatch;
-                                        btn.style.width = '200px';
-                                        btn.style.marginLeft = '50%';
-                                        btn.style.position = 'relative';
-                                        btn.style.left = '-100px';
+                                        btn.setAttribute("typeOfMatch", typeOfMatch)
+                                        tradeMatches.push(btn)
                                     }
                                     if (bookbook.sale) {
                                         typeOfMatch = "sale";
                                         btn.innerHTML = bookbook.title + " " + typeOfMatch;
-                                        btn.style.width = '200px';
-                                        btn.style.marginLeft = '50%';
-                                        btn.style.position = 'relative';
-                                        btn.style.left = '-100px';
+                                        btn.setAttribute("typeOfMatch", typeOfMatch)
+                                        saleMatches.push(btn)
                                     }
                                     if (bookbook.donate) {
                                         typeOfMatch = "donate";
                                         btn.innerHTML = bookbook.title + " " + typeOfMatch;
-                                        btn.style.width = '200px';
-                                        btn.style.marginLeft = '50%';
-                                        btn.style.position = 'relative';
-                                        btn.style.left = '-100px';
+                                        btn.setAttribute("typeOfMatch", typeOfMatch)
+                                        donateMatches.push(btn)
                                     }
-                                    btn.setAttribute("typeOfMatch", typeOfMatch)
-                                    btn.setAttribute("value", bookIDs[j]);
-                                    btn.setAttribute("text", bookbook.title);
-                                    document.body.appendChild(btn);
+                                
                                 }
                             }
                         }
+
+                        displayMatches()
                     });
                 });
 
             }
-        });
+        })
+    
     }
+
 
 
     render() {
         return (
             <div>
                 <h1>Find Matches Here</h1>
-                <p1>Click a book to be paired with a trading partner</p1>
+                <p>Click a book to be paired with a trading partner</p>
+                <div id="matchesList"></div>
             </div>
         );
     }
+}
+
+
+//Display matches with respect to match type 
+function displayMatches() {
+
+        console.log("Displaying matches")
+
+        //Get div to add matches to 
+        var list = document.getElementById("matchesList");
+
+        //Display trade matches first
+        var trades = document.createElement("div")
+        trades.className = "wrapper"
+        trades.style.height = "auto"
+        var tradesInner = document.createElement("div")
+        tradesInner.className = "form-wrapper"
+        tradeMatches.forEach(item => {
+            tradesInner.appendChild(item)
+        })
+        trades.appendChild(tradesInner)
+        list.appendChild(trades)
+
+         //Display donate matches 
+         var donations = document.createElement("div")
+         donations.className = "wrapper"
+         donations.style.height = "auto"
+         donations.style.marginTop = "10px"
+         var donationsInner = document.createElement("div")
+         donationsInner.className = "form-wrapper"
+         donateMatches.forEach(item => {
+             donationsInner.appendChild(item)
+         })
+         donations.appendChild(donationsInner)
+         list.appendChild(donations)
+
+
+        //Display sale options
+        var sales = document.createElement("div")
+        sales.className="wrapper"
+        sales.style.height = "auto"
+        sales.style.marginTop = "10px"
+        var salesInner = document.createElement("div")
+        salesInner.className="form-wrapper"
+        saleMatches.forEach(item => {
+            salesInner.appendChild(item)
+        })
+        sales.appendChild(salesInner)
+        list.appendChild(sales)
+
+
+        
 }
 
 //get ALL booksNeeded IDs from database     
