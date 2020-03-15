@@ -31,7 +31,7 @@ class Match extends Component {
 
                                     //set css
                                     btn.style.width = "100%"
-                                    btn.style.padding = '25px'
+                                    btn.style.padding = '15px'
                                     
 
                                     //set values 
@@ -41,19 +41,19 @@ class Match extends Component {
                                     //Add to proper list
                                     if (bookbook.trade) {
                                         typeOfMatch = "trade";
-                                        btn.innerHTML = bookbook.title + " " + typeOfMatch;
+                                        btn.innerHTML = bookbook.title;
                                         btn.setAttribute("typeOfMatch", typeOfMatch)
                                         tradeMatches.push(btn)
                                     }
                                     if (bookbook.sale) {
                                         typeOfMatch = "sale";
-                                        btn.innerHTML = bookbook.title + " " + typeOfMatch;
+                                        btn.innerHTML = bookbook.title
                                         btn.setAttribute("typeOfMatch", typeOfMatch)
                                         saleMatches.push(btn)
                                     }
                                     if (bookbook.donate) {
                                         typeOfMatch = "donate";
-                                        btn.innerHTML = bookbook.title + " " + typeOfMatch;
+                                        btn.innerHTML = bookbook.title
                                         btn.setAttribute("typeOfMatch", typeOfMatch)
                                         donateMatches.push(btn)
                                     }
@@ -99,6 +99,13 @@ function displayMatches() {
         trades.style.height = "auto"
         var tradesInner = document.createElement("div")
         tradesInner.className = "form-wrapper"
+
+        //Create title for trades list
+        var tradesTitle = document.createElement("h1")
+        tradesTitle.innerHTML = "Available Trades"
+        tradesTitle.style.textDecoration = "underline"
+        tradesInner.appendChild(tradesTitle)
+
         tradeMatches.forEach(item => {
             tradesInner.appendChild(item)
         })
@@ -112,6 +119,13 @@ function displayMatches() {
          donations.style.marginTop = "10px"
          var donationsInner = document.createElement("div")
          donationsInner.className = "form-wrapper"
+
+         //Create title
+         var donationsTitle = document.createElement("h1")
+         donationsTitle.innerHTML = "Available Donations"
+         donationsTitle.style.textDecoration = "underline"
+         donationsInner.appendChild(donationsTitle)
+
          donateMatches.forEach(item => {
              donationsInner.appendChild(item)
          })
@@ -126,6 +140,12 @@ function displayMatches() {
         sales.style.marginTop = "10px"
         var salesInner = document.createElement("div")
         salesInner.className="form-wrapper"
+
+        var salesTitle = document.createElement('h1')
+        salesTitle.innerHTML = "Available Sales"
+        salesTitle.style.textDecoration = "underline"
+        salesInner.appendChild(salesTitle)
+
         saleMatches.forEach(item => {
             salesInner.appendChild(item)
         })
