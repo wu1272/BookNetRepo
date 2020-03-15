@@ -56,6 +56,9 @@ class Match extends Component {
                                             for (var b = 0; b < bookAvailableIDs.length; b++) {
                                                 if (allBookIDsNeeded[a][bookAvailableIDs[b]] !== undefined) {
                                                     //console.log("hallelujah")
+                                                    var btn = document.createElement("button");
+                                                    btn.style.width = "100%"
+                                                    btn.style.padding = '15px'
                                                     typeOfMatch = "trade";
                                                     btn.id = [bookAvailableIDs[b]];
                                                     //bookbook.title is the one they have and I need
