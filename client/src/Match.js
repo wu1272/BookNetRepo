@@ -9,16 +9,16 @@ class Match extends Component {
                 var bookIDs = [];
                 var allBookIDs = [];
                 getBooksNeededIDs(bookIDs, user.uid, function () {
-                    console.log(bookIDs);
+                    //console.log(bookIDs);
 
                     getEverySingleDamnBookAvailable(allBookIDs, function () {
-                        console.log(allBookIDs);
-                        console.log(bookIDs);
+                        //console.log(allBookIDs);
+                        //console.log(bookIDs);
                         for (var i = 0; i < allBookIDs.length; i++) {
                             for (var j = 0; j < bookIDs.length; j++) {
                                 var bookbook = allBookIDs[i][bookIDs[j]];
                                 if (bookbook !== undefined) {
-                                    console.log(bookbook);
+                                    //console.log(bookbook);
                                     var btn = document.createElement("BUTTON");
                                     var typeOfMatch;
                                     if (bookbook.trade) {
