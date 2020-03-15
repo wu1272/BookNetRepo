@@ -55,13 +55,12 @@ class Match extends Component {
                                         for (var a = 0; a < allBookIDsNeeded.length; a++) {
                                             for (var b = 0; b < bookAvailableIDs.length; b++) {
                                                 if (allBookIDsNeeded[a][bookAvailableIDs[b]] !== undefined) {
-                                                    var btn = document.createElement("button");
                                                     //console.log("hallelujah")
                                                     typeOfMatch = "trade";
                                                     btn.id = [bookAvailableIDs[b]];
                                                     //bookbook.title is the one they have and I need
                                                     //allBookIDsNeeded[a][bookAvailableIDs[b]] is the one I have and they need
-                                                    btn.innerHTML = bookbook.title + "<br /><br /> for your <br /><br />" + allBookIDsNeeded[a][bookAvailableIDs[b]].title;
+                                                    btn.innerHTML = bookbook.title + "<br/>for your<br/>" + allBookIDsNeeded[a][bookAvailableIDs[b]].title;
                                                     btn.setAttribute("typeOfMatch", typeOfMatch)
                                                     tradeMatches.push(btn)
                                                 }
