@@ -12,12 +12,14 @@ import UploadImage from "./components/UploadImage";
 import BooksNeeded from "./BooksNeeded";
 import BooksAvailable from "./BooksAvailable";
 import Match from "./Match";
+import Trade from "./Trade";
 
 const App = () => {
   return (
     <AuthProvider>
       <Router>
         <div>
+          <Route exact path="/trade" component={Trade} />
           <Route exact path="/match" component={Match} />
           <Route exact path="/booksAvailable" component={BooksAvailable} />
           <Route exact path="/booksNeeded" component={BooksNeeded} />

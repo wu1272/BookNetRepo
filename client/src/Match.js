@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import app from "./base.js";
-import BooksNeeded from './BooksNeeded.js';
+import axios from "axios";
 
 var tradeMatches = []
 var saleMatches = []
@@ -18,6 +18,7 @@ class Match extends Component {
                 var bookAvailableIDs = [];
                 var allBookIDsAvailable = [];
                 var allBookIDsNeeded = [];
+                var allUserIDsAvailable = [];
                 getBooksNeededIDs(bookIDs, user.uid, function () {
                     //console.log(bookIDs);
                     getBooksAvailableIDs(bookAvailableIDs, user.uid, function() {
@@ -26,7 +27,7 @@ class Match extends Component {
                     getEverySingleDamnBookNeeded(allBookIDsNeeded, function() {
                         
                     
-                    getEverySingleDamnBookAvailable(allBookIDsAvailable, function () {
+                    getEverySingleDamnBookAvailable(allUserIDsAvailable, allBookIDsAvailable, function () {
                         //console.log(allBookIDsAvailable);
                         //console.log(bookIDs);
                         //console.log(allBookIDsNeeded.length);
@@ -65,6 +66,14 @@ class Match extends Component {
                                                     //allBookIDsNeeded[a][bookAvailableIDs[b]] is the one I have and they need
                                                     btn.innerHTML = bookbook.title + "<br/>for your<br/>" + allBookIDsNeeded[a][bookAvailableIDs[b]].title;
                                                     btn.setAttribute("typeOfMatch", typeOfMatch)
+                                                    btn.onclick = (function(userAvailableID, bookNeededID, bookAvailableID) {
+                                                        return function() {
+                                                          console.log(userAvailableID)
+                                                          console.log(bookNeededID)
+                                                          console.log(bookAvailableID)
+                                                          setPending(userAvailableID, bookNeededID, bookAvailableID)
+                                                        };
+                                                      }(allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b]));
                                                     tradeMatches.push(btn)
                                                 }
                                             }
@@ -105,6 +114,7 @@ class Match extends Component {
             <div>
                 <h1>Find Matches Here</h1>
                 <p>Click a book to be paired with a trading partner</p>
+                <button onClick={() => window.location.href = '/home'}>Home</button>
                 <div id="matchesList"></div>
             </div>
         );
@@ -208,13 +218,15 @@ function getBooksAvailableIDs(bookIDs, userID, callback) {
         });
 }
 
-function getEverySingleDamnBookAvailable(allBookIDsAvailable, callback) {
+function getEverySingleDamnBookAvailable(allUserIDsAvailable, allBookIDsAvailable, callback) {
     var booksAvailablePath = app.database().ref('users/');
     booksAvailablePath.once('value')
         .then(function (snapshot) {
             snapshot.forEach(function (user) {
+                console.log(user.key)
                 var bookID = user.child("booksAvailable").val();
                 allBookIDsAvailable.push(bookID);
+                allUserIDsAvailable.push(user.key);
             });
             callback();
         });
@@ -232,5 +244,29 @@ function getEverySingleDamnBookNeeded(allBookIDsNeeded, callback) {
         });
 }
 
+function setPending(userAvailableID, bookNeededID, bookAvailableID) {
+    app.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        axios.post('/api/setPending', {
+          userNeededID: user.uid,
+          userAvailableID: userAvailableID,
+          bookNeededID: bookNeededID,
+          bookAvailableID: bookAvailableID
+        })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+        if (!alert("Please proceed with your trade")) {
+          localStorage.setItem("user2", userAvailableID);
+          localStorage.setItem("bookNeeded", bookNeededID);
+          localStorage.setItem("bookAvailable", bookAvailableID);
+          window.location.href = "/trade"
+        }
+      }
+    });
+  }
 
 export default Match;

@@ -55,7 +55,6 @@ app.get('/api/users', (req, res) => {
 
 
 //GET BOOKSNEEDED
-
 //get ALL booksNeeded from database     
 function getBooksNeeded(authors, titles, userID, callback) {
   var booksNeededPath = admin.database().ref('users/' + userID + '/booksNeeded/');
@@ -85,8 +84,8 @@ app.get('/api/getBooksNeeded', (req, res) => {
 
 
 
-//SET BOOKSNEEDED
 
+//SET BOOKSNEEDED
 //write booksNeeded to database
 function setBooksNeeded(userID, bookID, title, author) {
   admin.database().ref('users/' + userID + '/booksNeeded/' + bookID).set({
@@ -96,12 +95,9 @@ function setBooksNeeded(userID, bookID, title, author) {
 }
 
 app.post('/api/setBooksNeeded', urlParser, function (req, res) {
-  var userid = req.body.userid;
-  var bookID = req.body.bookID;
-  var title = req.body.title;
-  var author = req.body.author;
   setBooksNeeded(req.body.userid, req.body.bookID, req.body.title, req.body.author);
 });
+
 
 
 
@@ -117,15 +113,38 @@ function setBooksAvailable(userID, bookID, title, author, sale, donate, trade) {
 }
 
 app.post('/api/setBooksAvailable', urlParser, function (req, res) {
-  var userid = req.body.userid;
-  var book_id = req.body.bookID;
-  var title = req.body.title;
-  var author = req.body.author;
-  var sale = req.body.sale
-  var donate = req.body.donate
-  var trade = req.body.trade
   setBooksAvailable(req.body.userid, req.body.bookID, req.body.title, req.body.author, req.body.sale, req.body.donate, req.body.trade);
 });
+
+
+
+
+
+//SET BOOKS AS PENDING
+function setPending(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
+  admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"pending":"true"})
+  admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID).update({"pending":"true"})
+  admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID).update({"pending":"true"})
+  admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID).update({"pending":"true"})
+}
+
+app.post('/api/setPending', urlParser, function (req, res) {
+  setPending(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
+});
+
+
+//REMOVES PENDING STATUS
+function removePending(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
+  admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/pending").remove();
+  admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID + "/pending").remove();
+  admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID + "/pending").remove();
+  admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID + "/pending").remove();
+}
+
+app.post('/api/removePending', urlParser, function (req, res) {
+  removePending(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
+});
+
 
 
 
@@ -143,18 +162,13 @@ function deleteBooksNeeded(userID, bookID) {
 //delete book from needBooks and availableBooks
 //booksNeeded
 app.post('/api/bookNeededRemove', urlParser, function (req, res) {
-  var userid = req.body.userid;
-  var bookID = req.body.bookID;
-  //console.log(req.body);
   deleteBooksNeeded(req.body.userid, req.body.bookID)
 });
 //booksAvailable
 app.post('/api/bookAvailableRemove', urlParser, function (req, res) {
-  var userid = req.body.userid;
-  var bookID = req.body.bookID
-  //console.log(req.body);
   deleteBooksAvailable(req.body.userid, req.body.bookID)
 });
+
 
 
 
@@ -204,17 +218,11 @@ app.put('/', function (req, res) {
 
 //read from axios post in frontend, write name to firebase using users/userID path
 app.post('/api/name', urlParser, function (req, res) {
-  var firstName = JSON.stringify(req.body.firstname);
-  var lastName = JSON.stringify(req.body.lastname);
-  var userid = req.body.userid;
-  //console.log(req.body);
   writeUserData(req.body.firstname, req.body.lastname, req.body.userid)
 });
 
 //delete user from database with path users/userID
 app.post('/api/remove', urlParser, function (req, res) {
-  var userid = req.body.userid;
-  //console.log(req.body);
   deleteUserData(req.body.userid)
 });
 
