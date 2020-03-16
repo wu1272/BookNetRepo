@@ -123,6 +123,7 @@ app.post('/api/setBooksAvailable', urlParser, function (req, res) {
 //SET BOOKS AS PENDING
 function setPending(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"pending":"true"})
+  admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"tradePartner":userAvailableID})
   admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID).update({"pending":"true"})
   admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID).update({"pending":"true"})
   admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID).update({"pending":"true"})
@@ -136,6 +137,7 @@ app.post('/api/setPending', urlParser, function (req, res) {
 //REMOVES PENDING STATUS
 function removePending(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/pending").remove();
+  admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/tradePartner").remove();
   admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID + "/pending").remove();
   admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID + "/pending").remove();
   admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID + "/pending").remove();
@@ -143,6 +145,19 @@ function removePending(userNeededID, userAvailableID, bookNeededID, bookAvailabl
 
 app.post('/api/removePending', urlParser, function (req, res) {
   removePending(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
+});
+
+
+//REMOVES ALL POTENTIAL TRADES
+function removeTrade(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
+  admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).remove();
+  admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID).remove();
+  admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID).remove();
+  admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID).remove();
+}
+
+app.post('/api/removeTrade', urlParser, function (req, res) {
+  removeTrade(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
 });
 
 

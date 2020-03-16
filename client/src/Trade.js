@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useCallback } from 'react';
 import './home.module.css';
 import app from "./base.js";
 import axios from "axios"
@@ -7,28 +7,47 @@ class Trade extends Component {
 
   componentDidMount() {
     app.auth().onAuthStateChanged(function (user) {
-        // console.log(localStorage.getItem("user2"));
-        // console.log(localStorage.getItem("bookNeeded"));
-        // console.log(localStorage.getItem("bookAvailable"));
-        var user2 = localStorage.getItem("user2");
-        var bookNeeded = localStorage.getItem("bookNeeded");
-        var bookAvailable = localStorage.getItem("bookAvailable");
-        var book1;
-        var book2;
-        getBookNeeded(book1, bookNeeded);
-        getBookAvailable(book2, bookAvailable);
+        var title1;
+        var title2;
+        var bookIDs1 = [];
+        var bookIDs2 = [];
+        var tradePartnerIDs = [];
+        getPending1(bookIDs1, title1, function(){
+          getTradePartnerID(tradePartnerIDs, bookIDs1[0], function() {
+          });
+        });
+        getPending2(bookIDs2, title2, function() {
+        });
     });
+  }
+  componentDidUpdate() {
+    app.auth().onAuthStateChanged(function (user) {
+      var title1;
+      var title2;
+      var bookIDs1 = [];
+      var bookIDs2 = [];
+      var tradePartnerIDs = [];
+      getPending1(bookIDs1, title1, function(){
+        getTradePartnerID(tradePartnerIDs, bookIDs1[0], function() {
+        });
+      });
+      getPending2(bookIDs2, title2, function() {
+      });
+  });
   }
 
   render() {
     return (
         <div>
-            <h1>Book you will trade:</h1>
+            <h1>Book you will receive:</h1>
+            <h3 id="title1"></h3>
             <h3 id="book1"></h3>
-            <h1>Book you will receive:<br /></h1>
+            <h1>Book you will trade:<br /></h1>
+            <h3 id="title2"></h3>
             <h3 id="book2"></h3>
-            <button onClick={ (e) => { removeAll(localStorage.getItem("user2"), localStorage.getItem("bookNeeded"), localStorage.getItem("bookAvailable"));}}>Accept Trade</button>
-            <button onClick={ (e) => { removePending(localStorage.getItem("user2"), localStorage.getItem("bookNeeded"), localStorage.getItem("bookAvailable"));}}>Cancel Trade</button>
+            <h3 id="user2"></h3>
+            <button onClick={ (e) => { removeTrade(document.getElementById("user2").innerHTML, document.getElementById("book1").innerHTML, document.getElementById("book2").innerHTML);}}>Accept Trade</button>
+            <button onClick={ (e) => { removePending(document.getElementById("user2").innerHTML, document.getElementById("book1").innerHTML, document.getElementById("book2").innerHTML);}}>Cancel Trade</button>
             <button onClick={() => window.location.href = '/home'}>Home</button>
         </div>
     );
@@ -36,13 +55,15 @@ class Trade extends Component {
 }
 
 //accept a trade so all books are removed from available and needed lists
-function removeAll(userAvailableID, bookNeededID, bookAvailableID) {
+function removeTrade(userAvailableID, bookNeededID, bookAvailableID) {
+    console.log(userAvailableID)
+    if (!userAvailableID) {
+      console.log("no trades")
+      return;
+    }
     app.auth().onAuthStateChanged(function (user) {
       if (user) {
-
-        //track it to api/bookNeededRemove
-
-        axios.post('/api/....................', {
+        axios.post('/api/removeTrade', {
           userNeededID: user.uid,
           userAvailableID: userAvailableID,
           bookNeededID: bookNeededID,
@@ -54,11 +75,6 @@ function removeAll(userAvailableID, bookNeededID, bookAvailableID) {
           .catch(function (error) {
             console.log(error);
           })
-
-
-        //track another axios.post to api/bookAvailableRemove
-
-
         if (!alert("Trade accepted!")) {
             window.location.reload();
         }
@@ -66,9 +82,69 @@ function removeAll(userAvailableID, bookNeededID, bookAvailableID) {
     });
   }
 
+
+function getPending1(bookIDs, title, callback) {
+  app.auth().onAuthStateChanged(function (user) {
+    var booksNeededPath = app.database().ref('users/' + user.uid + '/booksNeeded/');
+    booksNeededPath.once('value')
+        .then(function (snapshot) {
+          snapshot.forEach(function (book) {
+            if (book.child("pending").val() === 'true') {
+              console.log(book.key)
+              console.log(book.child("title").val())
+              bookIDs.push(book.key)
+              title = book.child("title").val();
+              document.getElementById("title1").innerHTML = title;
+              document.getElementById("book1").innerHTML = bookIDs[0];
+              document.getElementById("book1").style.display = "none";
+            }
+          });  
+          callback();
+        });
+  });
+}
+
+function getPending2(bookIDs, title, callback) {
+  app.auth().onAuthStateChanged(function (user) {
+    var booksNeededPath = app.database().ref('users/' + user.uid + '/booksAvailable/');
+    booksNeededPath.once('value')
+        .then(function (snapshot) {
+          snapshot.forEach(function (book) {
+            if (book.child("pending").val() === 'true') {
+              console.log(book.key)
+              console.log(book.child("title").val())
+              bookIDs.push(book.key);
+              title = book.child("title").val();
+              document.getElementById("title2").innerHTML = title;
+              document.getElementById("book2").innerHTML = bookIDs[0];
+              document.getElementById("book2").style.display = "none";
+            }
+          });   
+          callback();
+        });
+  });
+}
+
+function getTradePartnerID(tradePartnerIDs, bookID, callback) {
+  app.auth().onAuthStateChanged(function (user) {
+    var tradePartnerPath = app.database().ref('users/' + user.uid + '/booksNeeded/' + bookID);
+    tradePartnerPath.once('value')
+      .then(function(snapshot) {
+        console.log(snapshot.child("tradePartner").val())
+        tradePartnerIDs.push(snapshot.child("tradePartner").val());
+        document.getElementById("user2").innerHTML = tradePartnerIDs[0];
+        document.getElementById("user2").style.display = "none";
+      });
+      callback();
+  });
+}
+
 //cancel a trade so it is no longer pending
 function removePending(userAvailableID, bookNeededID, bookAvailableID) {
-    console.log(bookNeededID)
+    if (!userAvailableID) {
+      console.log("no trades")
+      return;
+    }
     app.auth().onAuthStateChanged(function (user) {
       if (user) {
         axios.post('/api/removePending', {
@@ -90,31 +166,5 @@ function removePending(userAvailableID, bookNeededID, bookAvailableID) {
     });
   }
 
-
-
-function getBookNeeded(book1, bookNeeded) {
-    app.auth().onAuthStateChanged(function (user) {
-        var booksNeededPath = app.database().ref('users/' + user.uid + '/booksNeeded/' + bookNeeded);
-        booksNeededPath.once('value')
-            .then(function (snapshot) {
-                book1 = snapshot.child("title").val();
-                //console.log(book1)
-                document.getElementById("book1").innerHTML = book1;
-            });
-    });
-}
-
-
-function getBookAvailable(book2, bookAvailable) {
-    app.auth().onAuthStateChanged(function (user) {
-        var booksAvailablePath = app.database().ref('users/' + user.uid + '/booksAvailable/' + bookAvailable);
-        booksAvailablePath.once('value')
-            .then(function (snapshot) {
-                book2 = snapshot.child("title").val();
-                //console.log(book2)
-                document.getElementById("book2").innerHTML = book2;
-            });
-    });
-}
 
 export default Trade;

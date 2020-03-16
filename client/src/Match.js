@@ -31,9 +31,14 @@ class Match extends Component {
                         //console.log(allBookIDsAvailable);
                         //console.log(bookIDs);
                         //console.log(allBookIDsNeeded.length);
-                        
                         for (var i = 0; i < allBookIDsAvailable.length; i++) {
                             for (var j = 0; j < bookIDs.length; j++) {
+                                console.log(allBookIDsAvailable[i])
+                                if (allBookIDsAvailable[i] === null) {
+                                    console.log("rip")
+                                    displayMatches()
+                                    return;
+                                }
                                 var bookbook = allBookIDsAvailable[i][bookIDs[j]];
                                 if (bookbook !== undefined) {
                                     //console.log(bookbook);
@@ -260,9 +265,6 @@ function setPending(userAvailableID, bookNeededID, bookAvailableID) {
             console.log(error);
           })
         if (!alert("Please proceed with your trade")) {
-          localStorage.setItem("user2", userAvailableID);
-          localStorage.setItem("bookNeeded", bookNeededID);
-          localStorage.setItem("bookAvailable", bookAvailableID);
           window.location.href = "/trade"
         }
       }
