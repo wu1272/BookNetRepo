@@ -46,18 +46,23 @@ function Search() {
         }
         function handleSubmit(event){
             event.preventDefault();
-            axios.get("https://www.googleapis.com/books/v1/volumes?q="+book+"&key="+apiKey+"&maxResults=40")
-            .then(data=> {
-                console.log(data);
-                console.log(data.data.totalItems)
-                if (data.data.totalItems === 0) {
-                    if (!alert("No results found!")) {
-                        window.location.reload();
-                        return;
+            if (book === "") {
+                alert("Please enter book Title, Author, or ISBN!");
+            }
+            else {
+                axios.get("https://www.googleapis.com/books/v1/volumes?q="+book+"&key="+apiKey+"&maxResults=40")
+                .then(data=> {
+                    console.log(data);
+                    console.log(data.data.totalItems)
+                    if (data.data.totalItems === 0) {
+                        if (!alert("No results found!")) {
+                            window.location.reload();
+                            return;
+                        }
                     }
-                }
-                setResult(data.data.items);
-            })
+                    setResult(data.data.items);
+                })
+            }
         }
         return (
             <body className="landing">
