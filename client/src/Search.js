@@ -46,7 +46,8 @@ function Search() {
         }
         function handleSubmit(event){
             event.preventDefault();
-            if (book === "") {
+            var regexCheck = /[0-9a-zA-z]+/;
+            if (!regexCheck.test(book)) {
                 alert("Please enter book Title, Author, or ISBN!");
             }
             else {
