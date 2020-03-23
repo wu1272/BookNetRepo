@@ -49,6 +49,13 @@ function Search() {
             axios.get("https://www.googleapis.com/books/v1/volumes?q="+book+"&key="+apiKey+"&maxResults=40")
             .then(data=> {
                 console.log(data);
+                console.log(data.data.totalItems)
+                if (data.data.totalItems === 0) {
+                    if (!alert("No results found!")) {
+                        window.location.reload();
+                        return;
+                    }
+                }
                 setResult(data.data.items);
             })
         }
