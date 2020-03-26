@@ -8,6 +8,8 @@ label {
 .bookImg {
   grid-area: bookImg;
   margin: auto;
+  width: 128px;
+  height: auto;
 }
 
 .bookNeed {
