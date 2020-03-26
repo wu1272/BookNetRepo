@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import app from "./base.js";
 import axios from "axios";
 import styles from "./search.module.css"
+import Modal from "react-modal"
+
 
 let defaultBookPic = "https://static.vecteezy.com/system/resources/thumbnails/000/365/820/small/Basic_Elements__2818_29.jpg"
 
@@ -34,12 +36,43 @@ function handleSellChange(e) {
 
 }
 
+// CSS style for modal popout 
+const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)'
+    }
+  };
 
 
 function Search() {
         const[book, setBook] = useState("");
         const[result, setResult] = useState([]);
-        const[apiKey, setApiKey] = useState("AIzaSyDRic7TFZjyUeYGPtUo0UVj1Wzx1oXhAsc");
+        const apiKey = "AIzaSyDRic7TFZjyUeYGPtUo0UVj1Wzx1oXhAsc";
+
+
+        //state for modal 
+        const [isModalOpen, setIsModalOpen] = useState(false)
+
+        //Modal functions
+        function afterOpenModal() {
+            // references are now sync'd and can be accessed.
+        }
+        
+        function openModal(e) {
+            setIsModalOpen(true)
+        }
+        
+        function closeModal() {
+            setIsModalOpen(false)
+        }
+
+        //End of Modal functions
+
         function handleChange(event) {
             const book = event.target.value;
             setBook(book);
@@ -67,6 +100,19 @@ function Search() {
         }
         return (
             <body className="landing">
+
+            <Modal 
+                contentLabel="Select book option"
+                isOpen={isModalOpen}
+                onAfterOpen={afterOpenModal}
+                onRequestClose={closeModal}
+                style={customStyles}
+            >
+
+                <h3>Yay</h3>
+
+            </Modal>
+
             <div>
                 <h1>Book Search App</h1>
                 <form onSubmit={handleSubmit}>
@@ -86,7 +132,7 @@ function Search() {
 
                             <button className={styles.bookNeed} onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Needed</button>
                             
-                            <button className={styles.bookHave} onClick={ (e) => { setBooksAvailable(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Available</button>
+                            <button className={styles.bookHave} onClick={openModal}> Book Available</button>
                         </div>
                     
                     ))}
@@ -94,6 +140,9 @@ function Search() {
             </body>
         );
     }
+
+
+    //<button className={styles.bookHave} onClick={ (e) => { setBooksAvailable(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Available</button>
 
 
     // <input type="checkbox" class="hidden" id="trade"   onChange={handleTradeChange}/>
