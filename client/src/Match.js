@@ -39,6 +39,11 @@ class Match extends Component {
                                     displayMatches()
                                     return;
                                 }
+                                if (allBookIDsNeeded[i] === null) {
+                                    console.log("rip")
+                                    displayMatches()
+                                    return;
+                                }                 
                                 var bookbook = allBookIDsAvailable[i][bookIDs[j]];
                                 if (bookbook !== undefined) {
                                     //console.log(bookbook);
