@@ -72,40 +72,38 @@ function Search() {
                 <form onSubmit={handleSubmit}>
                     <div>
                         <input onChange={handleChange} type="text" placeholder="Search for Books" autoComplete="off"/>
+                        <button type="submit">Search</button>
                     </div>
-                    <button className={styles.tester} type="submit">Search</button>
                 </form>
                 <button className={styles.tester} onClick={() => window.location.href = '/home'}>Home</button>
-                <div></div>
-                {result.map(book => (
-                    <ul>
+                <br/>
+                    {result.map(book => (
+                        <div className={styles.container}>
 
-                        <img src={((book.volumeInfo.imageLinks) ? book.volumeInfo.imageLinks.thumbnail : defaultBookPic)} />
-                        
-                        <div></div>
+                            <img className={styles.bookImg} src={((book.volumeInfo.imageLinks) ? book.volumeInfo.imageLinks.thumbnail : defaultBookPic)} />
+                            
+                            <br/>
 
-                        <button className={styles.tester} onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Needed</button>
+                            <button className={styles.bookNeed} onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Needed</button>
+                            
+                            <button className={styles.bookHave} onClick={ (e) => { setBooksAvailable(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Available</button>
+                        </div>
                     
-                        <div>Or select one of the following options and click Book Available</div>
-
-                        <input type="checkbox" class="hidden" id="trade"   onChange={handleTradeChange}/>
-                        <label>For Trade</label>
-
-                        <input type="checkbox" class="hidden" id="donation" onChange={handleDonationChange}/>
-                        <label>For Donation</label>
-
-                        <input type="checkbox" class="hidden" id="sale"  onChange={handleSellChange}/>
-                        <label>For Sale</label>
-                        
-                        <button className={styles.tester} onClick={ (e) => { setBooksAvailable(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Available</button>
-                    </ul>
-                   
-                ))}
+                    ))}
             </div>
             </body>
         );
     }
 
+
+    // <input type="checkbox" class="hidden" id="trade"   onChange={handleTradeChange}/>
+    //                     <label>For Trade</label>
+
+    //                     <input type="checkbox" class="hidden" id="donation" onChange={handleDonationChange}/>
+    //                     <label>For Donation</label>
+
+    //                     <input type="checkbox" class="hidden" id="sale"  onChange={handleSellChange}/>
+    //                     <label>For Sale</label>
 
     function setBooksNeeded(e, book_id, book_title, book_authors) {   
         app.auth().onAuthStateChanged(function (user) {
