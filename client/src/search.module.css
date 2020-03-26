@@ -30,7 +30,7 @@ label {
   background-color: grey;
   display: grid;
   grid-template-columns: auto;
-  grid-template-rows: auto;
+  grid-template-rows: 100px 100px;
   grid-template-areas: 
     "bookImg  topButton"
     "bookImg  botButton";
