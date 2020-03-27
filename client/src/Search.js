@@ -57,14 +57,32 @@ function Search() {
 
         //state for modal 
         const [isModalOpen, setIsModalOpen] = useState(false)
+        const [currBook, setCurrBook] = useState({
+            bookID: "",
+            name: "",
+            author: [],
+            img: ""
+
+        })
 
         //Modal functions
         function afterOpenModal() {
             // references are now sync'd and can be accessed.
+            console.log(currBook)
         }
         
-        function openModal(e) {
+
+        function openModal(book) {
+
+            setCurrBook(prev => ({...prev, 
+                            bookID: book.id, 
+                            name: book.volumeInfo.title, 
+                            author: book.volumeInfo.authors, 
+                            img: ((book.volumeInfo.imageLinks) ? book.volumeInfo.imageLinks.thumbnail : defaultBookPic)}))
+
+        
             setIsModalOpen(true)
+            
         }
         
         function closeModal() {
@@ -98,18 +116,22 @@ function Search() {
                 })
             }
         }
+
+
+
         return (
             <body className="landing">
 
             <Modal 
+                id="availBookModal"
                 contentLabel="Select book option"
                 isOpen={isModalOpen}
                 onAfterOpen={afterOpenModal}
                 onRequestClose={closeModal}
                 style={customStyles}
             >
-
-                <h3>Yay</h3>
+                
+                <img src={currBook.img}></img>
 
             </Modal>
 
@@ -132,7 +154,7 @@ function Search() {
 
                             <button className={styles.bookNeed} onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Needed</button>
                             
-                            <button className={styles.bookHave} onClick={openModal}> Book Available</button>
+                            <button className={styles.bookHave} onClick={(e) => {openModal(book)}}> Book Available</button>
                         </div>
                     
                     ))}
