@@ -1,26 +1,123 @@
-.tester {
-    background-color: #519e8a;
-    color: #fff;
-    border: 2px solid #fff;
-    border-radius: 2em;
-    width: 300px;
-    margin-top: 1em;
-    padding: 8px 0px;
-    font-size: 1em;
-    font-weight: lighter;
-    letter-spacing: 1px;
-    margin-bottom: 0.25em;
-    margin-left:auto;
-    margin-right:auto;
-  }
-  
-.tester:hover {
-    color: #519e8a;
-    background-color: #fff;
-    border: 2px solid #519e8a;
-  }
-  
+html {
+  background:url('./landing_background.jpg');
+}
+
+.moddedWrap {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.moddedFormWrap {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 40px;
+  border-radius: 10px;
+  box-shadow: 0px 10px 50px #555;
+  background-color: #eeeeee;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 label {
   display: block;
 }
+
+.headerButtons {
+  width: 33%;
+  margin-top: .5em;
+}
+
+.modalHeader {
+  grid-area: header;
+}
+
+.modalHeader2 {
+  grid-area: header2;
+}
+
+.tradeIt {
+  grid-area: topButton;
+}
+
+.sellIt {
+  grid-area: midButton;
+}
+
+.donateIt {
+  grid-area: botButton;
+}
+
+.bookImg {
+  grid-area: bookImg;
+  margin: auto;
+  width: 128px;
+  height: auto;
+}
+
+.bookNeed {
+  grid-area: topButton;
+  margin: .5em;
+}
+
+.bookHave {
+  grid-area: botButton;
+  margin: .5em;
+}
+
+.bookTitle {
+  grid-area: title;
+}
+
+.bookAuthor {
+  grid-area: author;
+}
+
+.container {
+  width: 50%;
+  margin-top: 1em;
+  margin-right: auto;
+  margin-left: auto;
+  border: 2px solid black;
+  border-radius: 1em;
+  padding: 1em;
+  align-items: center;
+  background-color: white;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 50px 50px 100px 100px;
+  grid-template-areas: 
+    "title   title"
+    "author  author"
+    "bookImg  topButton"
+    "bookImg  botButton";
+}
+
+.container:hover {
+  box-shadow: 8px 10px 8px #999999
+}
+
+.container button {
+  height: 50%;
+
+}
+
+.modalContainer {
+  width: 50%;
+  margin-right: auto;
+  margin-left: auto;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  grid-template-areas: 
+    "header   header" 
+    "header2  header2"
+    "bookImg  topButton"
+    "bookImg  midButton"
+    "bookImg  botButton";
+}
+
 
