@@ -165,10 +165,12 @@ function Search() {
                     {result.map(book => (
                         <div className={styles.container}>
 
+                            <h3 className={styles.bookTitle}> {book.volumeInfo.title} by</h3>
+                            <h3 className={styles.bookAuthor}> {book.volumeInfo.authors}</h3>
+
                             <img className={styles.bookImg} src={((book.volumeInfo.imageLinks) ? book.volumeInfo.imageLinks.thumbnail : defaultBookPic)} />
                             
-                            <br/>
-
+                    
                             <button className={styles.bookNeed} onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Needed</button>
                             
                             <button className={styles.bookHave} onClick={(e) => {openModal(book)}}> Book Available</button>
