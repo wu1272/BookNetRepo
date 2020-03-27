@@ -1,6 +1,34 @@
+html {
+  background:url('./landing_background.jpg');
+}
+
+.moddedWrap {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.moddedFormWrap {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 40px;
+  border-radius: 10px;
+  box-shadow: 0px 10px 50px #555;
+  background-color: #eeeeee;
+  margin-right: auto;
+  margin-left: auto;
+}
 
 label {
   display: block;
+}
+
+.headerButtons {
+  width: 33%;
+  margin-top: .5em;
 }
 
 .modalHeader {
@@ -41,15 +69,26 @@ label {
   margin-top: 1em;
   margin-right: auto;
   margin-left: auto;
+  border: 2px solid black;
   border-radius: 1em;
+  align-items: center;
   padding: 1em;
-  background-color: grey;
+  background-color: white;
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: 100px 100px;
   grid-template-areas: 
     "bookImg  topButton"
     "bookImg  botButton";
+}
+
+.container:hover {
+  box-shadow: 8px 10px 8px #999999
+}
+
+.container button {
+  height: 50%;
+
 }
 
 .modalContainer {

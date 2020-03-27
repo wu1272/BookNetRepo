@@ -123,37 +123,44 @@ function Search() {
 
 
         return (
-            <body className="landing">
+        
 
-            <Modal 
-                id="availBookModal"
-                contentLabel="Select book option"
-                isOpen={isModalOpen}
-                onAfterOpen={afterOpenModal}
-                onRequestClose={closeModal}
-                style={customStyles}
-            >
-                <div className={styles.modalContainer}>
-                    <h3 className={styles.modalHeader} >{currBook.name}</h3>
-                    <img className={styles.bookImg} src={currBook.img}></img>
-                    <button className={styles.tradeIt}  onClick={(e) => {handleAvailableBook("T")}}>Trade It</button>
-                    <button className={styles.sellIt}   onClick={(e) => {handleAvailableBook("S")}}>Sell It</button>
-                    <button className={styles.donateIt} onClick={(e) => {handleAvailableBook("D")}}>Donate It</button>
-                </div>
+            
+            <div className={styles.moddedWrap}>
+            <div className={styles.moddedFormWrap}>
+
+                <Modal 
+                    id="availBookModal"
+                    contentLabel="Select book option"
+                    isOpen={isModalOpen}
+                    onAfterOpen={afterOpenModal}
+                    onRequestClose={closeModal}
+                    style={customStyles}
+                >
+                    <div className={styles.modalContainer}>
+                        <h3 className={styles.modalHeader} >{currBook.name}</h3>
+                        <img className={styles.bookImg} src={currBook.img}></img>
+                        <button className={styles.tradeIt}  onClick={(e) => {handleAvailableBook("T")}}>Trade It</button>
+                        <button className={styles.sellIt}   onClick={(e) => {handleAvailableBook("S")}}>Sell It</button>
+                        <button className={styles.donateIt} onClick={(e) => {handleAvailableBook("D")}}>Donate It</button>
+                    </div>
+                    
+
+
+                </Modal>
+
                 
-
-
-            </Modal>
-
-            <div>
-                <h1>Book Search App</h1>
                 <form onSubmit={handleSubmit}>
                     <div>
-                        <input onChange={handleChange} type="text" placeholder="Search for Books" autoComplete="off"/>
-                        <button type="submit">Search</button>
+                        <h1>Search for Books</h1>
+                        <input onChange={handleChange} type="text" placeholder="Title, Author, or ISBN..." autoComplete="off"/>
+                        <br/>
+                        <button className={styles.headerButtons} type="submit">Search</button>
                     </div>
                 </form>
-                <button className={styles.tester} onClick={() => window.location.href = '/home'}>Home</button>
+                <div>
+                <button className={styles.headerButtons} onClick={() => window.location.href = '/home'}>Home</button>
+                </div>
                 <br/>
                     {result.map(book => (
                         <div className={styles.container}>
@@ -169,7 +176,8 @@ function Search() {
                     
                     ))}
             </div>
-            </body>
+            </div>
+            
         );
     }
 
