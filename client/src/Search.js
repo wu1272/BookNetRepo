@@ -154,7 +154,8 @@ function Search() {
                     style={customStyles}
                 >
                     <div className={styles.modalContainer}>
-                        <h3 className={styles.modalHeader} >{currBook.name}</h3>
+                        <h3 className={styles.modalHeader} >{currBook.name} by</h3>
+                        <h3 className={styles.modalHeader2}>{formatAuthors(currBook.author)}</h3>
                         <img className={styles.bookImg} src={currBook.img}></img>
                         <button className={styles.tradeIt}  onClick={(e) => {handleAvailableBook("T")}}>Trade It</button>
                         <button className={styles.sellIt}   onClick={(e) => {handleAvailableBook("S")}}>Sell It</button>

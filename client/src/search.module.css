@@ -35,6 +35,10 @@ label {
   grid-area: header;
 }
 
+.modalHeader2 {
+  grid-area: header2;
+}
+
 .tradeIt {
   grid-area: topButton;
 }
@@ -110,6 +114,7 @@ label {
   grid-template-rows: auto;
   grid-template-areas: 
     "header   header" 
+    "header2  header2"
     "bookImg  topButton"
     "bookImg  midButton"
     "bookImg  botButton";
