@@ -120,6 +120,22 @@ function Search() {
             }
         }
 
+        function formatAuthors(authors) {
+
+            if(authors === null) {
+                return "No Author Found"
+            }
+            
+            var toReturn = ""
+            for(var i = 0; i < authors.length; i++) {
+                toReturn += authors[i]
+                toReturn += ", "
+            }
+
+            toReturn = toReturn.substring(0, toReturn.length - 2)
+            return toReturn
+
+        }
 
 
         return (
@@ -166,7 +182,7 @@ function Search() {
                         <div className={styles.container}>
 
                             <h3 className={styles.bookTitle}> {book.volumeInfo.title} by</h3>
-                            <h3 className={styles.bookAuthor}> {book.volumeInfo.authors}</h3>
+                            <h3 className={styles.bookAuthor}> {formatAuthors(book.volumeInfo.authors)}</h3>
 
                             <img className={styles.bookImg} src={((book.volumeInfo.imageLinks) ? book.volumeInfo.imageLinks.thumbnail : defaultBookPic)} />
                             
