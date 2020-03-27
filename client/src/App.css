@@ -3,8 +3,12 @@
 
 
 html {
-  background:url('./landing_background.jpg') no-repeat;
-  background-size: cover;
+    background:url('./landing_background.jpg');
+    min-height: 500px;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .landing {
