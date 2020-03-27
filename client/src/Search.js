@@ -122,7 +122,7 @@ function Search() {
 
         function formatAuthors(authors) {
 
-            if(authors === null) {
+            if(authors === null || authors === undefined || authors === "") {
                 return "No Author Found"
             }
             
