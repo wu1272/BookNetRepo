@@ -3,7 +3,21 @@ label {
   display: block;
 }
 
+.modalHeader {
+  grid-area: header;
+}
 
+.tradeIt {
+  grid-area: topButton;
+}
+
+.sellIt {
+  grid-area: midButton;
+}
+
+.donateIt {
+  grid-area: botButton;
+}
 
 .bookImg {
   grid-area: bookImg;
@@ -35,6 +49,20 @@ label {
   grid-template-rows: 100px 100px;
   grid-template-areas: 
     "bookImg  topButton"
+    "bookImg  botButton";
+}
+
+.modalContainer {
+  width: 50%;
+  margin-right: auto;
+  margin-left: auto;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  grid-template-areas: 
+    "header   header" 
+    "bookImg  topButton"
+    "bookImg  midButton"
     "bookImg  botButton";
 }
 

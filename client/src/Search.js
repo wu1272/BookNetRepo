@@ -130,8 +130,15 @@ function Search() {
                 onRequestClose={closeModal}
                 style={customStyles}
             >
+                <div className={styles.modalContainer}>
+                    <h3 className={styles.modalHeader} >{currBook.name}</h3>
+                    <img className={styles.bookImg} src={currBook.img}></img>
+                    <button className={styles.tradeIt}>Trade It</button>
+                    <button className={styles.sellIt}>Sell It</button>
+                    <button className={styles.donateIt}>Donate It</button>
+                </div>
                 
-                <img src={currBook.img}></img>
+
 
             </Modal>
 
