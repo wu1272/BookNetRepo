@@ -7,34 +7,31 @@ import Modal from "react-modal"
 
 let defaultBookPic = "https://static.vecteezy.com/system/resources/thumbnails/000/365/820/small/Basic_Elements__2818_29.jpg"
 
-
-//global variables to keep track of state change
-var for_trade = false;
-var for_donation = false;
-var for_sale = false;
+//Method of availability (Trade, Sale, Donate)
+let availMethod = ""
 
 
 /*
  * functions to handle change in the checkbox
  */
-function handleTradeChange(e) {
-    const trade = e.target.checked
-    for_trade = trade;
-    console.log("for_trade" + for_trade)
-}
+// function handleTradeChange(e) {
+//     const trade = e.target.checked
+//     for_trade = trade;
+//     console.log("for_trade" + for_trade)
+// }
 
-function handleDonationChange(e) {
-    const donate = e.target.checked
-    for_donation = donate;
-    console.log("for_donation:" + for_donation )
-}
+// function handleDonationChange(e) {
+//     const donate = e.target.checked
+//     for_donation = donate;
+//     console.log("for_donation:" + for_donation )
+// }
 
-function handleSellChange(e) {
-    const sell = e.target.checked
-    for_sale = sell;
-    console.log("for_sale:" + for_sale )
+// function handleSellChange(e) {
+//     const sell = e.target.checked
+//     for_sale = sell;
+//     console.log("for_sale:" + for_sale )
 
-}
+// }
 
 // CSS style for modal popout 
 const customStyles = {
@@ -64,6 +61,7 @@ function Search() {
             img: ""
 
         })
+        
 
         //Modal functions
         function afterOpenModal() {
@@ -87,6 +85,11 @@ function Search() {
         
         function closeModal() {
             setIsModalOpen(false)
+        }
+
+        function handleAvailableBook(method) {
+            availMethod = method
+            setBooksAvailable(null, currBook.bookID, currBook.name, currBook.author)
         }
 
         //End of Modal functions
@@ -133,9 +136,9 @@ function Search() {
                 <div className={styles.modalContainer}>
                     <h3 className={styles.modalHeader} >{currBook.name}</h3>
                     <img className={styles.bookImg} src={currBook.img}></img>
-                    <button className={styles.tradeIt}>Trade It</button>
-                    <button className={styles.sellIt}>Sell It</button>
-                    <button className={styles.donateIt}>Donate It</button>
+                    <button className={styles.tradeIt}  onClick={(e) => {handleAvailableBook("T")}}>Trade It</button>
+                    <button className={styles.sellIt}   onClick={(e) => {handleAvailableBook("S")}}>Sell It</button>
+                    <button className={styles.donateIt} onClick={(e) => {handleAvailableBook("D")}}>Donate It</button>
                 </div>
                 
 
@@ -215,65 +218,48 @@ function Search() {
 function setBooksAvailable(e, book_id, book_title, book_authors) {
     app.auth().onAuthStateChanged(function (user) {
         if (user) {
-            // var sale = document.getElementById("sale").checked
-            // var donate = document.getElementById("donation").checked
-            // var trade = document.getElementById("trade").checked
 
- 
-            var sale = for_sale;
-            var donate = for_donation;
-            var trade = for_trade;
-            
+            var trade = false
+            var sale = false
+            var donate = false
 
-            //only send to backend if exactly 1 box is checked
-            var count = 0;
-            
-            if (sale) {
-                count++;
+            if(availMethod === "T") {
+                trade = true
             }
-            if (donate) {
-                count++;
+            else if(availMethod === "S") {
+                sale = true
             }
-            if (trade) {
-                count++;
+            else if(availMethod === "D") {
+                donate = true
             }
 
-            //user must select exactly 1 category
-            if (count === 0) {
-                alert("Please select a category: trade/sale/donation")
+    
+            if (book_authors === undefined) {
+                book_authors = null;
             }
-            else if (count > 1) {
-                alert("Please select exactly 1 category!")
-            }
-            else {
-                if (book_authors === undefined) {
-                    book_authors = null;
-                }
-                axios.post('/api/setBooksAvailable', {
-                    userid: user.uid,
-                        bookID: book_id,
-                        title: book_title,
-                        author: book_authors,
-                        sale: sale,
-                        donate: donate,
-                        trade: trade,
-                        event: e
+            axios.post('/api/setBooksAvailable', {
+                userid: user.uid,
+                    bookID: book_id,
+                    title: book_title,
+                    author: book_authors,
+                    sale: sale,
+                    donate: donate,
+                    trade: trade,
+                    event: e
+            })
+                .then(function (response) {
+                    console.log(response);
                 })
-                    .then(function (response) {
-                        console.log(response);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    })
+                .catch(function (error) {
+                    console.log(error);
+                })
 
-                    for_sale = false;
-                    for_trade = false;
-                    for_donation = false;
-                //alert user to book added and reload page to reset all variables
-                if(!alert('Added ' + book_title + " to your list of books available!")) {
-                    window.location.reload();
-                }
+        
+            //alert user to book added and reload page to reset all variables
+            if(!alert('Added ' + book_title + " to your list of books available!")) {
+                window.location.reload();
             }
+            
         }
     });
 }
