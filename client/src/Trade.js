@@ -90,7 +90,8 @@ function getPending1(bookIDs, title, callback) {
     booksNeededPath.once('value')
         .then(function (snapshot) {
           snapshot.forEach(function (book) {
-            if (book.child("pending").val() === 'true') {
+            console.log(book.child("trade").val())
+            if (book.child("pending").val() && book.child("trade").val()) {
               console.log(book.key)
               console.log(book.child("title").val())
               bookIDs.push(book.key)
@@ -111,7 +112,7 @@ function getPending2(bookIDs, title, callback) {
     booksNeededPath.once('value')
         .then(function (snapshot) {
           snapshot.forEach(function (book) {
-            if (book.child("pending").val() === 'true') {
+            if (book.child("pending").val() && book.child("trade").val()) {
               console.log(book.key)
               console.log(book.child("title").val())
               bookIDs.push(book.key);
@@ -179,7 +180,7 @@ function removePending(userAvailableID, bookNeededID, bookAvailableID) {
         //console.log('users/' + user.uid + '/booksNeeded/' + bookNeededID)
         axios.post('/api/confirmTrade', {
           userNeededID: user.uid,
-          bookNeededID: bookNeededID,
+          bookNeededID: bookNeededID
         })
           .then(function (response) {
             console.log(response);

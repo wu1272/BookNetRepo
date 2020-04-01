@@ -13,6 +13,8 @@ import BooksNeeded from "./BooksNeeded";
 import BooksAvailable from "./BooksAvailable";
 import Match from "./Match";
 import Trade from "./Trade";
+import Sale from "./Sale";
+import Donate from "./Donate";
 
 const App = () => {
   return (
@@ -20,6 +22,8 @@ const App = () => {
       <Router>
         <div>
           <Route exact path="/trade" component={Trade} />
+          <Route exact path="/sale" component={Sale} />
+          <Route exact path="/donate" component={Donate} />
           <Route exact path="/match" component={Match} />
           <Route exact path="/booksAvailable" component={BooksAvailable} />
           <Route exact path="/booksNeeded" component={BooksNeeded} />
