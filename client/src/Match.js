@@ -19,6 +19,7 @@ class Match extends Component {
                 var allBookIDsAvailable = [];
                 var allBookIDsNeeded = [];
                 var allUserIDsAvailable = [];
+                var availableInYourDir = [];
                 getBooksNeededIDs(bookIDs, user.uid, function () {
                     //console.log(bookIDs);
                     getBooksAvailableIDs(bookAvailableIDs, user.uid, function() {
@@ -28,6 +29,9 @@ class Match extends Component {
                         
                     
                     getEverySingleDamnBookAvailable(allUserIDsAvailable, allBookIDsAvailable, function () {
+
+                        preventPendingTrades(availableInYourDir, user.uid, function() {
+                        console.log(availableInYourDir)
                         //console.log(allBookIDsAvailable);
                         //console.log(bookIDs);
                         //console.log(allBookIDsNeeded.length);
@@ -84,7 +88,15 @@ class Match extends Component {
                                                           setPending(userAvailableID, bookNeededID, bookAvailableID)
                                                         };
                                                       }(allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b]));
-                                                    tradeMatches.push(btn)
+                                                    console.log(availableInYourDir)
+                                                    for (var y = 0; y < availableInYourDir.length; y++) {
+                                                        if (availableInYourDir[y].title === allBookIDsNeeded[a][bookAvailableIDs[b]].title) {
+                                                            if (!availableInYourDir[y].pending && availableInYourDir[y].trade) {
+                                                                tradeMatches.push(btn);
+                                                            }
+                                                        }
+                                                    }
+                                                    
                                                 }
                                             }
                                             
@@ -112,6 +124,7 @@ class Match extends Component {
                 });
                 });
             });
+        });
             }
         })
     
@@ -223,6 +236,17 @@ function getBooksAvailableIDs(bookIDs, userID, callback) {
             snapshot.forEach(function (child) {
                 var bookID = child.key;
                 bookIDs.push(bookID);
+            });
+            callback();
+        });
+}
+
+function preventPendingTrades(bookIDs, userID, callback) {
+    var booksAvailablePath = app.database().ref('users/' + userID + '/booksAvailable/');
+    booksAvailablePath.once('value')
+        .then(function (snapshot) {
+            snapshot.forEach(function (child) {
+                bookIDs.push(child.val());
             });
             callback();
         });
