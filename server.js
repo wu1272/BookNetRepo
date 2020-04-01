@@ -124,6 +124,7 @@ app.post('/api/setBooksAvailable', urlParser, function (req, res) {
 function setPending(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"pending":"true"})
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"tradePartner":userAvailableID})
+  admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID).update({"tradePartner":userNeededID})
   admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID).update({"pending":"true"})
   admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID).update({"pending":"true"})
   admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID).update({"pending":"true"})
@@ -138,6 +139,7 @@ app.post('/api/setPending', urlParser, function (req, res) {
 function removePending(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/pending").remove();
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/tradePartner").remove();
+  admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID + "/tradePartner").remove();
   admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID + "/pending").remove();
   admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID + "/pending").remove();
   admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID + "/pending").remove();
