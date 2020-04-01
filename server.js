@@ -123,10 +123,12 @@ app.post('/api/setBooksAvailable', urlParser, function (req, res) {
 //SET BOOKS AS PENDING
 function setPending(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"pending":"true"})
+  admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"trade":"true"})
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"tradePartner":userAvailableID})
   admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID).update({"tradePartner":userNeededID})
   admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID).update({"pending":"true"})
   admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID).update({"pending":"true"})
+  admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID).update({"trade":"true"})
   admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID).update({"pending":"true"})
 }
 
@@ -134,15 +136,58 @@ app.post('/api/setPending', urlParser, function (req, res) {
   setPending(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
 });
 
+//SET BOOKS AS PENDING (ONE WAY FOR SALE AND DONATE)
+function setPendingOneWay(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
+  admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"pending":"true"})
+  admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"sale":"true"})
+  admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookAvailableID).update({"pending":"true"})
+  admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"tradePartner":userAvailableID})
+  admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookAvailableID).update({"tradePartner":userNeededID})
+}
+
+app.post('/api/setPendingOneWay', urlParser, function (req, res) {
+  setPendingOneWay(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
+});
+
+
+//REMOVE ONE WAY PENDING
+function removePendingOneWay(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
+  if (bookAvailableID) {
+    admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID + "/pending").remove();
+    admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID + "/tradePartner").remove();
+    admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID + "/pending").remove();
+    admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID + "/tradePartner").remove();
+    admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID + "/confirmed").remove();
+    admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID + "/confirmed").remove();
+  }
+  if (bookNeededID) {
+    admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/pending").remove();
+    admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/sale").remove();
+    admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/tradePartner").remove();
+    admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID + "/pending").remove();
+    admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID + "/tradePartner").remove();
+    admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID + "/confirmed").remove();
+    admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/confirmed").remove();
+  }
+}
+
+app.post('/api/removePendingOneWay', urlParser, function (req, res) {
+  removePendingOneWay(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
+});
+
 
 //REMOVES PENDING STATUS
 function removePending(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/pending").remove();
+  admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/trade").remove();
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/tradePartner").remove();
   admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID + "/tradePartner").remove();
   admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID + "/pending").remove();
   admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID + "/pending").remove();
+  admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID + "/trade").remove();
   admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID + "/pending").remove();
+  admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/confirmed").remove();
+  admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID + "/confirmed").remove();
 }
 
 app.post('/api/removePending', urlParser, function (req, res) {
@@ -162,6 +207,48 @@ app.post('/api/removeTrade', urlParser, function (req, res) {
   removeTrade(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
 });
 
+//REMOVES ALL POTENTIAL SALES
+function removeSale(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
+  if (bookAvailableID) {
+    admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID).remove();
+    admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID).remove();
+  }
+  if (bookNeededID) {
+    admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).remove();
+    admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID).remove();
+  }
+}
+
+app.post('/api/removeSale', urlParser, function (req, res) {
+  removeSale(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
+});
+
+
+
+//SETS CONFIRM STATE FOR TRADE
+function confirmTrade(userNeededID, bookNeededID) {
+  //console.log('users/' + userNeededID + '/booksNeeded/' + bookNeededID)
+  admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"confirmed":"true"})
+}
+
+app.post('/api/confirmTrade', urlParser, function (req, res) {
+  confirmTrade(req.body.userNeededID, req.body.bookNeededID)
+});
+
+//SETS CONFIRM STATE FOR SALE
+function confirmSale(userNeededID, bookNeededID, bookAvailableID) {
+  //console.log('users/' + userNeededID + '/booksNeeded/' + bookNeededID)
+  if (bookAvailableID) {
+    admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID).update({"confirmed":"true"})
+  }
+  if (bookNeededID) {
+    admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"confirmed":"true"})
+  }
+}
+
+app.post('/api/confirmSale', urlParser, function (req, res) {
+  confirmSale(req.body.userNeededID, req.body.bookNeededID, req.body.bookAvailableID)
+});
 
 
 

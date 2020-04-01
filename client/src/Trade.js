@@ -46,7 +46,8 @@ class Trade extends Component {
             <h3 id="title2"></h3>
             <h3 id="book2"></h3>
             <h3 id="user2"></h3>
-            <button onClick={ (e) => { removeTrade(document.getElementById("user2").innerHTML, document.getElementById("book1").innerHTML, document.getElementById("book2").innerHTML);}}>Accept Trade</button>
+            
+            <button onClick={ (e) => { confirmTrade(document.getElementById("user2").innerHTML, document.getElementById("book1").innerHTML, document.getElementById("book2").innerHTML);}}>Accept Trade</button>
             <button onClick={ (e) => { removePending(document.getElementById("user2").innerHTML, document.getElementById("book1").innerHTML, document.getElementById("book2").innerHTML);}}>Cancel Trade</button>
             <button onClick={() => window.location.href = '/home'}>Home</button>
         </div>
@@ -89,7 +90,8 @@ function getPending1(bookIDs, title, callback) {
     booksNeededPath.once('value')
         .then(function (snapshot) {
           snapshot.forEach(function (book) {
-            if (book.child("pending").val() === 'true') {
+            console.log(book.child("trade").val())
+            if (book.child("pending").val() && book.child("trade").val()) {
               console.log(book.key)
               console.log(book.child("title").val())
               bookIDs.push(book.key)
@@ -110,7 +112,7 @@ function getPending2(bookIDs, title, callback) {
     booksNeededPath.once('value')
         .then(function (snapshot) {
           snapshot.forEach(function (book) {
-            if (book.child("pending").val() === 'true') {
+            if (book.child("pending").val() && book.child("trade").val()) {
               console.log(book.key)
               console.log(book.child("title").val())
               bookIDs.push(book.key);
@@ -162,6 +164,45 @@ function removePending(userAvailableID, bookNeededID, bookAvailableID) {
         if (!alert("Trade cancelled!")) {
             window.location.reload();
         }
+      }
+    });
+  }
+
+
+  function confirmTrade(userAvailableID, bookNeededID, bookAvailableID) {
+    console.log(userAvailableID)
+    if (!userAvailableID) {
+      console.log("no trades")
+      return;
+    }
+    app.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        //console.log('users/' + user.uid + '/booksNeeded/' + bookNeededID)
+        axios.post('/api/confirmTrade', {
+          userNeededID: user.uid,
+          bookNeededID: bookNeededID
+        })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        console.log('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID)
+        var booksNeededPath = app.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID);
+        booksNeededPath.once('value')
+          .then(function (snapshot) {
+            if (snapshot.val().confirmed) {
+              console.log("hi")
+              removeTrade(document.getElementById("user2").innerHTML, document.getElementById("book1").innerHTML, document.getElementById("book2").innerHTML);
+              return;
+            }
+            else {
+              if (!alert("Trade confirmed, waiting on trade partner!")) {
+                window.location.reload();
+              }
+            }
+          });
       }
     });
   }

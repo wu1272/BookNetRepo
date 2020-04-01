@@ -39,6 +39,8 @@ class Home extends Component {
             <button onClick={() => window.location.href = '/booksAvailable'}>Books Available</button>
             <button onClick={() => window.location.href = '/match'}>Match Me!</button>
             <button onClick={() => window.location.href = '/trade'}>Current Trade</button>
+            <button onClick={() => window.location.href = '/sale'}>Current Sale</button>
+            <button onClick={() => window.location.href = '/donate'}>Current Donation</button>
             <button onClick={() => window.location.href = '/profile'}>Profile</button>
             <button onClick={() => app.auth().signOut()}>Sign out</button>
           </div>

@@ -19,7 +19,7 @@ class Match extends Component {
                 var allBookIDsAvailable = [];
                 var allBookIDsNeeded = [];
                 var allUserIDsAvailable = [];
-                var availableInYourDir = [];
+                var availableInYourDir = [];  //actual book objects
                 getBooksNeededIDs(bookIDs, user.uid, function () {
                     //console.log(bookIDs);
                     getBooksAvailableIDs(bookAvailableIDs, user.uid, function() {
@@ -31,13 +31,13 @@ class Match extends Component {
                     getEverySingleDamnBookAvailable(allUserIDsAvailable, allBookIDsAvailable, function () {
 
                         preventPendingTrades(availableInYourDir, user.uid, function() {
-                        console.log(availableInYourDir)
+                        //console.log(availableInYourDir)
                         //console.log(allBookIDsAvailable);
                         //console.log(bookIDs);
                         //console.log(allBookIDsNeeded.length);
                         for (var i = 0; i < allBookIDsAvailable.length; i++) {
                             for (var j = 0; j < bookIDs.length; j++) {
-                                console.log(allBookIDsAvailable[i])
+                                //console.log(allBookIDsAvailable[i])
                                 if (allBookIDsAvailable[i] === null) {
                                     console.log("rip")
                                     displayMatches()
@@ -82,13 +82,14 @@ class Match extends Component {
                                                     btn.setAttribute("typeOfMatch", typeOfMatch)
                                                     btn.onclick = (function(userAvailableID, bookNeededID, bookAvailableID) {
                                                         return function() {
-                                                          console.log(userAvailableID)
-                                                          console.log(bookNeededID)
-                                                          console.log(bookAvailableID)
                                                           setPending(userAvailableID, bookNeededID, bookAvailableID)
                                                         };
                                                       }(allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b]));
-                                                    console.log(availableInYourDir)
+
+
+                                                    //does not show button when books are pending
+                                                    //i.e. when someone clicks the match with you, removes the button
+                                                    //console.log(availableInYourDir)
                                                     for (var y = 0; y < availableInYourDir.length; y++) {
                                                         if (availableInYourDir[y].title === allBookIDsNeeded[a][bookAvailableIDs[b]].title) {
                                                             if (!availableInYourDir[y].pending && availableInYourDir[y].trade) {
@@ -103,16 +104,44 @@ class Match extends Component {
                                         }
                                     }
                                     if (bookbook.sale) {
-                                        typeOfMatch = "sale";
-                                        btn.innerHTML = bookbook.title
-                                        btn.setAttribute("typeOfMatch", typeOfMatch)
-                                        saleMatches.push(btn)
+
+                                                    var btn = document.createElement("button");
+                                                    btn.style.width = "100%"
+                                                    btn.style.padding = '15px'
+                                                    typeOfMatch = "sale";
+                                                    //1 way match so same book for available and needed now
+                                                    btn.innerHTML = bookbook.title;
+                                                    btn.setAttribute("typeOfMatch", typeOfMatch)
+                                                    //console.log(bookIDs[j])
+                                                    btn.onclick = (function(userAvailableID, bookNeededID, bookAvailableID) {
+                                                        return function() {
+                                                          setPendingSale(userAvailableID, bookNeededID, bookAvailableID)
+                                                        };
+                                                      }(allUserIDsAvailable[i], bookIDs[j], bookIDs[j]));
+                                                    //console.log(allBookIDsAvailable[i][bookIDs[j]]);
+                                                    if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
+                                                        saleMatches.push(btn)
+                                                    }                               
+                                                
                                     }
                                     if (bookbook.donate) {
+                                        var btn = document.createElement("button");
+                                        btn.style.width = "100%"
+                                        btn.style.padding = '15px'
                                         typeOfMatch = "donate";
-                                        btn.innerHTML = bookbook.title
+                                        //1 way match so same book for available and needed now
+                                        btn.innerHTML = bookbook.title;
                                         btn.setAttribute("typeOfMatch", typeOfMatch)
-                                        donateMatches.push(btn)
+                                        //console.log(bookIDs[j])
+                                        btn.onclick = (function(userAvailableID, bookNeededID, bookAvailableID) {
+                                            return function() {
+                                              setPendingDonate(userAvailableID, bookNeededID, bookAvailableID)
+                                            };
+                                          }(allUserIDsAvailable[i], bookIDs[j], bookIDs[j]));
+                                        //console.log(allBookIDsAvailable[i][bookIDs[j]]);
+                                        if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
+                                            donateMatches.push(btn)
+                                        } 
                                     }
                                 
                                 }
@@ -257,7 +286,7 @@ function getEverySingleDamnBookAvailable(allUserIDsAvailable, allBookIDsAvailabl
     booksAvailablePath.once('value')
         .then(function (snapshot) {
             snapshot.forEach(function (user) {
-                console.log(user.key)
+                //console.log(user.key)
                 var bookID = user.child("booksAvailable").val();
                 allBookIDsAvailable.push(bookID);
                 allUserIDsAvailable.push(user.key);
@@ -295,6 +324,50 @@ function setPending(userAvailableID, bookNeededID, bookAvailableID) {
           })
         if (!alert("Please proceed with your trade")) {
           window.location.href = "/trade"
+        }
+      }
+    });
+  }
+
+  function setPendingSale(userAvailableID, bookNeededID, bookAvailableID) {
+    app.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        axios.post('/api/setPendingOneWay', {
+          userNeededID: user.uid,
+          userAvailableID: userAvailableID,
+          bookNeededID: bookNeededID,
+          bookAvailableID: bookAvailableID
+        })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+        if (!alert("Please proceed with the sale")) {
+          window.location.href = "/sale"
+        }
+      }
+    });
+  }
+
+  function setPendingDonate(userAvailableID, bookNeededID, bookAvailableID) {
+    app.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        axios.post('/api/setPendingOneWay', {
+          userNeededID: user.uid,
+          userAvailableID: userAvailableID,
+          bookNeededID: bookNeededID,
+          bookAvailableID: bookAvailableID
+        })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+        if (!alert("Please proceed with the donation")) {
+          window.location.href = "/donate"
         }
       }
     });
