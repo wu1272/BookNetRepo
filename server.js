@@ -163,6 +163,17 @@ app.post('/api/removeTrade', urlParser, function (req, res) {
 });
 
 
+//SETS CONFIRM STATE FOR TRADE
+function confirmTrade(userNeededID, bookNeededID) {
+  //console.log('users/' + userNeededID + '/booksNeeded/' + bookNeededID)
+  admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"confirmed":"true"})
+}
+
+app.post('/api/confirmTrade', urlParser, function (req, res) {
+  confirmTrade(req.body.userNeededID, req.body.bookNeededID)
+});
+
+
 
 
 //DELETE BOOKS
