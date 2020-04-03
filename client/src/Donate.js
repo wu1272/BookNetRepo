@@ -60,7 +60,7 @@ class Donate extends Component {
             <h1>Book you will receive:</h1>
             <h3 id="title1"></h3>
             <h3 id="book1"></h3>
-            <h1>Book you will sell:<br /></h1>
+            <h1>Book you will donate:<br /></h1>
             <h3 id="title2"></h3>
             <h3 id="book2"></h3>
             <h3 id="user2"></h3>
@@ -112,13 +112,13 @@ function getPending1(goto2, bookIDs, title, callback) {
           snapshot.forEach(function (book) {
               console.log(book.val())
               console.log(book.child("pending").val())
-              console.log(book.child("sale").val())
+              console.log(book.child("donate").val())
             if (book.child("pending").val()) {
               console.log(book.key)
               console.log(book.child("title").val())
-              console.log(book.child("sale").val())
+              console.log(book.child("donate").val())
 
-              if (book.child("sale").val()) {
+              if (book.child("donate").val()) {
                 bookIDs.push(book.key)
                 title = book.child("title").val();
                 
@@ -146,9 +146,9 @@ function getPending2(bookIDs, title, callback) {
         .then(function (snapshot) {
           snapshot.forEach(function (book) {
             console.log(book.val())
-            console.log(book.child("sale").val())
+            console.log(book.child("donate").val())
             console.log(book.child("pending").val() === 'true')
-            if (book.child("pending").val() && book.child("sale").val()) {
+            if (book.child("pending").val() && book.child("donate").val()) {
               console.log(book.key)
               console.log(book.child("title").val())
               bookIDs.push(book.key);
@@ -203,7 +203,7 @@ function removePendingOneWay(userAvailableID, bookNeededID, bookAvailableID) {
     }
     app.auth().onAuthStateChanged(function (user) {
       if (user) {
-        axios.post('/api/removePendingOneWay', {
+        axios.post('/api/removePendingOneWay2', {
           userNeededID: user.uid,
           userAvailableID: userAvailableID,
           bookNeededID: bookNeededID,
@@ -215,7 +215,7 @@ function removePendingOneWay(userAvailableID, bookNeededID, bookAvailableID) {
           .catch(function (error) {
             console.log(error);
           })
-        if (!alert("Sale cancelled!")) {
+        if (!alert("Donation cancelled!")) {
             window.location.reload();
         }
       }
@@ -261,7 +261,7 @@ function removePendingOneWay(userAvailableID, bookNeededID, bookAvailableID) {
               return;
             }
             else {
-              if (!alert("Sale confirmed, waiting on sale partner!")) {
+              if (!alert("Donation confirmed, waiting on donation partner!")) {
                 window.location.reload();
               }
             }
