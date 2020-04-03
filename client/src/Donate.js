@@ -65,8 +65,8 @@ class Donate extends Component {
             <h3 id="book2"></h3>
             <h3 id="user2"></h3>
             
-            <button onClick={ (e) => { confirmSale(document.getElementById("user2").innerHTML, document.getElementById("book1").innerHTML, document.getElementById("book2").innerHTML);}}>Accept Sale</button>
-            <button onClick={ (e) => { removePendingOneWay(document.getElementById("user2").innerHTML, document.getElementById("book1").innerHTML, document.getElementById("book2").innerHTML);}}>Cancel Sale</button>
+            <button onClick={ (e) => { confirmSale(document.getElementById("user2").innerHTML, document.getElementById("book1").innerHTML, document.getElementById("book2").innerHTML);}}>Accept Donation</button>
+            <button onClick={ (e) => { removePendingOneWay(document.getElementById("user2").innerHTML, document.getElementById("book1").innerHTML, document.getElementById("book2").innerHTML);}}>Cancel Donation</button>
             <button onClick={() => window.location.href = '/home'}>Home</button>
         </div>
     );
