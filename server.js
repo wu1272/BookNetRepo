@@ -136,7 +136,7 @@ app.post('/api/setPending', urlParser, function (req, res) {
   setPending(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
 });
 
-//SET BOOKS AS PENDING (ONE WAY FOR SALE AND DONATE)
+//SET BOOKS AS PENDING (ONE WAY FOR SALE)
 function setPendingOneWay(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"pending":"true"})
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"sale":"true"})
@@ -147,6 +147,19 @@ function setPendingOneWay(userNeededID, userAvailableID, bookNeededID, bookAvail
 
 app.post('/api/setPendingOneWay', urlParser, function (req, res) {
   setPendingOneWay(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
+});
+
+//SET BOOKS AS PENDING (ONE WAY FOR DONATE)
+function setPendingOneWay2(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
+  admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"pending":"true"})
+  admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"donate":"true"})
+  admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookAvailableID).update({"pending":"true"})
+  admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"tradePartner":userAvailableID})
+  admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookAvailableID).update({"tradePartner":userNeededID})
+}
+
+app.post('/api/setPendingOneWay2', urlParser, function (req, res) {
+  setPendingOneWay2(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
 });
 
 
@@ -173,6 +186,32 @@ function removePendingOneWay(userNeededID, userAvailableID, bookNeededID, bookAv
 
 app.post('/api/removePendingOneWay', urlParser, function (req, res) {
   removePendingOneWay(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
+});
+
+
+//REMOVE ONE WAY PENDING FOR DONATION (DONATE FIELD INSTEAD OF SALE FIELD)
+function removePendingOneWay2(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
+  if (bookAvailableID) {
+    admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID + "/pending").remove();
+    admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID + "/tradePartner").remove();
+    admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID + "/pending").remove();
+    admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID + "/tradePartner").remove();
+    admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID + "/confirmed").remove();
+    admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID + "/confirmed").remove();
+  }
+  if (bookNeededID) {
+    admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/pending").remove();
+    admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/donate").remove();
+    admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/tradePartner").remove();
+    admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID + "/pending").remove();
+    admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID + "/tradePartner").remove();
+    admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID + "/confirmed").remove();
+    admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/confirmed").remove();
+  }
+}
+
+app.post('/api/removePendingOneWay2', urlParser, function (req, res) {
+  removePendingOneWay2(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
 });
 
 

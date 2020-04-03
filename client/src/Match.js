@@ -354,7 +354,7 @@ function setPending(userAvailableID, bookNeededID, bookAvailableID) {
   function setPendingDonate(userAvailableID, bookNeededID, bookAvailableID) {
     app.auth().onAuthStateChanged(function (user) {
       if (user) {
-        axios.post('/api/setPendingOneWay', {
+        axios.post('/api/setPendingOneWay2', {
           userNeededID: user.uid,
           userAvailableID: userAvailableID,
           bookNeededID: bookNeededID,
