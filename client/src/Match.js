@@ -39,16 +39,22 @@ class Match extends Component {
                         for (var i = 0; i < allBookIDsAvailable.length; i++) {
                             for (var j = 0; j < bookIDs.length; j++) {
                                 //console.log(allBookIDsAvailable[i])
-                                if (allBookIDsAvailable[i] === null) {
-                                    console.log("rip")
-                                    displayMatches()
-                                    return;
+                                // if (allBookIDsAvailable[i] === null) {
+                                //     console.log("rip")
+                                //     displayMatches()
+                                //     return;
+                                // }
+                                // if (allBookIDsNeeded[i] === null) {
+                                //     console.log("rip")
+                                //     displayMatches()
+                                //     return;
+                                // }  
+                                
+                                
+                                if(allBookIDsAvailable[i] === null || bookIDs[j] === null) {
+                                    break
                                 }
-                                if (allBookIDsNeeded[i] === null) {
-                                    console.log("rip")
-                                    displayMatches()
-                                    return;
-                                }                 
+
                                 var bookbook = allBookIDsAvailable[i][bookIDs[j]];
                                 if (bookbook !== undefined) {
                                     //console.log(bookbook);
@@ -70,35 +76,37 @@ class Match extends Component {
                                     if (bookbook.trade) {
                                         for (var a = 0; a < allBookIDsNeeded.length; a++) {
                                             for (var b = 0; b < bookAvailableIDs.length; b++) {
-                                                if (allBookIDsNeeded[a][bookAvailableIDs[b]] !== undefined) {
-                                                    //console.log("hallelujah")
-                                                    var btn = document.createElement("button");
-                                                    btn.style.width = "100%"
-                                                    btn.style.padding = '15px'
-                                                    typeOfMatch = "trade";
-                                                    btn.id = [bookAvailableIDs[b]];
-                                                    //bookbook.title is the one they have and I need
-                                                    //allBookIDsNeeded[a][bookAvailableIDs[b]] is the one I have and they need
-                                                    btn.innerHTML = bookbook.title + "<br/>for your<br/>" + allBookIDsNeeded[a][bookAvailableIDs[b]].title;
-                                                    btn.setAttribute("typeOfMatch", typeOfMatch)
-                                                    btn.onclick = (function(userAvailableID, bookNeededID, bookAvailableID) {
-                                                        return function() {
-                                                          setPending(userAvailableID, bookNeededID, bookAvailableID)
-                                                        };
-                                                      }(allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b]));
+                                                if(allBookIDsNeeded[a]){
+                                                    if (allBookIDsNeeded[a][bookAvailableIDs[b]] !== undefined) {
+                                                        //console.log("hallelujah")
+                                                        var btn = document.createElement("button");
+                                                        btn.style.width = "100%"
+                                                        btn.style.padding = '15px'
+                                                        typeOfMatch = "trade";
+                                                        btn.id = [bookAvailableIDs[b]];
+                                                        //bookbook.title is the one they have and I need
+                                                        //allBookIDsNeeded[a][bookAvailableIDs[b]] is the one I have and they need
+                                                        btn.innerHTML = bookbook.title + "<br/>for your<br/>" + allBookIDsNeeded[a][bookAvailableIDs[b]].title;
+                                                        btn.setAttribute("typeOfMatch", typeOfMatch)
+                                                        btn.onclick = (function(userAvailableID, bookNeededID, bookAvailableID) {
+                                                            return function() {
+                                                                setPending(userAvailableID, bookNeededID, bookAvailableID)
+                                                            };
+                                                            }(allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b]));
 
 
-                                                    //does not show button when books are pending
-                                                    //i.e. when someone clicks the match with you, removes the button
-                                                    //console.log(availableInYourDir)
-                                                    for (var y = 0; y < availableInYourDir.length; y++) {
-                                                        if (availableInYourDir[y].title === allBookIDsNeeded[a][bookAvailableIDs[b]].title) {
-                                                            if (!availableInYourDir[y].pending && availableInYourDir[y].trade) {
-                                                                tradeMatches.push(btn);
+                                                        //does not show button when books are pending
+                                                        //i.e. when someone clicks the match with you, removes the button
+                                                        //console.log(availableInYourDir)
+                                                        for (var y = 0; y < availableInYourDir.length; y++) {
+                                                            if (availableInYourDir[y].title === allBookIDsNeeded[a][bookAvailableIDs[b]].title) {
+                                                                if (!availableInYourDir[y].pending && availableInYourDir[y].trade) {
+                                                                    tradeMatches.push(btn);
+                                                                }
                                                             }
                                                         }
+                                                        
                                                     }
-                                                    
                                                 }
                                             }
                                             
