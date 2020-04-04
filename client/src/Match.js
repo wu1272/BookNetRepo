@@ -69,6 +69,7 @@ class Match extends Component {
                                     if (bookbook.trade) {
                                         for (var a = 0; a < allBookIDsNeeded.length; a++) {
                                             for (var b = 0; b < bookAvailableIDs.length; b++) {
+                                              if (allBookIDsNeeded[a]) {
                                                 if (allBookIDsNeeded[a][bookAvailableIDs[b]] !== undefined) {
                                                     //console.log("hallelujah")
                                                     var btn = document.createElement("button");
@@ -99,6 +100,7 @@ class Match extends Component {
                                                     }
                                                     
                                                 }
+                                              }
                                             }
                                             
                                         }
