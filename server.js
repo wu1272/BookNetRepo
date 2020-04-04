@@ -103,18 +103,19 @@ app.post('/api/setBooksNeeded', urlParser, function (req, res) {
 
 
 //SET BOOKS AVAILABLE
-function setBooksAvailable(userID, bookID, title, author, sale, donate, trade) {
+function setBooksAvailable(userID, bookID, title, author, sale, donate, trade, bookImg) {
   admin.database().ref('users/' + userID + '/booksAvailable/' + bookID).set({
     author: author,
     title: title,
     sale: sale,
     donate: donate,
     trade: trade,
+    bookImg: bookImg
   });
 }
 
 app.post('/api/setBooksAvailable', urlParser, function (req, res) {
-  setBooksAvailable(req.body.userid, req.body.bookID, req.body.title, req.body.author, req.body.sale, req.body.donate, req.body.trade);
+  setBooksAvailable(req.body.userid, req.body.bookID, req.body.title, req.body.author, req.body.sale, req.body.donate, req.body.trade, req.body.bookImg);
 });
 
 

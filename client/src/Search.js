@@ -89,7 +89,7 @@ function Search() {
 
         function handleAvailableBook(method) {
             availMethod = method
-            setBooksAvailable(null, currBook.bookID, currBook.name, currBook.author)
+            setBooksAvailable(null, currBook.bookID, currBook.name, currBook.author, currBook.img)
         }
 
         //End of Modal functions
@@ -243,7 +243,7 @@ function Search() {
 
 
     
-function setBooksAvailable(e, book_id, book_title, book_authors) {
+function setBooksAvailable(e, book_id, book_title, book_authors, book_img) {
     app.auth().onAuthStateChanged(function (user) {
         if (user) {
 
@@ -273,6 +273,7 @@ function setBooksAvailable(e, book_id, book_title, book_authors) {
                     sale: sale,
                     donate: donate,
                     trade: trade,
+                    bookImg: book_img,
                     event: e
             })
                 .then(function (response) {
