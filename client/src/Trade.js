@@ -17,6 +17,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 
 var tradePartnerIDs = [];
 var currentUser;
+var currentProfilePic;
 class Trade extends Component {
   constructor() {
     super();
@@ -29,11 +30,10 @@ class Trade extends Component {
   componentDidMount() {
     app.auth().onAuthStateChanged(user => {
       if (user) {
-        user.updateProfile({
-          photoURL: "https://cdn0.iconfinder.com/data/icons/iphone-black-people-svg-icons/40/agent_user_stock_spy_mail_help_hat_vehicle_vector_trustee-512.png"       
-       })
+        console.log(user.email)
         console.log(user.photoURL)
         currentUser = user.email;
+        currentProfilePic = user.photoURL;
         this.setState({ user });
         this.loadMessages();
       } else {
@@ -79,7 +79,6 @@ class Trade extends Component {
     };
     app.auth().onAuthStateChanged(function (user) {
       app.database().ref("/users/" + user.uid + "/messages/").limitToLast(12).on("child_added", callback);
-      app.database().ref("/users/" + tradePartnerIDs[0] + "/messages/").limitToLast(12).on("child_added", callback);
     });
 
   }
@@ -95,7 +94,7 @@ class Trade extends Component {
       console.log(message.text)
       console.log(message.user)
       console.log(message.text + '\n' + message.user)
-      message.text = message.user.substring(0, message.user.indexOf('@')) + '\n\n' + message.text;
+      //message.text = message.user.substring(0, message.user.indexOf('@')) + '\n\n' + message.text;
       app.database().ref("/users/" + tradePartnerIDs[0] + "/messages/").push(message)
       .catch(function(error) {
         console.error("Error saving message to Database:", error);
@@ -112,8 +111,11 @@ class Trade extends Component {
     // console.log(this.state.messages)
     return (
       <GiftedChat
-        user={currentUser}
-        renderAvatar={"https://cdn0.iconfinder.com/data/icons/iphone-black-people-svg-icons/40/agent_user_stock_spy_mail_help_hat_vehicle_vector_trustee-512.png"}
+        user={{
+          avatar: currentProfilePic,
+          id: currentUser,
+        }}
+        //renderAvatar={"https://cdn0.iconfinder.com/data/icons/iphone-black-people-svg-icons/40/agent_user_stock_spy_mail_help_hat_vehicle_vector_trustee-512.png"}
         messages={this.state.messages.slice().reverse()}
         onSend={messages => this.onSend(messages)}
       />

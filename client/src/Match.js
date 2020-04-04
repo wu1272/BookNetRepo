@@ -38,15 +38,18 @@ class Match extends Component {
                         for (var i = 0; i < allBookIDsAvailable.length; i++) {
                             for (var j = 0; j < bookIDs.length; j++) {
                                 //console.log(allBookIDsAvailable[i])
-                                if (allBookIDsAvailable[i] === null) {
-                                    console.log("rip")
-                                    displayMatches()
-                                    return;
-                                }
-                                if (allBookIDsNeeded[i] === null) {
-                                    console.log("rip")
-                                    displayMatches()
-                                    return;
+                                // if (allBookIDsAvailable[i] === null) {
+                                //     console.log("rip")
+                                //     displayMatches()
+                                //     return;
+                                // }
+                                // if (allBookIDsNeeded[i] === null) {
+                                //     console.log("rip")
+                                //     displayMatches()
+                                //     return;
+                                // }
+                                if (allBookIDsAvailable[i] === null || bookIDs[j] === null) {
+                                  break;
                                 }                 
                                 var bookbook = allBookIDsAvailable[i][bookIDs[j]];
                                 if (bookbook !== undefined) {
@@ -69,8 +72,10 @@ class Match extends Component {
                                     if (bookbook.trade) {
                                         for (var a = 0; a < allBookIDsNeeded.length; a++) {
                                             for (var b = 0; b < bookAvailableIDs.length; b++) {
+                                              //console.log(allBookIDsNeeded[a])
                                               if (allBookIDsNeeded[a]) {
                                                 if (allBookIDsNeeded[a][bookAvailableIDs[b]] !== undefined) {
+                                                    //console.log(allBookIDsNeeded[a][bookAvailableIDs[b]])
                                                     //console.log("hallelujah")
                                                     var btn = document.createElement("button");
                                                     btn.style.width = "100%"

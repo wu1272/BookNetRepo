@@ -154,8 +154,8 @@ function closePassModal() {
       var userId = user.uid
       app.database().ref('users/' + userId).once('value').then(function (snapshot) {
         //console.log(snapshot.val())
-        let uFirstName = (snapshot.val() && snapshot.val().firstname) || 'NoFirstNameError'
-        let uLastName = (snapshot.val() && snapshot.val().lastname) || 'NoLastNameError'
+        let uFirstName = (snapshot.val() && snapshot.val().firstname) || ''
+        let uLastName = (snapshot.val() && snapshot.val().lastname) || ''
       
         setFirstName(uFirstName)
         //console.log(uLastName)
@@ -333,7 +333,7 @@ function closePassModal() {
         return;
       }
 
-      app.database().ref('users/' + user.uid + '/').set({
+      app.database().ref('users/' + user.uid + '/').update({
         firstname: newFirstName,
         lastname: newLastName
       }).then(function() {
