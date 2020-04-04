@@ -114,25 +114,29 @@ class Match extends Component {
                                     }
                                     if (bookbook.sale) {
 
-                                                    saleMatches.push(createBookListing(bookbook))
+                                        if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
+                                            saleMatches.push(createBookListing(bookbook))
+                                        }    
 
-                                                    var btn = document.createElement("button");
-                                                    btn.style.width = "100%"
-                                                    btn.style.padding = '15px'
-                                                    typeOfMatch = "sale";
-                                                    //1 way match so same book for available and needed now
-                                                    btn.innerHTML = bookbook.title;
-                                                    btn.setAttribute("typeOfMatch", typeOfMatch)
-                                                    //console.log(bookIDs[j])
-                                                    btn.onclick = (function(userAvailableID, bookNeededID, bookAvailableID) {
-                                                        return function() {
-                                                          setPendingSale(userAvailableID, bookNeededID, bookAvailableID)
-                                                        };
-                                                      }(allUserIDsAvailable[i], bookIDs[j], bookIDs[j]));
-                                                    //console.log(allBookIDsAvailable[i][bookIDs[j]]);
-                                                    if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
-                                                        saleMatches.push(btn)
-                                                    }                               
+                                                    
+
+                                        // var btn = document.createElement("button");
+                                        // btn.style.width = "100%"
+                                        // btn.style.padding = '15px'
+                                        // typeOfMatch = "sale";
+                                        // //1 way match so same book for available and needed now
+                                        // btn.innerHTML = bookbook.title;
+                                        // btn.setAttribute("typeOfMatch", typeOfMatch)
+                                        // //console.log(bookIDs[j])
+                                        // btn.onclick = (function(userAvailableID, bookNeededID, bookAvailableID) {
+                                        //     return function() {
+                                        //         setPendingSale(userAvailableID, bookNeededID, bookAvailableID)
+                                        //     };
+                                        //     }(allUserIDsAvailable[i], bookIDs[j], bookIDs[j]));
+                                        // //console.log(allBookIDsAvailable[i][bookIDs[j]]);
+                                        // if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
+                                        //     saleMatches.push(btn)
+                                        // }                               
                                                 
                                     }
                                     if (bookbook.donate) {
