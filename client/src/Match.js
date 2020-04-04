@@ -188,15 +188,19 @@ class Match extends Component {
     }
 }
 
+function listingCallBack() {
+    alert("yeehaw")
+}
+
 
 function createBookListing(book) {
 
     var listing = document.createElement('img')
     listing.src = book.bookImg
+    listing.className = styles.listing
+    listing.onclick = listingCallBack
 
-
-
-    return listing
+    return listing 
 
 
 }

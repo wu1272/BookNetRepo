@@ -1,5 +1,10 @@
 
-img {
+
+.listing {
     width: 128px;
     height: auto;
+    display: inline-block;
+    margin-right: auto;
+    margin-left: auto;
+    
 }
