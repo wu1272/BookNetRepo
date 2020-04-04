@@ -262,14 +262,19 @@ function displayMatches() {
         var salesInner = document.createElement("div")
         salesInner.className="form-wrapper"
 
+        var salesSlider = document.createElement("div")
+        salesSlider.className = styles.slider
+
+
         var salesTitle = document.createElement('h1')
         salesTitle.innerHTML = "Available Sales"
         salesTitle.style.textDecoration = "underline"
         salesInner.appendChild(salesTitle)
 
         saleMatches.forEach(item => {
-            salesInner.appendChild(item)
+            salesSlider.appendChild(item)
         })
+        salesInner.appendChild(salesSlider)
         sales.appendChild(salesInner)
         list.appendChild(sales)
 

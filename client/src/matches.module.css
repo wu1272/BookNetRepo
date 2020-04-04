@@ -1,4 +1,8 @@
 
+.slider {
+    overflow: auto;
+    white-space: nowrap;
+}
 
 .listing {
     width: 128px;
@@ -6,5 +10,6 @@
     display: inline-block;
     margin-right: auto;
     margin-left: auto;
+    padding: .2em;
     
 }
