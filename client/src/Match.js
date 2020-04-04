@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import app from "./base.js";
+import styles from "./matches.module.css"
 import axios from "axios";
 
 var tradeMatches = []
@@ -105,6 +106,8 @@ class Match extends Component {
                                     }
                                     if (bookbook.sale) {
 
+                                                    saleMatches.push(createBookListing(bookbook))
+
                                                     var btn = document.createElement("button");
                                                     btn.style.width = "100%"
                                                     btn.style.padding = '15px'
@@ -171,6 +174,19 @@ class Match extends Component {
             </div>
         );
     }
+}
+
+
+function createBookListing(book) {
+
+    var listing = document.createElement('img')
+    listing.src = book.bookImg
+
+
+
+    return listing
+
+
 }
 
 
