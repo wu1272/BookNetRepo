@@ -115,7 +115,7 @@ class Match extends Component {
                                     if (bookbook.sale) {
 
                                         if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
-                                            saleMatches.push(createBookListing(bookbook))
+                                            saleMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b]))
                                         }    
 
                                                     
@@ -188,17 +188,20 @@ class Match extends Component {
     }
 }
 
-function listingCallBack() {
-    alert("yeehaw")
+function listingCallBack(userId, bNeedId, bAvailId) {
+    //alert("yeehaw")
+    setPendingSale(userId, bNeedId, bAvailId)
 }
 
 
-function createBookListing(book) {
+function createBookListing(book, userId, bNeedId, bAvailId) {
 
     var listing = document.createElement('img')
     listing.src = book.bookImg
     listing.className = styles.listing
-    listing.onclick = listingCallBack
+    listing.onclick = function() {
+        listingCallBack(userId, bNeedId, bAvailId)
+    }
 
     return listing 
 
