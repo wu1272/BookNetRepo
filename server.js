@@ -87,15 +87,16 @@ app.get('/api/getBooksNeeded', (req, res) => {
 
 //SET BOOKSNEEDED
 //write booksNeeded to database
-function setBooksNeeded(userID, bookID, title, author) {
+function setBooksNeeded(userID, bookID, title, author, img) {
   admin.database().ref('users/' + userID + '/booksNeeded/' + bookID).set({
     title: title,
-    author: author
+    author: author,
+    bookImg: img
   });
 }
 
 app.post('/api/setBooksNeeded', urlParser, function (req, res) {
-  setBooksNeeded(req.body.userid, req.body.bookID, req.body.title, req.body.author);
+  setBooksNeeded(req.body.userid, req.body.bookID, req.body.title, req.body.author, req.body.bookImg);
 });
 
 
