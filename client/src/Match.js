@@ -115,7 +115,7 @@ class Match extends Component {
                                     if (bookbook.sale) {
 
                                         if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
-                                            saleMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b]))
+                                            saleMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "S"))
                                         }    
 
                                                                             
@@ -170,19 +170,28 @@ class Match extends Component {
     }
 }
 
-function listingCallBack(userId, bNeedId, bAvailId) {
-    //alert("yeehaw")
-    setPendingSale(userId, bNeedId, bAvailId)
+function listingCallBack(userId, bNeedId, bAvailId, method) {
+    
+    switch(method) {
+        case "T":
+            break
+        case "S":
+            setPendingSale(userId, bNeedId, bAvailId)
+            break
+        case "D":
+            break
+    }
+    
 }
 
 
-function createBookListing(book, userId, bNeedId, bAvailId) {
+function createBookListing(book, userId, bNeedId, bAvailId, method) {
 
     var listing = document.createElement('img')
     listing.src = book.bookImg
     listing.className = styles.listing
     listing.onclick = function() {
-        listingCallBack(userId, bNeedId, bAvailId)
+        listingCallBack(userId, bNeedId, bAvailId, method)
     }
 
     return listing 
