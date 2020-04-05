@@ -14,7 +14,8 @@
     "express": "^4.17.1",
     "firebase": "^7.9.0",
     "firebase-admin": "^8.9.2",
-    "react-modal": "^3.11.1"
+    "react-modal": "^3.11.1",
+    "react-web-gifted-chat": "^0.6.7"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
