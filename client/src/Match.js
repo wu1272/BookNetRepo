@@ -120,21 +120,7 @@ class Match extends Component {
                                                 
                                     }
                                     if (bookbook.donate) {
-                                        var btn = document.createElement("button");
-                                        btn.style.width = "100%"
-                                        btn.style.padding = '15px'
-                                        typeOfMatch = "donate";
-                                        //1 way match so same book for available and needed now
-                                        btn.innerHTML = bookbook.title;
-                                        btn.setAttribute("typeOfMatch", typeOfMatch)
-                                        //console.log(bookIDs[j])
-                                        btn.onclick = (function(userAvailableID, bookNeededID, bookAvailableID) {
-                                            return function() {
-                                              setPendingDonate(userAvailableID, bookNeededID, bookAvailableID)
-                                            };
-                                          }(allUserIDsAvailable[i], bookIDs[j], bookIDs[j]));
-                                        //console.log(allBookIDsAvailable[i][bookIDs[j]]);
-
+                                       
                                         if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
                                             donateMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "D"))
                                         } 
@@ -178,6 +164,7 @@ function listingCallBack(userId, bNeedId, bAvailId, method) {
             setPendingSale(userId, bNeedId, bAvailId)
             break
         case "D":
+            setPendingDonate(userId, bNeedId, bAvailId)
             break
     }
     
