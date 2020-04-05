@@ -227,6 +227,9 @@ function displayMatches() {
          var donationsInner = document.createElement("div")
          donationsInner.className = "form-wrapper"
 
+         var donateSlider = document.createElement("div")
+         donateSlider.className = styles.slider
+
          //Create title
          var donationsTitle = document.createElement("h1")
          donationsTitle.innerHTML = "Available Donations"
@@ -234,8 +237,9 @@ function displayMatches() {
          donationsInner.appendChild(donationsTitle)
 
          donateMatches.forEach(item => {
-             donationsInner.appendChild(item)
+             donateSlider.appendChild(item)
          })
+         donationsInner.appendChild(donateSlider)
          donations.appendChild(donationsInner)
          list.appendChild(donations)
 
