@@ -159,6 +159,7 @@ function listingCallBack(userId, bNeedId, bAvailId, method) {
     
     switch(method) {
         case "T":
+            setPending(userId, bNeedId, bAvailId)
             break
         case "S":
             setPendingSale(userId, bNeedId, bAvailId)
