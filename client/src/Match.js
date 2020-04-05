@@ -116,9 +116,7 @@ class Match extends Component {
 
                                         if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
                                             saleMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "S"))
-                                        }    
-
-                                                                            
+                                        }                                        
                                                 
                                     }
                                     if (bookbook.donate) {
@@ -136,8 +134,9 @@ class Match extends Component {
                                             };
                                           }(allUserIDsAvailable[i], bookIDs[j], bookIDs[j]));
                                         //console.log(allBookIDsAvailable[i][bookIDs[j]]);
+
                                         if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
-                                            donateMatches.push(btn)
+                                            donateMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "D"))
                                         } 
                                     }
                                 
