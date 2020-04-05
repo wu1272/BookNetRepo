@@ -134,7 +134,7 @@ class Match extends Component {
                           btn.style.padding = '15px'
                           typeOfMatch = "sale";
                           //1 way match so same book for available and needed now
-                          btn.innerHTML = bookbook.title;
+                          btn.innerHTML = bookbook.title + "<br/>from<br/>" + allUserNamesAvailable[i];
                           btn.setAttribute("typeOfMatch", typeOfMatch)
                           //console.log(bookIDs[j])
                           btn.onclick = (function (userAvailableID, bookNeededID, bookAvailableID) {
@@ -154,7 +154,7 @@ class Match extends Component {
                           btn.style.padding = '15px'
                           typeOfMatch = "donate";
                           //1 way match so same book for available and needed now
-                          btn.innerHTML = bookbook.title;
+                          btn.innerHTML = bookbook.title + "<br/>from<br/>" + allUserNamesAvailable[i];
                           btn.setAttribute("typeOfMatch", typeOfMatch)
                           //console.log(bookIDs[j])
                           btn.onclick = (function (userAvailableID, bookNeededID, bookAvailableID) {
