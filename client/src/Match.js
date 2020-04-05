@@ -79,20 +79,20 @@ class Match extends Component {
                                                 if(allBookIDsNeeded[a]){
                                                     if (allBookIDsNeeded[a][bookAvailableIDs[b]] !== undefined) {
                                                         //console.log("hallelujah")
-                                                        var btn = document.createElement("button");
-                                                        btn.style.width = "100%"
-                                                        btn.style.padding = '15px'
-                                                        typeOfMatch = "trade";
-                                                        btn.id = [bookAvailableIDs[b]];
-                                                        //bookbook.title is the one they have and I need
-                                                        //allBookIDsNeeded[a][bookAvailableIDs[b]] is the one I have and they need
-                                                        btn.innerHTML = bookbook.title + "<br/>for your<br/>" + allBookIDsNeeded[a][bookAvailableIDs[b]].title;
-                                                        btn.setAttribute("typeOfMatch", typeOfMatch)
-                                                        btn.onclick = (function(userAvailableID, bookNeededID, bookAvailableID) {
-                                                            return function() {
-                                                                setPending(userAvailableID, bookNeededID, bookAvailableID)
-                                                            };
-                                                            }(allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b]));
+                                                        // var btn = document.createElement("button");
+                                                        // btn.style.width = "100%"
+                                                        // btn.style.padding = '15px'
+                                                        // typeOfMatch = "trade";
+                                                        // btn.id = [bookAvailableIDs[b]];
+                                                        // //bookbook.title is the one they have and I need
+                                                        // //allBookIDsNeeded[a][bookAvailableIDs[b]] is the one I have and they need
+                                                        // btn.innerHTML = bookbook.title + "<br/>for your<br/>" + allBookIDsNeeded[a][bookAvailableIDs[b]].title;
+                                                        // btn.setAttribute("typeOfMatch", typeOfMatch)
+                                                        // btn.onclick = (function(userAvailableID, bookNeededID, bookAvailableID) {
+                                                        //     return function() {
+                                                        //         setPending(userAvailableID, bookNeededID, bookAvailableID)
+                                                        //     };
+                                                        //     }(allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b]));
 
 
                                                         //does not show button when books are pending
@@ -101,7 +101,7 @@ class Match extends Component {
                                                         for (var y = 0; y < availableInYourDir.length; y++) {
                                                             if (availableInYourDir[y].title === allBookIDsNeeded[a][bookAvailableIDs[b]].title) {
                                                                 if (!availableInYourDir[y].pending && availableInYourDir[y].trade) {
-                                                                    tradeMatches.push(btn);
+                                                                    tradeMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "T"))
                                                                 }
                                                             }
                                                         }
@@ -202,6 +202,10 @@ function displayMatches() {
         var tradesInner = document.createElement("div")
         tradesInner.className = "form-wrapper"
 
+        //create trade slider
+        var tradeSlider = document.createElement("div")
+        tradeSlider.className = styles.slider
+
         //Create title for trades list
         var tradesTitle = document.createElement("h1")
         tradesTitle.innerHTML = "Available Trades"
@@ -209,8 +213,9 @@ function displayMatches() {
         tradesInner.appendChild(tradesTitle)
 
         tradeMatches.forEach(item => {
-            tradesInner.appendChild(item)
+            tradeSlider.appendChild(item)
         })
+        tradesInner.appendChild(tradeSlider)
         trades.appendChild(tradesInner)
         list.appendChild(trades)
 
@@ -243,6 +248,7 @@ function displayMatches() {
         var salesInner = document.createElement("div")
         salesInner.className="form-wrapper"
 
+        //create sales slider
         var salesSlider = document.createElement("div")
         salesSlider.className = styles.slider
 
