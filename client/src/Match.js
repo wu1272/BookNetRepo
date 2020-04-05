@@ -5,7 +5,7 @@ import axios from "axios";
 var tradeMatches = []
 var saleMatches = []
 var donateMatches = []
-
+var preventRepeats = []
 
 class Match extends Component {
 
@@ -19,6 +19,7 @@ class Match extends Component {
         var allBookIDsAvailable = [];
         var allBookIDsNeeded = [];
         var allUserIDsAvailable = [];
+        var allUserNamesAvailable = [];
         var availableInYourDir = [];  //actual book objects
         getBooksNeededIDs(bookIDs, user.uid, function () {
           //console.log(bookIDs);
@@ -28,7 +29,7 @@ class Match extends Component {
             getEverySingleDamnBookNeeded(allBookIDsNeeded, function () {
 
 
-              getEverySingleDamnBookAvailable(allUserIDsAvailable, allBookIDsAvailable, function () {
+              getEverySingleDamnBookAvailable(allUserNamesAvailable, allUserIDsAvailable, allBookIDsAvailable, function () {
 
                 preventPendingTrades(availableInYourDir, user.uid, function () {
                   //console.log(availableInYourDir)
@@ -69,6 +70,7 @@ class Match extends Component {
                         //Add to proper list
                         //book I need   ---- book you have available... done above
                         //book you need ---- book I have available... do below
+                        
                         if (bookbook.trade) {
                           for (var a = 0; a < allBookIDsNeeded.length; a++) {
                             for (var b = 0; b < bookAvailableIDs.length; b++) {
@@ -84,14 +86,28 @@ class Match extends Component {
                                   btn.id = [bookAvailableIDs[b]];
                                   //bookbook.title is the one they have and I need
                                   //allBookIDsNeeded[a][bookAvailableIDs[b]] is the one I have and they need
-                                  btn.innerHTML = bookbook.title + "<br/>for your<br/>" + allBookIDsNeeded[a][bookAvailableIDs[b]].title;
+                                  btn.innerHTML = bookbook.title + "<br/>for your<br/>" + allBookIDsNeeded[a][bookAvailableIDs[b]].title + "<br/>with<br/>" + allUserNamesAvailable[i];
                                   btn.setAttribute("typeOfMatch", typeOfMatch)
                                   btn.onclick = (function (userAvailableID, bookNeededID, bookAvailableID) {
                                     return function () {
                                       setPending(userAvailableID, bookNeededID, bookAvailableID)
                                     };
                                   }(allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b]));
-
+                                  
+                                  var good = false;
+                                  var count = 0;
+                                  for (var x = 0; x < preventRepeats.length; x++) {
+                                    if (preventRepeats[x] !== btn.innerHTML) {
+                                      count++;
+                                    }
+                                    else {
+                                      continue;
+                                    }
+                                  }
+                                  if (count === preventRepeats.length) {
+                                    preventRepeats.push(btn.innerHTML)
+                                    good = true;
+                                  }
 
                                   //does not show button when books are pending
                                   //i.e. when someone clicks the match with you, removes the button
@@ -99,7 +115,9 @@ class Match extends Component {
                                   for (var y = 0; y < availableInYourDir.length; y++) {
                                     if (availableInYourDir[y].title === allBookIDsNeeded[a][bookAvailableIDs[b]].title) {
                                       if (!availableInYourDir[y].pending && availableInYourDir[y].trade) {
-                                        tradeMatches.push(btn);
+                                        if (good) {
+                                          tradeMatches.push(btn)
+                                        }
                                       }
                                     }
                                   }
@@ -287,7 +305,7 @@ function preventPendingTrades(bookIDs, userID, callback) {
     });
 }
 
-function getEverySingleDamnBookAvailable(allUserIDsAvailable, allBookIDsAvailable, callback) {
+function getEverySingleDamnBookAvailable(allUserNamesAvailable, allUserIDsAvailable, allBookIDsAvailable, callback) {
   var booksAvailablePath = app.database().ref('users/');
   booksAvailablePath.once('value')
     .then(function (snapshot) {
@@ -296,6 +314,7 @@ function getEverySingleDamnBookAvailable(allUserIDsAvailable, allBookIDsAvailabl
         var bookID = user.child("booksAvailable").val();
         allBookIDsAvailable.push(bookID);
         allUserIDsAvailable.push(user.key);
+        allUserNamesAvailable.push(user.child("firstname").val() + " " + user.child("lastname").val());
       });
       callback();
     });
