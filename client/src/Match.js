@@ -1,15 +1,35 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import app from "./base.js";
 import styles from "./matches.module.css"
 import axios from "axios";
+import Modal from "react-modal"
+
 
 var tradeMatches = []
 var saleMatches = []
 var donateMatches = []
 
+// CSS style for modal popout 
+const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)'
+    }
+  };
+
+
+
+var isModalOpen = false
+
+
 
 class Match extends Component {
 
+      
     
 
     componentDidMount() {
@@ -57,12 +77,12 @@ class Match extends Component {
                                         //list of books that you can trade for given book 
                                         var yourPossTrades = []
 
+                                        //Get books that can be traded for bookbook 
                                         for (var a = 0; a < allBookIDsNeeded.length; a++) {
                                             for (var b = 0; b < bookAvailableIDs.length; b++) {
                                                 if(allBookIDsNeeded[a]){
                                                     if (allBookIDsNeeded[a][bookAvailableIDs[b]] !== undefined) {
                                                         
-
                                                         for (var y = 0; y < availableInYourDir.length; y++) {
 
                                                             if (availableInYourDir[y].title === allBookIDsNeeded[a][bookAvailableIDs[b]].title) {
@@ -79,7 +99,7 @@ class Match extends Component {
                                             
                                         }
 
-                                        
+                                        //Debugging info 
                                         if(yourPossTrades.length !== 0) {
                                             console.log(yourPossTrades)
                                         }
@@ -124,9 +144,42 @@ class Match extends Component {
 
 
 
+     
+
     render() {
+            
+        //Modal functions
+        function afterOpenModal() {
+            // references are now sync'd and can be accessed.
+        }
+
+
+        function closeModal() {
+            isModalOpen = false
+            this.setState(this.state)
+        }
+
+
         return (
             <div>
+
+                <Modal 
+                    id="tradeModal"
+                    contentLabel="Select book to trade."
+                    isOpen={isModalOpen}
+                    onAfterOpen={afterOpenModal}
+                    onRequestClose={closeModal}
+                    style={customStyles}
+                >
+                    <div>
+                        <h3>Click on one of your books to trade for the selected book</h3>
+                
+
+                    </div>
+
+                </Modal>
+
+
                 <h1>Find Matches Here</h1>
                 <p>Click a book to be paired with a trading partner</p>
                 <button onClick={() => window.location.href = '/home'}>Home</button>
@@ -136,11 +189,14 @@ class Match extends Component {
     }
 }
 
-function listingCallBack(userId, bNeedId, bAvailId, method) {
+function listingCallBack(userId, bNeedId, bAvailId, method, tradeBooks) {
     
+
+
     switch(method) {
         case "T":
-            setPending(userId, bNeedId, bAvailId)
+            isModalOpen = true
+            //setPending(userId, bNeedId, bAvailId)
             break
         case "S":
             setPendingSale(userId, bNeedId, bAvailId)
@@ -160,7 +216,7 @@ function createBookListing(book, userId, bNeedId, bAvailId, method, tradeBooks) 
     listing.className = styles.listing
     listing.alt = book.title
     listing.onclick = function() {
-        listingCallBack(userId, bNeedId, bAvailId, method)
+        listingCallBack(userId, bNeedId, bAvailId, method, tradeBooks)
     }
 
     return listing 
