@@ -53,17 +53,24 @@ class Match extends Component {
                                     //book I need   ---- book you have available... done above
                                     //book you need ---- book I have available... do below
                                     if (bookbook.trade) {
+
+                                        //list of books that you can trade for given book 
+                                        var yourPossTrades = []
+
                                         for (var a = 0; a < allBookIDsNeeded.length; a++) {
                                             for (var b = 0; b < bookAvailableIDs.length; b++) {
                                                 if(allBookIDsNeeded[a]){
                                                     if (allBookIDsNeeded[a][bookAvailableIDs[b]] !== undefined) {
                                                         
+
                                                         for (var y = 0; y < availableInYourDir.length; y++) {
+
                                                             if (availableInYourDir[y].title === allBookIDsNeeded[a][bookAvailableIDs[b]].title) {
                                                                 if (!availableInYourDir[y].pending && availableInYourDir[y].trade) {
-                                                                    tradeMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "T"))
+                                                                    yourPossTrades.push(availableInYourDir[y])
                                                                 }
                                                             }
+                                                            
                                                         }
                                                         
                                                     }
@@ -71,13 +78,22 @@ class Match extends Component {
                                             }
                                             
                                         }
+
+                                        
+                                        if(yourPossTrades.length !== 0) {
+                                            console.log(yourPossTrades)
+                                        }
+                                        
+                                        //add trade match
+                                        tradeMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "T", yourPossTrades))
+
                                     }
 
                                     //Check for sale 
                                     if (bookbook.sale) {
 
                                         if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
-                                            saleMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "S"))
+                                            saleMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "S", null))
                                         }                                        
                                                 
                                     }
@@ -87,7 +103,7 @@ class Match extends Component {
                                     if (bookbook.donate) {
                                        
                                         if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
-                                            donateMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "D"))
+                                            donateMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "D", null))
                                         } 
                                     }
                                 
@@ -137,7 +153,7 @@ function listingCallBack(userId, bNeedId, bAvailId, method) {
 }
 
 
-function createBookListing(book, userId, bNeedId, bAvailId, method) {
+function createBookListing(book, userId, bNeedId, bAvailId, method, tradeBooks) {
 
     var listing = document.createElement('img')
     listing.src = book.bookImg
