@@ -38,38 +38,17 @@ class Match extends Component {
                         //console.log(allBookIDsNeeded.length);
                         for (var i = 0; i < allBookIDsAvailable.length; i++) {
                             for (var j = 0; j < bookIDs.length; j++) {
-                                //console.log(allBookIDsAvailable[i])
-                                // if (allBookIDsAvailable[i] === null) {
-                                //     console.log("rip")
-                                //     displayMatches()
-                                //     return;
-                                // }
-                                // if (allBookIDsNeeded[i] === null) {
-                                //     console.log("rip")
-                                //     displayMatches()
-                                //     return;
-                                // }  
+                               
                                 
-                                
+                                //Null check
                                 if(allBookIDsAvailable[i] === null || bookIDs[j] === null) {
                                     break
                                 }
 
+                                //get book they have that user needs
                                 var bookbook = allBookIDsAvailable[i][bookIDs[j]];
                                 if (bookbook !== undefined) {
-                                    //console.log(bookbook);
-                                    var btn = document.createElement("button");
-                                    var typeOfMatch;
-
-                                    //set css
-                                    btn.style.width = "100%"
-                                    btn.style.padding = '15px'
-                                    
-
-                                    //set values 
-                                    btn.setAttribute("value", bookIDs[j]);
-                                    btn.setAttribute("text", bookbook.title);
-
+                    
                                     //Add to proper list
                                     //book I need   ---- book you have available... done above
                                     //book you need ---- book I have available... do below
