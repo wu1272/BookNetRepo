@@ -19,7 +19,7 @@
 ### Issues with dependencies for GiftedChat or @materialui
 `cd client`
 
-`npm i --save-dev react-web-gifted-chat @material-ui/core`
+`npm i --save-dev react-web-gifted-chat @material-ui/core react-notifications`
 
 If this removes "dev:" line in package.json, add this to the scripts...
 
