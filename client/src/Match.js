@@ -72,6 +72,8 @@ class Match extends Component {
                                             
                                         }
                                     }
+
+                                    //Check for sale 
                                     if (bookbook.sale) {
 
                                         if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
@@ -79,6 +81,9 @@ class Match extends Component {
                                         }                                        
                                                 
                                     }
+
+
+                                    //Check for donate
                                     if (bookbook.donate) {
                                        
                                         if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
@@ -137,6 +142,7 @@ function createBookListing(book, userId, bNeedId, bAvailId, method) {
     var listing = document.createElement('img')
     listing.src = book.bookImg
     listing.className = styles.listing
+    listing.alt = book.title
     listing.onclick = function() {
         listingCallBack(userId, bNeedId, bAvailId, method)
     }
