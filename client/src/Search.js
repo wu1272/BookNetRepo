@@ -89,7 +89,7 @@ function Search() {
 
         function handleAvailableBook(method) {
             availMethod = method
-            setBooksAvailable(null, currBook.bookID, currBook.name, currBook.author)
+            setBooksAvailable(null, currBook.bookID, currBook.name, currBook.author, currBook.img)
         }
 
         //End of Modal functions
@@ -188,7 +188,7 @@ function Search() {
                             <img className={styles.bookImg} src={((book.volumeInfo.imageLinks) ? book.volumeInfo.imageLinks.thumbnail : defaultBookPic)} />
                             
                     
-                            <button className={styles.bookNeed} onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Needed</button>
+                            <button className={styles.bookNeed} onClick={ (e) => { setBooksNeeded(e, book.id, book.volumeInfo.title, book.volumeInfo.authors, ((book.volumeInfo.imageLinks) ? book.volumeInfo.imageLinks.thumbnail : defaultBookPic))}}> Book Needed</button>
                             
                             <button className={styles.bookHave} onClick={(e) => {openModal(book)}}> Book Available</button>
                         </div>
@@ -213,7 +213,7 @@ function Search() {
     //                     <input type="checkbox" class="hidden" id="sale"  onChange={handleSellChange}/>
     //                     <label>For Sale</label>
 
-    function setBooksNeeded(e, book_id, book_title, book_authors) {   
+    function setBooksNeeded(e, book_id, book_title, book_authors, book_img) {   
         app.auth().onAuthStateChanged(function (user) {
             if (user) {
                 if (book_authors === undefined) {
@@ -224,6 +224,7 @@ function Search() {
                     bookID: book_id,
                     title: book_title,
                     author: book_authors,
+                    bookImg: book_img,
                     event: e
                 })
                     .then(function (response) {
@@ -242,7 +243,7 @@ function Search() {
 
 
     
-function setBooksAvailable(e, book_id, book_title, book_authors) {
+function setBooksAvailable(e, book_id, book_title, book_authors, book_img) {
     app.auth().onAuthStateChanged(function (user) {
         if (user) {
 
@@ -272,6 +273,7 @@ function setBooksAvailable(e, book_id, book_title, book_authors) {
                     sale: sale,
                     donate: donate,
                     trade: trade,
+                    bookImg: book_img,
                     event: e
             })
                 .then(function (response) {

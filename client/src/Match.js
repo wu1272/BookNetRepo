@@ -1,124 +1,149 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import app from "./base.js";
+import styles from "./matches.module.css"
 import axios from "axios";
+import Modal from "react-modal"
+
 
 var tradeMatches = []
 var saleMatches = []
 var donateMatches = []
-var preventRepeats = []
+
+
+// CSS style for modal popout 
+const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)'
+    }
+  };
+
+
+
+
+
 
 class Match extends Component {
 
 
 
-  componentDidMount() {
-    app.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        var bookIDs = [];
-        var bookAvailableIDs = [];
-        var allBookIDsAvailable = [];
-        var allBookIDsNeeded = [];
-        var allUserIDsAvailable = [];
-        var allUserNamesAvailable = [];
-        var availableInYourDir = [];  //actual book objects
-        getBooksNeededIDs(bookIDs, user.uid, function () {
-          //console.log(bookIDs);
-          getBooksAvailableIDs(bookAvailableIDs, user.uid, function () {
+    constructor(props) {
+        super(props);
 
+        this.state = {
+            isModalOpen: false,
+            modalContent: []
+        }
 
-            getEverySingleDamnBookNeeded(allBookIDsNeeded, function () {
+        this.listingCallBack = this.listingCallBack.bind(this)
+        this.createBookListing = this.createBookListing.bind(this)
+        this.closeModal = this.closeModal.bind(this)
+        this.afterOpenModal = this.afterOpenModal.bind(this)
+    }
 
+    
 
-              getEverySingleDamnBookAvailable(allUserNamesAvailable, allUserIDsAvailable, allBookIDsAvailable, function () {
+    componentDidMount() {
 
-                preventPendingTrades(availableInYourDir, user.uid, function () {
-                  //console.log(availableInYourDir)
-                  //console.log(allBookIDsAvailable);
-                  //console.log(bookIDs);
-                  //console.log(allBookIDsNeeded.length);
-                  for (var i = 0; i < allBookIDsAvailable.length; i++) {
-                    for (var j = 0; j < bookIDs.length; j++) {
-                      //console.log(allBookIDsAvailable[i])
-                      // if (allBookIDsAvailable[i] === null) {
-                      //     console.log("rip")
-                      //     displayMatches()
-                      //     return;
-                      // }
-                      // if (allBookIDsNeeded[i] === null) {
-                      //     console.log("rip")
-                      //     displayMatches()
-                      //     return;
-                      // }
-                      if (allBookIDsAvailable[i] === null || bookIDs[j] === null) {
-                        break;
-                      }
-                      var bookbook = allBookIDsAvailable[i][bookIDs[j]];
-                      if (bookbook !== undefined) {
-                        //console.log(bookbook);
-                        var btn = document.createElement("button");
-                        var typeOfMatch;
-
-                        //set css
-                        btn.style.width = "100%"
-                        btn.style.padding = '15px'
-
-
-                        //set values 
-                        btn.setAttribute("value", bookIDs[j]);
-                        btn.setAttribute("text", bookbook.title);
-
-                        //Add to proper list
-                        //book I need   ---- book you have available... done above
-                        //book you need ---- book I have available... do below
+        app.auth().onAuthStateChanged((user) => {
+            if (user) {
+                var bookIDs = [];
+                var bookAvailableIDs = [];
+                var allBookIDsAvailable = [];
+                var allBookIDsNeeded = [];
+                var allUserIDsAvailable = [];
+                var availableInYourDir = [];  //actual book objects
+                getBooksNeededIDs(bookIDs, user.uid, () => {
+                    //console.log(bookIDs);
+                    getBooksAvailableIDs(bookAvailableIDs, user.uid,()  =>{
                         
-                        if (bookbook.trade) {
-                          for (var a = 0; a < allBookIDsNeeded.length; a++) {
-                            for (var b = 0; b < bookAvailableIDs.length; b++) {
-                              //console.log(allBookIDsNeeded[a])
-                              if (allBookIDsNeeded[a]) {
-                                if (allBookIDsNeeded[a][bookAvailableIDs[b]] !== undefined) {
-                                  //console.log(allBookIDsNeeded[a][bookAvailableIDs[b]])
-                                  //console.log("hallelujah")
-                                  var btn = document.createElement("button");
-                                  btn.style.width = "100%"
-                                  btn.style.padding = '15px'
-                                  typeOfMatch = "trade";
-                                  btn.id = [bookAvailableIDs[b]];
-                                  //bookbook.title is the one they have and I need
-                                  //allBookIDsNeeded[a][bookAvailableIDs[b]] is the one I have and they need
-                                  btn.innerHTML = bookbook.title + "<br/>for your<br/>" + allBookIDsNeeded[a][bookAvailableIDs[b]].title + "<br/>with<br/>" + allUserNamesAvailable[i];
-                                  btn.setAttribute("typeOfMatch", typeOfMatch)
-                                  btn.onclick = (function (userAvailableID, bookNeededID, bookAvailableID) {
-                                    return function () {
-                                      setPending(userAvailableID, bookNeededID, bookAvailableID)
-                                    };
-                                  }(allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b]));
-                                  
-                                  var good = false;
-                                  var count = 0;
-                                  for (var x = 0; x < preventRepeats.length; x++) {
-                                    if (preventRepeats[x] !== btn.innerHTML) {
-                                      count++;
-                                    }
-                                    else {
-                                      continue;
-                                    }
-                                  }
-                                  if (count === preventRepeats.length) {
-                                    preventRepeats.push(btn.innerHTML)
-                                    good = true;
-                                  }
+                    
+                    getEverySingleDamnBookNeeded(allBookIDsNeeded,()  =>{
+                        
+                    
+                    getEverySingleDamnBookAvailable(allUserIDsAvailable, allBookIDsAvailable, () => {
 
-                                  //does not show button when books are pending
-                                  //i.e. when someone clicks the match with you, removes the button
-                                  //console.log(availableInYourDir)
-                                  for (var y = 0; y < availableInYourDir.length; y++) {
-                                    if (availableInYourDir[y].title === allBookIDsNeeded[a][bookAvailableIDs[b]].title) {
-                                      if (!availableInYourDir[y].pending && availableInYourDir[y].trade) {
-                                        if (good) {
-                                          tradeMatches.push(btn)
+                        preventPendingTrades(availableInYourDir, user.uid,()  =>{
+                        //console.log(availableInYourDir)
+                        //console.log(allBookIDsAvailable);
+                        //console.log(bookIDs);
+                        //console.log(allBookIDsNeeded.length);
+                        for (var i = 0; i < allBookIDsAvailable.length; i++) {
+                            for (var j = 0; j < bookIDs.length; j++) {
+                               
+                                
+                                //Null check
+                                if(allBookIDsAvailable[i] === null || bookIDs[j] === null) {
+                                    break
+                                }
+
+                                //get book they have that user needs
+                                var bookbook = allBookIDsAvailable[i][bookIDs[j]];
+                                if (bookbook !== undefined) {
+                    
+                                    //Add to proper list
+                                    //book I need   ---- book you have available... done above
+                                    //book you need ---- book I have available... do below
+                                    if (bookbook.trade) {
+
+                                        //list of books that you can trade for given book 
+                                        var yourPossTrades = []
+
+                                        //Get books that can be traded for bookbook 
+                                        for (var a = 0; a < allBookIDsNeeded.length; a++) {
+                                            for (var b = 0; b < bookAvailableIDs.length; b++) {
+                                                if(allBookIDsNeeded[a]){
+                                                    if (allBookIDsNeeded[a][bookAvailableIDs[b]] !== undefined) {
+                                                        
+                                                        for (var y = 0; y < availableInYourDir.length; y++) {
+
+                                                            if (availableInYourDir[y].title === allBookIDsNeeded[a][bookAvailableIDs[b]].title) {
+                                                                if (!availableInYourDir[y].pending && availableInYourDir[y].trade) {
+                                                                    yourPossTrades.push(availableInYourDir[y])
+                                                                }
+                                                            }
+                                                            
+                                                        }
+                                                        
+                                                    }
+                                                }
+                                            }
+                                            
                                         }
-                                      }
+
+                                        //Debugging info 
+                                        if(yourPossTrades.length !== 0) {
+                                            console.log(yourPossTrades)
+                                        }
+                                        
+                                        console.log("Adding trade: " + bookAvailableIDs[b])
+
+                                        //add trade match
+                                        tradeMatches.push(this.createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "T", yourPossTrades))
+
+                                    }
+
+                                    //Check for sale 
+                                    if (bookbook.sale) {
+
+                                        if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
+                                            saleMatches.push(this.createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "S", null))
+                                        }                                        
+                                                
+                                    }
+
+
+                                    //Check for donate
+                                    if (bookbook.donate) {
+                                       
+                                        if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
+                                            donateMatches.push(this.createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "D", null))
+                                        } 
+
                                     }
                                   }
 
@@ -126,45 +151,6 @@ class Match extends Component {
                               }
                             }
 
-                          }
-                        }
-                        if (bookbook.sale) {
-                          var btn = document.createElement("button");
-                          btn.style.width = "100%"
-                          btn.style.padding = '15px'
-                          typeOfMatch = "sale";
-                          //1 way match so same book for available and needed now
-                          btn.innerHTML = bookbook.title + "<br/>from<br/>" + allUserNamesAvailable[i];
-                          btn.setAttribute("typeOfMatch", typeOfMatch)
-                          //console.log(bookIDs[j])
-                          btn.onclick = (function (userAvailableID, bookNeededID, bookAvailableID) {
-                            return function () {
-                              setPendingSale(userAvailableID, bookNeededID, bookAvailableID)
-                            };
-                          }(allUserIDsAvailable[i], bookIDs[j], bookIDs[j]));
-                          //console.log(allBookIDsAvailable[i][bookIDs[j]]);
-                          if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
-                            saleMatches.push(btn)
-                          }
-
-                        }
-                        if (bookbook.donate) {
-                          var btn = document.createElement("button");
-                          btn.style.width = "100%"
-                          btn.style.padding = '15px'
-                          typeOfMatch = "donate";
-                          //1 way match so same book for available and needed now
-                          btn.innerHTML = bookbook.title + "<br/>from<br/>" + allUserNamesAvailable[i];
-                          btn.setAttribute("typeOfMatch", typeOfMatch)
-                          //console.log(bookIDs[j])
-                          btn.onclick = (function (userAvailableID, bookNeededID, bookAvailableID) {
-                            return function () {
-                              setPendingDonate(userAvailableID, bookNeededID, bookAvailableID)
-                            };
-                          }(allUserIDsAvailable[i], bookIDs[j], bookIDs[j]));
-                          //console.log(allBookIDsAvailable[i][bookIDs[j]]);
-                          if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
-                            donateMatches.push(btn)
                           }
                         }
 
@@ -184,18 +170,103 @@ class Match extends Component {
   }
 
 
+  
 
-  render() {
-    return (
-      <div>
-        <h1>Find Matches Here</h1>
-        <p>Click a book to be paired with a trading partner</p>
-        <button onClick={() => window.location.href = '/home'}>Home</button>
-        <div id="matchesList"></div>
-      </div>
-    );
-  }
+    listingCallBack(userId, bNeedId, bAvailId, method, tradeBooks) {
+
+        switch(method) {
+            case "T":
+
+                //open modal 
+                this.setState({isModalOpen: true})
+
+                //create listings for each book avail to trade
+                var slider = document.getElementById("modalSlider")
+                tradeBooks.forEach(item => {
+                    console.log("Available Book: " + item.bookID)
+                    console.log("Book Needed: " + bAvailId)
+                    slider.appendChild(this.createBookListing(item, userId, bAvailId, item.bookID, "TO", null))  
+                })
+
+                
+                break
+            case "S":
+                setPendingSale(userId, bNeedId, bAvailId)
+                break
+            case "D":
+                setPendingDonate(userId, bNeedId, bAvailId)
+                break
+            case "TO":
+                setPending(userId, bNeedId, bAvailId)
+                break
+        }
+        
+    }
+    
+    
+    createBookListing(book, userId, bNeedId, bAvailId, method, tradeBooks) {
+    
+        var listing = document.createElement('img')
+        listing.src = book.bookImg
+        listing.className = styles.listing
+        listing.alt = book.title
+        listing.onclick = () => {
+            this.listingCallBack(userId, bNeedId, book.bookID, method, tradeBooks)
+        }
+    
+        return listing 
+    
+    
+    }
+
+    //Modal functions
+    afterOpenModal() {
+        // references are now sync'd and can be accessed.
+    }
+
+
+    closeModal() {
+        this.setState({isModalOpen: false})
+    }
+     
+
+
+    render() {
+            
+
+        return (
+            <div>
+
+                <Modal 
+                    id="tradeModal"
+                    contentLabel="Select book to trade."
+                    isOpen={this.state.isModalOpen}
+                    onAfterOpen={this.afterOpenModal}
+                    onRequestClose={this.closeModal}
+                    style={customStyles}
+                >
+                    <div>
+                        <h3>Click on one of your books to trade for the selected book</h3>
+                        <div id="modalSlider" className={styles.slider}>
+
+                        </div>
+
+                    </div>
+
+                </Modal>
+
+
+                <h1>Find Matches Here</h1>
+                <p>Click a book to be paired with a trading partner</p>
+                <button onClick={() => window.location.href = '/home'}>Home</button>
+                <div id="matchesList"></div>
+            </div>
+        );
+    }
+
 }
+
+
 
 
 //Display matches with respect to match type 
@@ -266,6 +337,76 @@ function displayMatches() {
   list.appendChild(sales)
 
 
+
+        //create trade slider
+        var tradeSlider = document.createElement("div")
+        tradeSlider.className = styles.slider
+
+        //Create title for trades list
+        var tradesTitle = document.createElement("h1")
+        tradesTitle.innerHTML = "Available Trades"
+        tradesTitle.style.textDecoration = "underline"
+        tradesInner.appendChild(tradesTitle)
+
+        tradeMatches.forEach(item => {
+            tradeSlider.appendChild(item)
+        })
+        tradesInner.appendChild(tradeSlider)
+        trades.appendChild(tradesInner)
+        list.appendChild(trades)
+
+         //Display donate matches 
+         var donations = document.createElement("div")
+         donations.className = "wrapper"
+         donations.style.height = "auto"
+         donations.style.marginTop = "10px"
+         var donationsInner = document.createElement("div")
+         donationsInner.className = "form-wrapper"
+
+         var donateSlider = document.createElement("div")
+         donateSlider.className = styles.slider
+
+         //Create title
+         var donationsTitle = document.createElement("h1")
+         donationsTitle.innerHTML = "Available Donations"
+         donationsTitle.style.textDecoration = "underline"
+         donationsInner.appendChild(donationsTitle)
+
+         donateMatches.forEach(item => {
+             donateSlider.appendChild(item)
+         })
+         donationsInner.appendChild(donateSlider)
+         donations.appendChild(donationsInner)
+         list.appendChild(donations)
+
+
+        //Display sale options
+        var sales = document.createElement("div")
+        sales.className="wrapper"
+        sales.style.height = "auto"
+        sales.style.marginTop = "10px"
+        var salesInner = document.createElement("div")
+        salesInner.className="form-wrapper"
+
+        //create sales slider
+        var salesSlider = document.createElement("div")
+        salesSlider.className = styles.slider
+
+
+        var salesTitle = document.createElement('h1')
+        salesTitle.innerHTML = "Available Sales"
+        salesTitle.style.textDecoration = "underline"
+        salesInner.appendChild(salesTitle)
+
+        saleMatches.forEach(item => {
+            salesSlider.appendChild(item)
+        })
+        salesInner.appendChild(salesSlider)
+        sales.appendChild(salesInner)
+        list.appendChild(sales)
+
+
+        
 
 }
 
