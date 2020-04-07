@@ -88,7 +88,7 @@ class Match extends Component {
                                     //Add to proper list
                                     //book I need   ---- book you have available... done above
                                     //book you need ---- book I have available... do below
-                                    if (bookbook.trade) {
+                                    if (bookbook.trade && !bookbook.pending) {
 
                                         //list of books that you can trade for given book 
                                         var yourPossTrades = []
@@ -98,13 +98,11 @@ class Match extends Component {
                                             for (var b = 0; b < bookAvailableIDs.length; b++) {
                                                 if(allBookIDsNeeded[a]){
                                                     if (allBookIDsNeeded[a][bookAvailableIDs[b]] !== undefined) {
-                                                        
                                                         for (var y = 0; y < availableInYourDir.length; y++) {
-
                                                             if (availableInYourDir[y].title === allBookIDsNeeded[a][bookAvailableIDs[b]].title) {
-                                                                if (!availableInYourDir[y].pending && availableInYourDir[y].trade) {
-                                                                    yourPossTrades.push(availableInYourDir[y])
-                                                                }
+                                                              if (!availableInYourDir[y].pending && availableInYourDir[y].trade) {
+                                                                yourPossTrades.push(availableInYourDir[y])        
+                                                              }
                                                             }
                                                             
                                                         }
