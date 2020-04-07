@@ -24,7 +24,6 @@ const customStyles = {
 
 
 
-var isModalOpen = false
 
 class Match extends Component {
 
@@ -32,8 +31,14 @@ class Match extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            isModalOpen: false
+        }
+
         this.listingCallBack = this.listingCallBack.bind(this)
         this.createBookListing = this.createBookListing.bind(this)
+        this.closeModal = this.closeModal.bind(this)
+        this.afterOpenModal = this.afterOpenModal.bind(this)
     }
 
     
@@ -156,8 +161,7 @@ class Match extends Component {
 
         switch(method) {
             case "T":
-                isModalOpen = true
-                this.setState(this.state)
+                this.setState({isModalOpen: true})
                 //setPending(userId, bNeedId, bAvailId)
                 break
             case "S":
@@ -185,22 +189,20 @@ class Match extends Component {
     
     
     }
+
+    //Modal functions
+    afterOpenModal() {
+        // references are now sync'd and can be accessed.
+    }
+
+
+    closeModal() {
+        this.setState({isModalOpen: false})
+    }
      
 
     render() {
             
-
-        //Modal functions
-        function afterOpenModal() {
-            // references are now sync'd and can be accessed.
-        }
-
-
-        function closeModal() {
-            isModalOpen = false
-            this.setState(this.state)
-        }
-
 
         return (
             <div>
@@ -208,7 +210,7 @@ class Match extends Component {
                 <Modal 
                     id="tradeModal"
                     contentLabel="Select book to trade."
-                    isOpen={isModalOpen}
+                    isOpen={this.state.isModalOpen}
                     onAfterOpen={afterOpenModal}
                     onRequestClose={closeModal}
                     style={customStyles}
