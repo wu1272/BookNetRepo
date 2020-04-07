@@ -32,7 +32,8 @@ class Match extends Component {
         super(props);
 
         this.state = {
-            isModalOpen: false
+            isModalOpen: false,
+            modalContent: []
         }
 
         this.listingCallBack = this.listingCallBack.bind(this)
@@ -161,14 +162,28 @@ class Match extends Component {
 
         switch(method) {
             case "T":
+
+                //open modal 
                 this.setState({isModalOpen: true})
-                //setPending(userId, bNeedId, bAvailId)
+
+                //create listings for each book avail to trade
+                var slider = document.getElementById("modalSlider")
+                tradeBooks.forEach(item => {
+
+                    console.log(item)
+                    slider.appendChild(this.createBookListing(item, userId, bNeedId, item.id, "TO", null))  
+                })
+
+                
                 break
             case "S":
                 setPendingSale(userId, bNeedId, bAvailId)
                 break
             case "D":
                 setPendingDonate(userId, bNeedId, bAvailId)
+                break
+            case "TO":
+                setPending(userId, bNeedId, bAvailId)
                 break
         }
         
@@ -211,13 +226,15 @@ class Match extends Component {
                     id="tradeModal"
                     contentLabel="Select book to trade."
                     isOpen={this.state.isModalOpen}
-                    onAfterOpen={afterOpenModal}
-                    onRequestClose={closeModal}
+                    onAfterOpen={this.afterOpenModal}
+                    onRequestClose={this.closeModal}
                     style={customStyles}
                 >
                     <div>
                         <h3>Click on one of your books to trade for the selected book</h3>
-                
+                        <div id="modalSlider" className={styles.slider}>
+
+                        </div>
 
                     </div>
 
