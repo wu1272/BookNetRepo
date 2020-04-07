@@ -1,37 +1,48 @@
 {
-  "name": "booknetrepo",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
+  "name": "react-firebase-auth",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
     "axios": "^0.19.2",
-    "bcrypt": "^3.0.8",
-    "body-parser": "^1.19.0",
-    "concurrently": "^5.1.0",
-    "express": "^4.17.1",
-    "firebase": "^7.9.0",
-    "firebase-admin": "^8.9.2",
-    "react-modal": "^3.11.1"
-  },
-  "devDependencies": {
-    "@material-ui/core": "^4.9.9",
-    "nodemon": "^2.0.2",
-    "react-notifications-component": "^2.4.0",
-    "react-web-gifted-chat": "^0.6.7"
+    "firebase": "^5.10.1",
+    "react": "^16.8.6",
+    "react-axios": "^2.0.3",
+    "react-dom": "^16.8.6",
+    "react-modal": "^3.11.1",
+    "react-router": "^5.0.0",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "3.0.0",
+    "react-web-gifted-chat": "^0.6.7",
+    "react-notifications": "^1.6.0",
+    "node-pre-gyp": "0.12.0"
   },
   "scripts": {
-    "start": "node server.js",
-    "server": "nodemon server.js",
-    "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "dev": "nodemon server.js",
+    "eject": "react-scripts eject"
   },
-  "repository": {
-    "type": "git",
-    "url": "github.com/mhedge11/BookNetRepo/"
+  "proxy": "http://localhost:5000",
+  "eslintConfig": {
+    "extends": "react-app"
   },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "main": "index.js",
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {},
+  "description": "",
+  "dev": "nodemon server.js"
 }
