@@ -117,6 +117,8 @@ class Match extends Component {
                                             console.log(yourPossTrades)
                                         }
                                         
+                                        console.log("Adding trade: " + bookAvailableIDs[b])
+
                                         //add trade match
                                         tradeMatches.push(this.createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "T", yourPossTrades))
 
@@ -169,9 +171,9 @@ class Match extends Component {
                 //create listings for each book avail to trade
                 var slider = document.getElementById("modalSlider")
                 tradeBooks.forEach(item => {
-
-                    console.log(item)
-                    slider.appendChild(this.createBookListing(item, userId, bNeedId, item.id, "TO", null))  
+                    console.log("Available Book: " + item.bookID)
+                    console.log("Book Needed: " + bAvailId)
+                    slider.appendChild(this.createBookListing(item, userId, bAvailId, item.bookID, "TO", null))  
                 })
 
                 
@@ -197,7 +199,7 @@ class Match extends Component {
         listing.className = styles.listing
         listing.alt = book.title
         listing.onclick = () => {
-            this.listingCallBack(userId, bNeedId, bAvailId, method, tradeBooks)
+            this.listingCallBack(userId, bNeedId, book.bookID, method, tradeBooks)
         }
     
         return listing 

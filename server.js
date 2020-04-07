@@ -91,7 +91,8 @@ function setBooksNeeded(userID, bookID, title, author, img) {
   admin.database().ref('users/' + userID + '/booksNeeded/' + bookID).set({
     title: title,
     author: author,
-    bookImg: img
+    bookImg: img,
+    bookID: bookID 
   });
 }
 
@@ -110,7 +111,8 @@ function setBooksAvailable(userID, bookID, title, author, sale, donate, trade, b
     sale: sale,
     donate: donate,
     trade: trade,
-    bookImg: bookImg
+    bookImg: bookImg,
+    bookID: bookID
   });
 }
 
