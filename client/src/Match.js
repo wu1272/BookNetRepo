@@ -23,9 +23,8 @@ const customStyles = {
 
 
 
+
 var isModalOpen = false
-
-
 
 class Match extends Component {
 
@@ -105,7 +104,7 @@ class Match extends Component {
                                         }
                                         
                                         //add trade match
-                                        tradeMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "T", yourPossTrades))
+                                        tradeMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "T", yourPossTrades, this))
 
                                     }
 
@@ -113,7 +112,7 @@ class Match extends Component {
                                     if (bookbook.sale) {
 
                                         if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
-                                            saleMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "S", null))
+                                            saleMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "S", null, null))
                                         }                                        
                                                 
                                     }
@@ -123,7 +122,7 @@ class Match extends Component {
                                     if (bookbook.donate) {
                                        
                                         if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
-                                            donateMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "D", null))
+                                            donateMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "D", null, null))
                                         } 
                                     }
                                 
@@ -148,6 +147,7 @@ class Match extends Component {
 
     render() {
             
+
         //Modal functions
         function afterOpenModal() {
             // references are now sync'd and can be accessed.
@@ -189,13 +189,14 @@ class Match extends Component {
     }
 }
 
-function listingCallBack(userId, bNeedId, bAvailId, method, tradeBooks) {
+function listingCallBack(userId, bNeedId, bAvailId, method, tradeBooks, comp) {
     
 
 
     switch(method) {
         case "T":
             isModalOpen = true
+            comp.setState(comp.state)
             //setPending(userId, bNeedId, bAvailId)
             break
         case "S":
@@ -209,14 +210,14 @@ function listingCallBack(userId, bNeedId, bAvailId, method, tradeBooks) {
 }
 
 
-function createBookListing(book, userId, bNeedId, bAvailId, method, tradeBooks) {
+function createBookListing(book, userId, bNeedId, bAvailId, method, tradeBooks, comp) {
 
     var listing = document.createElement('img')
     listing.src = book.bookImg
     listing.className = styles.listing
     listing.alt = book.title
     listing.onclick = function() {
-        listingCallBack(userId, bNeedId, bAvailId, method, tradeBooks)
+        listingCallBack(userId, bNeedId, bAvailId, method, tradeBooks, comp)
     }
 
     return listing 
