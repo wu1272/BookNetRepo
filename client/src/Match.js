@@ -149,14 +149,7 @@ class Match extends Component {
 
                                 }
                               }
-                            }
-
-                          }
-                        }
-
-                      }
-                    }
-                  }
+                
 
                   displayMatches()
                 });
