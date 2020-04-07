@@ -28,11 +28,19 @@ var isModalOpen = false
 
 class Match extends Component {
 
-      
+
+    constructor(props) {
+        super(props);
+
+        this.listingCallBack = this.listingCallBack.bind(this)
+        this.createBookListing = this.createBookListing.bind(this)
+    }
+
     
 
     componentDidMount() {
-        app.auth().onAuthStateChanged(function (user) {
+
+        app.auth().onAuthStateChanged((user) => {
             if (user) {
                 var bookIDs = [];
                 var bookAvailableIDs = [];
@@ -40,17 +48,17 @@ class Match extends Component {
                 var allBookIDsNeeded = [];
                 var allUserIDsAvailable = [];
                 var availableInYourDir = [];  //actual book objects
-                getBooksNeededIDs(bookIDs, user.uid, function () {
+                getBooksNeededIDs(bookIDs, user.uid, () => {
                     //console.log(bookIDs);
-                    getBooksAvailableIDs(bookAvailableIDs, user.uid, function() {
+                    getBooksAvailableIDs(bookAvailableIDs, user.uid,()  =>{
                         
                     
-                    getEverySingleDamnBookNeeded(allBookIDsNeeded, function() {
+                    getEverySingleDamnBookNeeded(allBookIDsNeeded,()  =>{
                         
                     
-                    getEverySingleDamnBookAvailable(allUserIDsAvailable, allBookIDsAvailable, function () {
+                    getEverySingleDamnBookAvailable(allUserIDsAvailable, allBookIDsAvailable, () => {
 
-                        preventPendingTrades(availableInYourDir, user.uid, function() {
+                        preventPendingTrades(availableInYourDir, user.uid,()  =>{
                         //console.log(availableInYourDir)
                         //console.log(allBookIDsAvailable);
                         //console.log(bookIDs);
@@ -104,7 +112,7 @@ class Match extends Component {
                                         }
                                         
                                         //add trade match
-                                        tradeMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "T", yourPossTrades, this))
+                                        tradeMatches.push(this.createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "T", yourPossTrades))
 
                                     }
 
@@ -112,7 +120,7 @@ class Match extends Component {
                                     if (bookbook.sale) {
 
                                         if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
-                                            saleMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "S", null, null))
+                                            saleMatches.push(this.createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "S", null))
                                         }                                        
                                                 
                                     }
@@ -122,7 +130,7 @@ class Match extends Component {
                                     if (bookbook.donate) {
                                        
                                         if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
-                                            donateMatches.push(createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "D", null, null))
+                                            donateMatches.push(this.createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "D", null))
                                         } 
                                     }
                                 
@@ -142,7 +150,41 @@ class Match extends Component {
     }
 
 
+  
 
+    listingCallBack(userId, bNeedId, bAvailId, method, tradeBooks) {
+
+        switch(method) {
+            case "T":
+                isModalOpen = true
+                this.setState(this.state)
+                //setPending(userId, bNeedId, bAvailId)
+                break
+            case "S":
+                setPendingSale(userId, bNeedId, bAvailId)
+                break
+            case "D":
+                setPendingDonate(userId, bNeedId, bAvailId)
+                break
+        }
+        
+    }
+    
+    
+    createBookListing(book, userId, bNeedId, bAvailId, method, tradeBooks) {
+    
+        var listing = document.createElement('img')
+        listing.src = book.bookImg
+        listing.className = styles.listing
+        listing.alt = book.title
+        listing.onclick = () => {
+            this.listingCallBack(userId, bNeedId, bAvailId, method, tradeBooks)
+        }
+    
+        return listing 
+    
+    
+    }
      
 
     render() {
@@ -187,43 +229,13 @@ class Match extends Component {
             </div>
         );
     }
-}
-
-function listingCallBack(userId, bNeedId, bAvailId, method, tradeBooks, comp) {
-    
 
 
-    switch(method) {
-        case "T":
-            isModalOpen = true
-            comp.setState(comp.state)
-            //setPending(userId, bNeedId, bAvailId)
-            break
-        case "S":
-            setPendingSale(userId, bNeedId, bAvailId)
-            break
-        case "D":
-            setPendingDonate(userId, bNeedId, bAvailId)
-            break
-    }
+
     
 }
 
 
-function createBookListing(book, userId, bNeedId, bAvailId, method, tradeBooks, comp) {
-
-    var listing = document.createElement('img')
-    listing.src = book.bookImg
-    listing.className = styles.listing
-    listing.alt = book.title
-    listing.onclick = function() {
-        listingCallBack(userId, bNeedId, bAvailId, method, tradeBooks, comp)
-    }
-
-    return listing 
-
-
-}
 
 
 //Display matches with respect to match type 
