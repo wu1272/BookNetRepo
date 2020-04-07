@@ -57,6 +57,7 @@ class Match extends Component {
                 var allBookIDsNeeded = [];
                 var allUserIDsAvailable = [];
                 var availableInYourDir = [];  //actual book objects
+                var allUserNamesAvailable = [];
                 getBooksNeededIDs(bookIDs, user.uid, () => {
                     //console.log(bookIDs);
                     getBooksAvailableIDs(bookAvailableIDs, user.uid,()  =>{
@@ -65,7 +66,7 @@ class Match extends Component {
                     getEverySingleDamnBookNeeded(allBookIDsNeeded,()  =>{
                         
                     
-                    getEverySingleDamnBookAvailable(allUserIDsAvailable, allBookIDsAvailable, () => {
+                    getEverySingleDamnBookAvailable(allUserNamesAvailable, allUserIDsAvailable, allBookIDsAvailable, () => {
 
                         preventPendingTrades(availableInYourDir, user.uid,()  =>{
                         //console.log(availableInYourDir)
@@ -84,7 +85,7 @@ class Match extends Component {
                                 //get book they have that user needs
                                 var bookbook = allBookIDsAvailable[i][bookIDs[j]];
                                 if (bookbook !== undefined) {
-                    
+                                    
                                     //Add to proper list
                                     //book I need   ---- book you have available... done above
                                     //book you need ---- book I have available... do below
@@ -121,7 +122,7 @@ class Match extends Component {
                                         console.log("Adding trade: " + bookAvailableIDs[b])
 
                                         //add trade match
-                                        tradeMatches.push(this.createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "T", yourPossTrades))
+                                        tradeMatches.push(this.createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "T", yourPossTrades, allUserNamesAvailable[i]))
 
                                     }
 
@@ -129,7 +130,7 @@ class Match extends Component {
                                     if (bookbook.sale) {
 
                                         if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
-                                            saleMatches.push(this.createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "S", null))
+                                            saleMatches.push(this.createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "S", null, allUserNamesAvailable[i]))
                                         }                                        
                                                 
                                     }
@@ -139,7 +140,7 @@ class Match extends Component {
                                     if (bookbook.donate) {
                                        
                                         if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
-                                            donateMatches.push(this.createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "D", null))
+                                            donateMatches.push(this.createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "D", null, allUserNamesAvailable[i]))
                                         } 
 
                                     }
@@ -163,7 +164,7 @@ class Match extends Component {
 
   
 
-    listingCallBack(userId, bNeedId, bAvailId, method, tradeBooks) {
+    listingCallBack(userId, bNeedId, bAvailId, method, tradeBooks, userName) {
 
         switch(method) {
             case "T":
@@ -176,7 +177,7 @@ class Match extends Component {
                 tradeBooks.forEach(item => {
                     console.log("Available Book: " + item.bookID)
                     console.log("Book Needed: " + bAvailId)
-                    slider.appendChild(this.createBookListing(item, userId, bAvailId, item.bookID, "TO", null))  
+                    slider.appendChild(this.createBookListing(item, userId, bAvailId, item.bookID, "TO", null, null))  
                 })
 
                 
@@ -195,19 +196,18 @@ class Match extends Component {
     }
     
     
-    createBookListing(book, userId, bNeedId, bAvailId, method, tradeBooks) {
-    
+    createBookListing(book, userId, bNeedId, bAvailId, method, tradeBooks, userName) {
         var listing = document.createElement('img')
         listing.src = book.bookImg
         listing.className = styles.listing
         listing.alt = book.title
-        listing.onclick = () => {
-            this.listingCallBack(userId, bNeedId, book.bookID, method, tradeBooks)
+        if (userName !== null) {
+          listing.title = userName
         }
-    
+        listing.onclick = () => {
+            this.listingCallBack(userId, bNeedId, book.bookID, method, tradeBooks, userName)
+        }
         return listing 
-    
-    
     }
 
     //Modal functions
@@ -383,7 +383,7 @@ function preventPendingTrades(bookIDs, userID, callback) {
     });
 }
 
-function getEverySingleDamnBookAvailable(allUserIDsAvailable, allBookIDsAvailable, callback) {
+function getEverySingleDamnBookAvailable(allUserNamesAvailable, allUserIDsAvailable, allBookIDsAvailable, callback) {
   var booksAvailablePath = app.database().ref('users/');
   booksAvailablePath.once('value')
     .then(function (snapshot) {
@@ -392,6 +392,7 @@ function getEverySingleDamnBookAvailable(allUserIDsAvailable, allBookIDsAvailabl
         var bookID = user.child("booksAvailable").val();
         allBookIDsAvailable.push(bookID);
         allUserIDsAvailable.push(user.key);
+        allUserNamesAvailable.push(user.child("firstname").val() + " " + user.child('lastname').val())
       });
       callback();
     });
