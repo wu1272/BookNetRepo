@@ -43,5 +43,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {},
-  "description": ""
+  "description": "",
+  "dev": "nodemon server.js"
 }
