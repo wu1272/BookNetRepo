@@ -22,6 +22,7 @@ const SignUp = ({ history }) => {
         console.log(email.value);
         app.auth().onAuthStateChanged(function(user) {
           if (user) {
+            user.updateProfile({photoURL: "https://cdn0.iconfinder.com/data/icons/iphone-black-people-svg-icons/40/agent_user_stock_spy_mail_help_hat_vehicle_vector_trustee-512.png"})
             sendUserID(firstname.value, lastname.value, user.uid);
           }
         });

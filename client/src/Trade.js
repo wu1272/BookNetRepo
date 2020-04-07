@@ -1,56 +1,230 @@
 import React, { Component, useCallback } from 'react';
-import './home.module.css';
 import app from "./base.js";
 import axios from "axios"
+import { GiftedChat, Bubble, Colors } from "react-web-gifted-chat";
+import Button from "@material-ui/core/Button";
+import Avatar from "@material-ui/core/Avatar";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemText from "@material-ui/core/ListItemText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Dialog from "@material-ui/core/Dialog";
+import Typography from "@material-ui/core/Typography";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
 
+
+var tradePartnerIDs = [];
+var currentUser;
+var currentProfilePic;
 class Trade extends Component {
+  constructor() {
+    super();
+    this.state = {
+      messages: [],
+      user: {},
+    };
+  }
 
   componentDidMount() {
-    app.auth().onAuthStateChanged(function (user) {
+    app.auth().onAuthStateChanged(user => {
+      if (user) {
+        console.log(user.email)
+        console.log(user.photoURL)
+        currentUser = user.email;
+        currentProfilePic = user.photoURL;
+        this.setState({ user });
+        this.loadMessages();
+      } else {
+        this.setState({
+          user: {
+            
+          },
+          messages: []
+        });
+      }
         var title1;
         var title2;
         var bookIDs1 = [];
         var bookIDs2 = [];
-        var tradePartnerIDs = [];
+        // var tradePartnerIDs = [];
         getPending1(bookIDs1, title1, function(){
           getTradePartnerID(tradePartnerIDs, bookIDs1[0], function() {
+            console.log(tradePartnerIDs[0])
+            console.log(bookIDs1[0])
+            if (!tradePartnerIDs[0]) {
+              if (!alert("You do not have a current trade!")) {
+                window.location.href = "/home"
+              }
+            }
           });
         });
         getPending2(bookIDs2, title2, function() {
         });
     });
   }
-  componentDidUpdate() {
+
+
+  loadMessages() {
+    console.log(currentUser)
+    console.log(tradePartnerIDs[0]);
+    const callback = snap => {
+      console.log(snap.val().user)
+      const message = snap.val();
+      message.id = snap.key;
+      const { messages } = this.state;
+      messages.push(message);
+      this.setState({ messages });
+    };
     app.auth().onAuthStateChanged(function (user) {
-      var title1;
-      var title2;
-      var bookIDs1 = [];
-      var bookIDs2 = [];
-      var tradePartnerIDs = [];
-      getPending1(bookIDs1, title1, function(){
-        getTradePartnerID(tradePartnerIDs, bookIDs1[0], function() {
-        });
-      });
-      getPending2(bookIDs2, title2, function() {
-      });
-  });
+      app.database().ref("/users/" + user.uid + "/messages/").limitToLast(12).on("child_added", callback);
+    });
+
   }
 
-  render() {
+  onSend(messages) {
+    for (const message of messages) {
+      this.saveMessage(message);
+    }
+  }
+
+  saveMessage(message) {
+    app.auth().onAuthStateChanged(function (user) {
+      console.log(message.text)
+      console.log(message.user)
+      console.log(message.text + '\n' + message.user)
+      //message.text = message.user.substring(0, message.user.indexOf('@')) + '\n\n' + message.text;
+      app.database().ref("/users/" + tradePartnerIDs[0] + "/messages/").push(message)
+      .catch(function(error) {
+        console.error("Error saving message to Database:", error);
+      });
+      app.database().ref("/users/" + user.uid + "/messages/").push(message)
+        .catch(function(error) {
+          console.error("Error saving message to Database:", error);
+        });
+    });
+  }
+
+  renderChat() {
+    // console.log(currentUser)
+    // console.log(this.state.messages)
     return (
-        <div>
-            <h1>Book you will receive:</h1>
-            <h3 id="title1"></h3>
-            <h3 id="book1"></h3>
-            <h1>Book you will trade:<br /></h1>
-            <h3 id="title2"></h3>
-            <h3 id="book2"></h3>
+      <GiftedChat
+        user={{
+          avatar: currentProfilePic,
+          id: currentUser,
+        }}
+        //renderAvatar={"https://cdn0.iconfinder.com/data/icons/iphone-black-people-svg-icons/40/agent_user_stock_spy_mail_help_hat_vehicle_vector_trustee-512.png"}
+        messages={this.state.messages.slice().reverse()}
+        onSend={messages => this.onSend(messages)}
+      />
+      // <GiftedChat 
+      //   renderUsernameOnMessage={true} 
+      //   messages={this.state.messages} 
+      //   onSend={messages => this.onSend(messages)} 
+      //   user={currentUser}
+      // />
+    );
+  }
+
+  renderBooksHeader() {
+    return (
+      <AppBar position="static" color="default">
+        <Toolbar>
+          <Typography variant="h6" color="inherit">
+            Books
+          </Typography>
+        </Toolbar>
+      </AppBar>
+    );
+  }
+  renderChatHeader() {
+    return (
+      <AppBar position="static" color="default">
+        <Toolbar>
+          <Typography variant="h6" color="inherit">
+            Default channel
             <h3 id="user2"></h3>
-            
-            <button onClick={ (e) => { confirmTrade(document.getElementById("user2").innerHTML, document.getElementById("book1").innerHTML, document.getElementById("book2").innerHTML);}}>Accept Trade</button>
-            <button onClick={ (e) => { removePending(document.getElementById("user2").innerHTML, document.getElementById("book1").innerHTML, document.getElementById("book2").innerHTML);}}>Cancel Trade</button>
-            <button onClick={() => window.location.href = '/home'}>Home</button>
+          </Typography>
+        </Toolbar>
+      </AppBar>
+    );
+  }
+  renderOptionsHeader() {
+    return (
+      <AppBar position="static" color="default">
+        <Toolbar>
+          <Typography variant="h6" color="inherit">
+            Options
+          </Typography>
+        </Toolbar>
+      </AppBar>
+    );
+  }
+
+  renderAcceptButton() {
+    return <Button onClick={ (e) => { confirmTrade(document.getElementById("user2").innerHTML, document.getElementById("book1").innerHTML, document.getElementById("book2").innerHTML);}}>Accept Trade</Button>
+  }
+  renderCancelButton() {
+    return <Button onClick={ (e) => { removePending(document.getElementById("user2").innerHTML, document.getElementById("book1").innerHTML, document.getElementById("book2").innerHTML);}}>Cancel Trade</Button>
+  }
+  renderHomeButton() {
+    return <Button onClick={() => window.location.href = '/home'}>Home</Button>
+  }
+
+  
+  render() {
+    console.log(tradePartnerIDs[0])
+    return (
+      <div style={styles.container}>
+        <div style={styles.channelList}>
+          {this.renderBooksHeader()}
+          <List>
+            <ListItem>
+              <ListItemText primary="Book you will receive"></ListItemText>
+            </ListItem>
+            <ListItem button>
+              <ListItemAvatar>
+                <Avatar>T</Avatar>
+              </ListItemAvatar>
+              <ListItemText id="title1"></ListItemText>
+              <h3 id="book1"></h3>
+            </ListItem>
+          </List>
+
+          <List>
+            <ListItem>
+              <ListItemText primary="Book you will trade"></ListItemText>
+            </ListItem>
+            <ListItem button>
+              <ListItemAvatar>
+                <Avatar>T</Avatar>
+              </ListItemAvatar>
+              <ListItemText id="title2"></ListItemText>
+              <h3 id="book2"></h3>
+              <h3 id="user2"></h3>
+              
+            </ListItem>
+          </List>
         </div>
+        <div style={styles.chat}>
+        <AppBar position="static" color="default">
+        <Toolbar>
+          <Typography variant="h6" color="inherit">
+            Chat
+          </Typography>
+        </Toolbar>
+      </AppBar>
+          {this.renderChat()}
+        </div>
+        <div style={styles.settings}>
+          {this.renderOptionsHeader()}
+          {this.renderAcceptButton()}
+          {this.renderCancelButton()}
+          {this.renderHomeButton()}
+        </div>
+      </div>
     );
   }
 }
@@ -77,7 +251,7 @@ function removeTrade(userAvailableID, bookNeededID, bookAvailableID) {
             console.log(error);
           })
         if (!alert("Trade accepted!")) {
-            window.location.reload();
+            window.location.href = '/home';
         }
       }
     });
@@ -136,6 +310,21 @@ function getTradePartnerID(tradePartnerIDs, bookID, callback) {
         tradePartnerIDs.push(snapshot.child("tradePartner").val());
         document.getElementById("user2").innerHTML = tradePartnerIDs[0];
         document.getElementById("user2").style.display = "none";
+        callback();
+      });
+      
+  });
+}
+
+function getTradePartnerName(tradePartnerNames, user2id, callback) {
+  app.auth().onAuthStateChanged(function (user) {
+    var tradePartnerPath = app.database().ref('users/' + user2id);
+    tradePartnerPath.once('value')
+      .then(function(snapshot) {
+        tradePartnerNames.push(snapshot.child("firstname").val());
+        tradePartnerNames.push(snapshot.child("lastname").val());
+        document.getElementById("user2firstname").innerHTML = tradePartnerNames[0];
+        document.getElementById("user2lastname").innerHTML = tradePartnerNames[1];
       });
       callback();
   });
@@ -162,7 +351,7 @@ function removePending(userAvailableID, bookNeededID, bookAvailableID) {
             console.log(error);
           })
         if (!alert("Trade cancelled!")) {
-            window.location.reload();
+          window.location.href = '/home';
         }
       }
     });
@@ -207,5 +396,32 @@ function removePending(userAvailableID, bookNeededID, bookAvailableID) {
     });
   }
 
+  const styles = {
+    container: {
+      flex: 1,
+      display: "flex",
+      flexDirection: "row",
+      height: "100vh",
+    },
+    channelList: {
+      display: "flex",
+      flex: 1,
+      flexDirection: "column",
+    },
+    chat: {
+      display: "flex",
+      flex: 3,
+      flexDirection: "column",
+      borderWidth: "1px",
+      borderColor: "#ccc",
+      borderRightStyle: "solid",
+      borderLeftStyle: "solid",
+    },
+    settings: {
+      display: "flex",
+      flex: 1,
+      flexDirection: "column",
+    },
+  };
 
 export default Trade;

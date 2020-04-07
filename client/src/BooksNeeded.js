@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import app from "./base.js";
 import axios from "axios";
+import Modal from "react-modal"
 
 class BooksNeeded extends Component {
 
@@ -41,6 +42,11 @@ class BooksNeeded extends Component {
                   deleteBooksNeeded(id)
                 };
               }(bookIDs[i]));
+              // btn.onclick = (function(title) {
+              //   return function() {
+              //     searchOnBarnes(title)
+              //   };
+              // }(titles[i]));
             }
           });
         });
@@ -53,7 +59,9 @@ class BooksNeeded extends Component {
     return (
       <div>
         <h1>Books Needed</h1>
-        <p1>Click a book to remove it from your list of needed books.</p1>
+        <p1>Select a book to see options!<br></br></p1>
+        <p1>Click here to remove a book from your list of books needed.<br></br></p1>
+        <p1>Select a retailer here to search for the book being sold online.<br></br></p1>
       </div>
     );
   }
@@ -106,6 +114,16 @@ function deleteBooksNeeded(bookID) {
       }
     }
   });
+}
+
+function searchOnBarnes(title) {
+  window.open('https://www.barnesandnoble.com/s/'+title);
+}
+function searchOnAmazon(title) {
+  window.open('https://www.amazon.com/s?k='+title);
+}
+function searchOnFollets(title) {
+  window.open('https://www.bkstr.com/purduestore/search/keyword/'+title);
 }
 
 export default BooksNeeded;

@@ -42,18 +42,6 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig)
 
 
-//default hard-coded array of users to confirm back can send to front
-app.get('/api/users', (req, res) => {
-  const users = [
-    { id: 1, firstName: 'John', lastName: 'Doe' },
-    { id: 2, firstName: 'John', lastName: 'Dough' },
-    { id: 3, firstName: 'Jane', lastName: 'Doh' }
-  ];
-  res.json(users);
-});
-
-
-
 //GET BOOKSNEEDED
 //get ALL booksNeeded from database     
 function getBooksNeeded(authors, titles, userID, callback) {
@@ -221,6 +209,8 @@ app.post('/api/removePendingOneWay2', urlParser, function (req, res) {
 
 //REMOVES PENDING STATUS
 function removePending(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
+  admin.database().ref('users/' + userNeededID + "/messages").remove();
+  admin.database().ref('users/' + userAvailableID + "/messages").remove();
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/pending").remove();
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/trade").remove();
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/tradePartner").remove();
@@ -240,6 +230,8 @@ app.post('/api/removePending', urlParser, function (req, res) {
 
 //REMOVES ALL POTENTIAL TRADES
 function removeTrade(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
+  admin.database().ref('users/' + userNeededID + "/messages").remove();
+  admin.database().ref('users/' + userAvailableID + "/messages").remove();
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).remove();
   admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID).remove();
   admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID).remove();

@@ -9,6 +9,7 @@ var tradeMatches = []
 var saleMatches = []
 var donateMatches = []
 
+
 // CSS style for modal popout 
 const customStyles = {
     content: {
@@ -25,7 +26,9 @@ const customStyles = {
 
 
 
+
 class Match extends Component {
+
 
 
     constructor(props) {
@@ -140,22 +143,31 @@ class Match extends Component {
                                         if (!allBookIDsAvailable[i][bookIDs[j]].pending) {
                                             donateMatches.push(this.createBookListing(bookbook, allUserIDsAvailable[i], bookIDs[j], bookAvailableIDs[b], "D", null))
                                         } 
+
                                     }
-                                
+                                  }
+
                                 }
+                              }
                             }
+
+                          }
                         }
 
-                        displayMatches()
-                    });
+                      }
+                    }
+                  }
+
+                  displayMatches()
                 });
-                });
+              });
             });
+          });
         });
-            }
-        })
-    
-    }
+      }
+    })
+
+  }
 
 
   
@@ -218,6 +230,7 @@ class Match extends Component {
     }
      
 
+
     render() {
             
 
@@ -251,9 +264,6 @@ class Match extends Component {
         );
     }
 
-
-
-    
 }
 
 
@@ -262,17 +272,71 @@ class Match extends Component {
 //Display matches with respect to match type 
 function displayMatches() {
 
-        console.log("Displaying matches")
+  console.log("Displaying matches")
 
-        //Get div to add matches to 
-        var list = document.getElementById("matchesList");
+  //Get div to add matches to 
+  var list = document.getElementById("matchesList");
 
-        //Display trade matches first
-        var trades = document.createElement("div")
-        trades.className = "wrapper"
-        trades.style.height = "auto"
-        var tradesInner = document.createElement("div")
-        tradesInner.className = "form-wrapper"
+  //Display trade matches first
+  var trades = document.createElement("div")
+  trades.className = "wrapper"
+  trades.style.height = "auto"
+  var tradesInner = document.createElement("div")
+  tradesInner.className = "form-wrapper"
+
+  //Create title for trades list
+  var tradesTitle = document.createElement("h1")
+  tradesTitle.innerHTML = "Available Trades"
+  tradesTitle.style.textDecoration = "underline"
+  tradesInner.appendChild(tradesTitle)
+
+  tradeMatches.forEach(item => {
+    tradesInner.appendChild(item)
+  })
+  trades.appendChild(tradesInner)
+  list.appendChild(trades)
+
+  //Display donate matches 
+  var donations = document.createElement("div")
+  donations.className = "wrapper"
+  donations.style.height = "auto"
+  donations.style.marginTop = "10px"
+  var donationsInner = document.createElement("div")
+  donationsInner.className = "form-wrapper"
+
+  //Create title
+  var donationsTitle = document.createElement("h1")
+  donationsTitle.innerHTML = "Available Donations"
+  donationsTitle.style.textDecoration = "underline"
+  donationsInner.appendChild(donationsTitle)
+
+  donateMatches.forEach(item => {
+    donationsInner.appendChild(item)
+  })
+  donations.appendChild(donationsInner)
+  list.appendChild(donations)
+
+
+  //Display sale options
+  var sales = document.createElement("div")
+  sales.className = "wrapper"
+  sales.style.height = "auto"
+  sales.style.marginTop = "10px"
+  var salesInner = document.createElement("div")
+  salesInner.className = "form-wrapper"
+
+  var salesTitle = document.createElement('h1')
+  salesTitle.innerHTML = "Available Sales"
+  salesTitle.style.textDecoration = "underline"
+  salesInner.appendChild(salesTitle)
+
+  saleMatches.forEach(item => {
+    salesInner.appendChild(item)
+  })
+  sales.appendChild(salesInner)
+  list.appendChild(sales)
+
+
 
         //create trade slider
         var tradeSlider = document.createElement("div")
@@ -343,134 +407,136 @@ function displayMatches() {
 
 
         
+
 }
 
 //get ALL booksNeeded IDs from database     
 function getBooksNeededIDs(bookIDs, userID, callback) {
-    var booksNeededPath = app.database().ref('users/' + userID + '/booksNeeded/');
-    booksNeededPath.once('value')
-        .then(function (snapshot) {
-            snapshot.forEach(function (child) {
-                var bookID = child.key;
-                bookIDs.push(bookID);
-            });
-            callback();
-        });
+  var booksNeededPath = app.database().ref('users/' + userID + '/booksNeeded/');
+  booksNeededPath.once('value')
+    .then(function (snapshot) {
+      snapshot.forEach(function (child) {
+        var bookID = child.key;
+        bookIDs.push(bookID);
+      });
+      callback();
+    });
 }
 
 function getBooksAvailableIDs(bookIDs, userID, callback) {
-    var booksAvailablePath = app.database().ref('users/' + userID + '/booksAvailable/');
-    booksAvailablePath.once('value')
-        .then(function (snapshot) {
-            snapshot.forEach(function (child) {
-                var bookID = child.key;
-                bookIDs.push(bookID);
-            });
-            callback();
-        });
+  var booksAvailablePath = app.database().ref('users/' + userID + '/booksAvailable/');
+  booksAvailablePath.once('value')
+    .then(function (snapshot) {
+      snapshot.forEach(function (child) {
+        var bookID = child.key;
+        bookIDs.push(bookID);
+      });
+      callback();
+    });
 }
 
 function preventPendingTrades(bookIDs, userID, callback) {
-    var booksAvailablePath = app.database().ref('users/' + userID + '/booksAvailable/');
-    booksAvailablePath.once('value')
-        .then(function (snapshot) {
-            snapshot.forEach(function (child) {
-                bookIDs.push(child.val());
-            });
-            callback();
-        });
+  var booksAvailablePath = app.database().ref('users/' + userID + '/booksAvailable/');
+  booksAvailablePath.once('value')
+    .then(function (snapshot) {
+      snapshot.forEach(function (child) {
+        bookIDs.push(child.val());
+      });
+      callback();
+    });
 }
 
-function getEverySingleDamnBookAvailable(allUserIDsAvailable, allBookIDsAvailable, callback) {
-    var booksAvailablePath = app.database().ref('users/');
-    booksAvailablePath.once('value')
-        .then(function (snapshot) {
-            snapshot.forEach(function (user) {
-                //console.log(user.key)
-                var bookID = user.child("booksAvailable").val();
-                allBookIDsAvailable.push(bookID);
-                allUserIDsAvailable.push(user.key);
-            });
-            callback();
-        });
+function getEverySingleDamnBookAvailable(allUserNamesAvailable, allUserIDsAvailable, allBookIDsAvailable, callback) {
+  var booksAvailablePath = app.database().ref('users/');
+  booksAvailablePath.once('value')
+    .then(function (snapshot) {
+      snapshot.forEach(function (user) {
+        //console.log(user.key)
+        var bookID = user.child("booksAvailable").val();
+        allBookIDsAvailable.push(bookID);
+        allUserIDsAvailable.push(user.key);
+        allUserNamesAvailable.push(user.child("firstname").val() + " " + user.child("lastname").val());
+      });
+      callback();
+    });
 }
 
 function getEverySingleDamnBookNeeded(allBookIDsNeeded, callback) {
-    var booksNeededPath = app.database().ref('users/');
-    booksNeededPath.once('value')
-        .then(function (snapshot) {
-            snapshot.forEach(function (user) {
-                var bookID = user.child("booksNeeded").val();
-                allBookIDsNeeded.push(bookID);
-            });
-            callback();
-        });
+  var booksNeededPath = app.database().ref('users/');
+  booksNeededPath.once('value')
+    .then(function (snapshot) {
+      snapshot.forEach(function (user) {
+        var bookID = user.child("booksNeeded").val();
+        allBookIDsNeeded.push(bookID);
+      });
+      callback();
+    });
 }
 
 function setPending(userAvailableID, bookNeededID, bookAvailableID) {
-    app.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        axios.post('/api/setPending', {
-          userNeededID: user.uid,
-          userAvailableID: userAvailableID,
-          bookNeededID: bookNeededID,
-          bookAvailableID: bookAvailableID
+  app.auth().onAuthStateChanged(function (user) {
+    if (user) {
+      axios.post('/api/setPending', {
+        userNeededID: user.uid,
+        userAvailableID: userAvailableID,
+        bookNeededID: bookNeededID,
+        bookAvailableID: bookAvailableID
+      })
+        .then(function (response) {
+          console.log(response);
         })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          })
-        if (!alert("Please proceed with your trade")) {
-          window.location.href = "/trade"
-        }
+        .catch(function (error) {
+          console.log(error);
+        })
+      if (!alert("Please proceed with your trade")) {
+        window.location.href = "/trade"
       }
-    });
-  }
+    }
+  });
+}
 
-  function setPendingSale(userAvailableID, bookNeededID, bookAvailableID) {
-    app.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        axios.post('/api/setPendingOneWay', {
-          userNeededID: user.uid,
-          userAvailableID: userAvailableID,
-          bookNeededID: bookNeededID,
-          bookAvailableID: bookAvailableID
+function setPendingSale(userAvailableID, bookNeededID, bookAvailableID) {
+  app.auth().onAuthStateChanged(function (user) {
+    if (user) {
+      axios.post('/api/setPendingOneWay', {
+        userNeededID: user.uid,
+        userAvailableID: userAvailableID,
+        bookNeededID: bookNeededID,
+        bookAvailableID: bookAvailableID
+      })
+        .then(function (response) {
+          console.log(response);
         })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          })
-        if (!alert("Please proceed with the sale")) {
-          window.location.href = "/sale"
-        }
+        .catch(function (error) {
+          console.log(error);
+        })
+      if (!alert("Please proceed with the sale")) {
+        window.location.href = "/sale"
       }
-    });
-  }
+    }
+  });
+}
 
-  function setPendingDonate(userAvailableID, bookNeededID, bookAvailableID) {
-    app.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        axios.post('/api/setPendingOneWay2', {
-          userNeededID: user.uid,
-          userAvailableID: userAvailableID,
-          bookNeededID: bookNeededID,
-          bookAvailableID: bookAvailableID
+function setPendingDonate(userAvailableID, bookNeededID, bookAvailableID) {
+  app.auth().onAuthStateChanged(function (user) {
+    if (user) {
+      axios.post('/api/setPendingOneWay2', {
+        userNeededID: user.uid,
+        userAvailableID: userAvailableID,
+        bookNeededID: bookNeededID,
+        bookAvailableID: bookAvailableID
+      })
+        .then(function (response) {
+          console.log(response);
         })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          })
-        if (!alert("Please proceed with the donation")) {
-          window.location.href = "/donate"
-        }
+        .catch(function (error) {
+          console.log(error);
+        })
+      if (!alert("Please proceed with the donation")) {
+        window.location.href = "/donate"
       }
-    });
-  }
+    }
+  });
+}
 
 export default Match;

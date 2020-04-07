@@ -11,9 +11,6 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    fetch('/api/users')
-      .then(res => res.json())
-      .then(users => this.setState({ users }, () => console.log('Users fetched...', users)));
     app.auth().onAuthStateChanged(function (user) {
       if (user) {
         document.getElementById("emailAddress").innerHTML = user.email;
@@ -27,7 +24,6 @@ class Home extends Component {
       <section class="wrapper">
         <div class="form-wrapper">
           <h1>Hello <span id="emailAddress"></span>!</h1>
-          <h2>Users</h2>
           <div>
             {this.state.users.map(user =>
               <li key={user.id}>{user.firstName} {user.lastName}</li>
