@@ -265,138 +265,84 @@ class Match extends Component {
 //Display matches with respect to match type 
 function displayMatches() {
 
-  console.log("Displaying matches")
+    console.log("Displaying matches")
 
-  //Get div to add matches to 
-  var list = document.getElementById("matchesList");
+    //Get div to add matches to 
+    var list = document.getElementById("matchesList");
 
-  //Display trade matches first
-  var trades = document.createElement("div")
-  trades.className = "wrapper"
-  trades.style.height = "auto"
-  var tradesInner = document.createElement("div")
-  tradesInner.className = "form-wrapper"
+    //Display trade matches first
+    var trades = document.createElement("div")
+    trades.className = "wrapper"
+    trades.style.height = "auto"
+    var tradesInner = document.createElement("div")
+    tradesInner.className = "form-wrapper"
 
-  //Create title for trades list
-  var tradesTitle = document.createElement("h1")
-  tradesTitle.innerHTML = "Available Trades"
-  tradesTitle.style.textDecoration = "underline"
-  tradesInner.appendChild(tradesTitle)
+    //create trade slider
+    var tradeSlider = document.createElement("div")
+    tradeSlider.className = styles.slider
 
-  tradeMatches.forEach(item => {
-    tradesInner.appendChild(item)
-  })
-  trades.appendChild(tradesInner)
-  list.appendChild(trades)
+    //Create title for trades list
+    var tradesTitle = document.createElement("h1")
+    tradesTitle.innerHTML = "Available Trades"
+    tradesTitle.style.textDecoration = "underline"
+    tradesInner.appendChild(tradesTitle)
 
-  //Display donate matches 
-  var donations = document.createElement("div")
-  donations.className = "wrapper"
-  donations.style.height = "auto"
-  donations.style.marginTop = "10px"
-  var donationsInner = document.createElement("div")
-  donationsInner.className = "form-wrapper"
+    tradeMatches.forEach(item => {
+        tradeSlider.appendChild(item)
+    })
+    tradesInner.appendChild(tradeSlider)
+    trades.appendChild(tradesInner)
+    list.appendChild(trades)
 
-  //Create title
-  var donationsTitle = document.createElement("h1")
-  donationsTitle.innerHTML = "Available Donations"
-  donationsTitle.style.textDecoration = "underline"
-  donationsInner.appendChild(donationsTitle)
+    //Display donate matches 
+    var donations = document.createElement("div")
+    donations.className = "wrapper"
+    donations.style.height = "auto"
+    donations.style.marginTop = "10px"
+    var donationsInner = document.createElement("div")
+    donationsInner.className = "form-wrapper"
 
-  donateMatches.forEach(item => {
-    donationsInner.appendChild(item)
-  })
-  donations.appendChild(donationsInner)
-  list.appendChild(donations)
+    var donateSlider = document.createElement("div")
+    donateSlider.className = styles.slider
 
+    //Create title
+    var donationsTitle = document.createElement("h1")
+    donationsTitle.innerHTML = "Available Donations"
+    donationsTitle.style.textDecoration = "underline"
+    donationsInner.appendChild(donationsTitle)
 
-  //Display sale options
-  var sales = document.createElement("div")
-  sales.className = "wrapper"
-  sales.style.height = "auto"
-  sales.style.marginTop = "10px"
-  var salesInner = document.createElement("div")
-  salesInner.className = "form-wrapper"
-
-  var salesTitle = document.createElement('h1')
-  salesTitle.innerHTML = "Available Sales"
-  salesTitle.style.textDecoration = "underline"
-  salesInner.appendChild(salesTitle)
-
-  saleMatches.forEach(item => {
-    salesInner.appendChild(item)
-  })
-  sales.appendChild(salesInner)
-  list.appendChild(sales)
+    donateMatches.forEach(item => {
+        donateSlider.appendChild(item)
+    })
+    donationsInner.appendChild(donateSlider)
+    donations.appendChild(donationsInner)
+    list.appendChild(donations)
 
 
+    //Display sale options
+    var sales = document.createElement("div")
+    sales.className="wrapper"
+    sales.style.height = "auto"
+    sales.style.marginTop = "10px"
+    var salesInner = document.createElement("div")
+    salesInner.className="form-wrapper"
 
-        //create trade slider
-        var tradeSlider = document.createElement("div")
-        tradeSlider.className = styles.slider
-
-        //Create title for trades list
-        var tradesTitle = document.createElement("h1")
-        tradesTitle.innerHTML = "Available Trades"
-        tradesTitle.style.textDecoration = "underline"
-        tradesInner.appendChild(tradesTitle)
-
-        tradeMatches.forEach(item => {
-            tradeSlider.appendChild(item)
-        })
-        tradesInner.appendChild(tradeSlider)
-        trades.appendChild(tradesInner)
-        list.appendChild(trades)
-
-         //Display donate matches 
-         var donations = document.createElement("div")
-         donations.className = "wrapper"
-         donations.style.height = "auto"
-         donations.style.marginTop = "10px"
-         var donationsInner = document.createElement("div")
-         donationsInner.className = "form-wrapper"
-
-         var donateSlider = document.createElement("div")
-         donateSlider.className = styles.slider
-
-         //Create title
-         var donationsTitle = document.createElement("h1")
-         donationsTitle.innerHTML = "Available Donations"
-         donationsTitle.style.textDecoration = "underline"
-         donationsInner.appendChild(donationsTitle)
-
-         donateMatches.forEach(item => {
-             donateSlider.appendChild(item)
-         })
-         donationsInner.appendChild(donateSlider)
-         donations.appendChild(donationsInner)
-         list.appendChild(donations)
+    //create sales slider
+    var salesSlider = document.createElement("div")
+    salesSlider.className = styles.slider
 
 
-        //Display sale options
-        var sales = document.createElement("div")
-        sales.className="wrapper"
-        sales.style.height = "auto"
-        sales.style.marginTop = "10px"
-        var salesInner = document.createElement("div")
-        salesInner.className="form-wrapper"
+    var salesTitle = document.createElement('h1')
+    salesTitle.innerHTML = "Available Sales"
+    salesTitle.style.textDecoration = "underline"
+    salesInner.appendChild(salesTitle)
 
-        //create sales slider
-        var salesSlider = document.createElement("div")
-        salesSlider.className = styles.slider
-
-
-        var salesTitle = document.createElement('h1')
-        salesTitle.innerHTML = "Available Sales"
-        salesTitle.style.textDecoration = "underline"
-        salesInner.appendChild(salesTitle)
-
-        saleMatches.forEach(item => {
-            salesSlider.appendChild(item)
-        })
-        salesInner.appendChild(salesSlider)
-        sales.appendChild(salesInner)
-        list.appendChild(sales)
+    saleMatches.forEach(item => {
+        salesSlider.appendChild(item)
+    })
+    salesInner.appendChild(salesSlider)
+    sales.appendChild(salesInner)
+    list.appendChild(sales)
 
 
         
@@ -439,7 +385,7 @@ function preventPendingTrades(bookIDs, userID, callback) {
     });
 }
 
-function getEverySingleDamnBookAvailable(allUserNamesAvailable, allUserIDsAvailable, allBookIDsAvailable, callback) {
+function getEverySingleDamnBookAvailable(allUserIDsAvailable, allBookIDsAvailable, callback) {
   var booksAvailablePath = app.database().ref('users/');
   booksAvailablePath.once('value')
     .then(function (snapshot) {
@@ -448,7 +394,6 @@ function getEverySingleDamnBookAvailable(allUserNamesAvailable, allUserIDsAvaila
         var bookID = user.child("booksAvailable").val();
         allBookIDsAvailable.push(bookID);
         allUserIDsAvailable.push(user.key);
-        allUserNamesAvailable.push(user.child("firstname").val() + " " + user.child("lastname").val());
       });
       callback();
     });
