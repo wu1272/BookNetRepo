@@ -174,6 +174,8 @@ function removePendingOneWay(userNeededID, userAvailableID, bookNeededID, bookAv
     admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID + "/confirmed").remove();
     admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/confirmed").remove();
   }
+  admin.database().ref('users/' + userNeededID + "/messages").remove();
+  admin.database().ref('users/' + userAvailableID + "/messages").remove();
 }
 
 app.post('/api/removePendingOneWay', urlParser, function (req, res) {
@@ -200,6 +202,8 @@ function removePendingOneWay2(userNeededID, userAvailableID, bookNeededID, bookA
     admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID + "/confirmed").remove();
     admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/confirmed").remove();
   }
+  admin.database().ref('users/' + userNeededID + "/messages").remove();
+  admin.database().ref('users/' + userAvailableID + "/messages").remove();
 }
 
 app.post('/api/removePendingOneWay2', urlParser, function (req, res) {
@@ -252,6 +256,8 @@ function removeSale(userNeededID, userAvailableID, bookNeededID, bookAvailableID
     admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).remove();
     admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID).remove();
   }
+  admin.database().ref('users/' + userNeededID + "/messages").remove();
+  admin.database().ref('users/' + userAvailableID + "/messages").remove();
 }
 
 app.post('/api/removeSale', urlParser, function (req, res) {
