@@ -33,7 +33,7 @@ class Sale extends Component {
         currentUser = user.email;
         currentProfilePic = user.photoURL;
         this.setState({ user });
-        this.loadMessages();
+        var saveState = this;
       } else {
         this.setState({
           user: {},
@@ -54,6 +54,9 @@ class Sale extends Component {
                   window.location.href = "/home"
                 }
               }
+              else {
+                saveState.loadMessages();
+              }
             });
           });
         }
@@ -64,6 +67,9 @@ class Sale extends Component {
               if (!alert("You do not have a current sale!")) {
                 window.location.href = "/home"
               }
+            }
+            else {
+              saveState.loadMessages();
             }
           });
         }
@@ -80,7 +86,7 @@ class Sale extends Component {
       this.setState({ messages });
     };
     app.auth().onAuthStateChanged(function (user) {
-      app.database().ref("/users/" + user.uid + "/messages/").limitToLast(12).on("child_added", callback);
+      app.database().ref("/users/" + user.uid + "/messages/" + tradePartnerIDs[0]).limitToLast(12).on("child_added", callback);
     });
 
   }
@@ -94,11 +100,11 @@ class Sale extends Component {
   saveMessage(message) {
     app.auth().onAuthStateChanged(function (user) {
       //message.text = message.user.substring(0, message.user.indexOf('@')) + '\n\n' + message.text;
-      app.database().ref("/users/" + tradePartnerIDs[0] + "/messages/").push(message)
+      app.database().ref("/users/" + tradePartnerIDs[0] + "/messages/" + user.uid).push(message)
         .catch(function (error) {
           console.error("Error saving message to database:", error);
         });
-      app.database().ref("/users/" + user.uid + "/messages/").push(message)
+      app.database().ref("/users/" + user.uid + "/messages/" + tradePartnerIDs[0]).push(message)
         .catch(function (error) {
           console.error("Error saving message to database:", error);
         });
@@ -123,8 +129,8 @@ class Sale extends Component {
       <AppBar position="static" color="default">
         <Toolbar>
           <Typography variant="h6" color="inherit">
-            Books
-              </Typography>
+            Books / Sale
+          </Typography>
         </Toolbar>
       </AppBar>
     );
@@ -135,7 +141,7 @@ class Sale extends Component {
         <Toolbar>
           <Typography variant="h6" color="inherit">
             Options
-              </Typography>
+          </Typography>
         </Toolbar>
       </AppBar>
     );

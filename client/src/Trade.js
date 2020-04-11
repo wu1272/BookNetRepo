@@ -32,8 +32,8 @@ class Trade extends Component {
       if (user) {
         currentUser = user.email;
         currentProfilePic = user.photoURL;
+        var saveState = this;
         this.setState({ user });
-        this.loadMessages();
       } else {
         this.setState({
           user: {
@@ -54,6 +54,9 @@ class Trade extends Component {
               window.location.href = "/home"
             }
           }
+          else {
+            saveState.loadMessages();
+          }
         });
       });
       getPending2(bookIDs2, title2, function () {
@@ -71,7 +74,7 @@ class Trade extends Component {
       this.setState({ messages });
     };
     app.auth().onAuthStateChanged(function (user) {
-      app.database().ref("/users/" + user.uid + "/messages/").limitToLast(12).on("child_added", callback);
+      app.database().ref("/users/" + user.uid + "/messages/" + tradePartnerIDs[0]).limitToLast(12).on("child_added", callback);
     });
 
   }
@@ -85,11 +88,11 @@ class Trade extends Component {
   saveMessage(message) {
     app.auth().onAuthStateChanged(function (user) {
       //message.text = message.user.substring(0, message.user.indexOf('@')) + '\n\n' + message.text;
-      app.database().ref("/users/" + tradePartnerIDs[0] + "/messages/").push(message)
+      app.database().ref("/users/" + tradePartnerIDs[0] + "/messages/" + user.uid).push(message)
         .catch(function (error) {
           console.error("Error saving message to database:", error);
         });
-      app.database().ref("/users/" + user.uid + "/messages/").push(message)
+      app.database().ref("/users/" + user.uid + "/messages/" + tradePartnerIDs[0]).push(message)
         .catch(function (error) {
           console.error("Error saving message to database:", error);
         });
@@ -114,7 +117,7 @@ class Trade extends Component {
       <AppBar position="static" color="default">
         <Toolbar>
           <Typography variant="h6" color="inherit">
-            Books
+            Books / Trade
           </Typography>
         </Toolbar>
       </AppBar>
