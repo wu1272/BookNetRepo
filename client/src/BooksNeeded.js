@@ -8,45 +8,15 @@ class BooksNeeded extends Component {
   componentDidMount() {
     app.auth().onAuthStateChanged(function (user) {
       if (user) {
-        var titles = [];
         var bookIDs = [];
-        var authors = [];
+        var books = []
         getBooksNeededIDs(bookIDs, user.uid, function () {
           //console.log(bookIDs);
 
-          getBooksNeeded(authors, titles, user.uid, function () {
+          getBooksNeeded(books, user.uid, function () {
             //document.getElementById("p3").innerHTML = titles;
-            for (var i = 0; i < titles.length; i++) {
-              var title = titles[i];
-              var bookID = bookIDs[i];
-              var author = authors[i];
-              if (author == null) {
-                author = "Unknown";
-              }
-              //console.log(title);
-              //console.log(bookID);
-              var btn = document.createElement("BUTTON");
-              btn.id = i;
-              btn.innerHTML = title + "<br /><br />By: " + author;
-              btn.setAttribute("value", bookID);
-              btn.setAttribute("index", i);
-              btn.setAttribute("text", title);
-              document.body.appendChild(btn);
-              btn.style.width = '200px';
-              btn.style.marginLeft = '50%';
-              btn.style.position = 'relative';
-              btn.style.left = '-100px';
-              btn.onclick = (function(id) {
-                return function() {
-                  //console.log(id)
-                  deleteBooksNeeded(id)
-                };
-              }(bookIDs[i]));
-              // btn.onclick = (function(title) {
-              //   return function() {
-              //     searchOnBarnes(title)
-              //   };
-              // }(titles[i]));
+            for (var i = 0; i < books.length; i++) {
+              document.getElementById("slider").appendChild(createListing(books[i]))
             }
           });
         });
@@ -59,24 +29,40 @@ class BooksNeeded extends Component {
     return (
       <div>
         <h1>Books Needed</h1>
-        <p1>Select a book to see options!<br></br></p1>
-        <p1>Click here to remove a book from your list of books needed.<br></br></p1>
-        <p1>Select a retailer here to search for the book being sold online.<br></br></p1>
+        <p>Select a book to see options!<br></br></p>
+        <p>Click here to remove a book from your list of books needed.<br></br></p>
+        <p>Select a retailer here to search for the book being sold online.<br></br></p>
+        <div id="slider" className="slider">
+
+        </div>
       </div>
     );
   }
 }
 
+
+//Create listing element 
+function createListing(book) {
+
+  var listing = document.createElement('img')
+  listing.src = book.child("bookImg").val()
+  listing.className = "listing"
+  listing.alt = book.child("title").val()
+  
+  listing.onclick = () => {
+    deleteBooksNeeded(book.key)
+  }
+  return listing
+
+}
+
 //get ALL booksNeeded from database     
-function getBooksNeeded(authors, titles, userID, callback) {
+function getBooksNeeded(books, userID, callback) {
   var booksNeededPath = app.database().ref('users/' + userID + '/booksNeeded/');
   booksNeededPath.once('value')
     .then(function (snapshot) {
       snapshot.forEach(function (child) {
-        var title = child.child("title").val();
-        var author = child.child("author").child("0").val();       
-        titles.push(title);
-        authors.push(author);
+        books.push(child)
       });
       callback();
     });
