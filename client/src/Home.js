@@ -5,18 +5,13 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 var pendingCounter = 0;
+
 var trade_titles = [];
 var sale_titles = [];
 var donate_titles = [];
 var titles2;
 
 class Home extends Component {
-  constructor() {
-    super();
-    this.state = {
-      users: []
-    };
-  }
 
   componentDidMount() {
     app.auth().onAuthStateChanged(function (user) {
@@ -64,6 +59,7 @@ class Home extends Component {
     //var titles = titles.join(",", "<br />");
   }
 
+
   
 
   /*
@@ -75,6 +71,7 @@ class Home extends Component {
     return () => {
       switch (type) {
         case 'info':
+
         
           NotificationManager.info('You have ' + pendingCounter + ' pending books:', 'Info message', 6000);
           if (trade_titles.length != 0) {
@@ -114,11 +111,6 @@ class Home extends Component {
       <section class="wrapper">
         <div class="form-wrapper">
           <h1>Hello <span id="emailAddress"></span>!</h1>
-          <div>
-            {this.state.users.map(user =>
-              <li key={user.id}>{user.firstName} {user.lastName}</li>
-            )}
-          </div>
           <div>
             <button onClick={() => window.location.href = '/search'}>Search</button>
             <button onClick={() => window.location.href = '/booksNeeded'}>Books Needed</button>

@@ -1,52 +1,48 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import app from "./base.js";
 import axios from "axios";
 import Modal from "react-modal"
+import styles from "./search.module.css"
 
+// CSS style for modal popout 
+
+const customStyles = {
+
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)'
+  }
+};
+ 
 class BooksNeeded extends Component {
 
-  componentDidMount() {
-    app.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        var titles = [];
-        var bookIDs = [];
-        var authors = [];
-        getBooksNeededIDs(bookIDs, user.uid, function () {
-          //console.log(bookIDs);
+  constructor() {
+    super()
 
-          getBooksNeeded(authors, titles, user.uid, function () {
+    this.state = {
+      isModalOpen: false,
+      currBook: null
+    }
+
+    this.createListing = this.createListing.bind(this)
+    this.closeModal = this.closeModal.bind(this)
+  }
+
+  componentDidMount() {
+    app.auth().onAuthStateChanged((user) =>  {
+      if (user) {
+        var bookIDs = [];
+        var books = []
+        getBooksNeededIDs(bookIDs, user.uid, () => {
+          //console.log(bookIDs);
+          getBooksNeeded(books, user.uid, () => {
             //document.getElementById("p3").innerHTML = titles;
-            for (var i = 0; i < titles.length; i++) {
-              var title = titles[i];
-              var bookID = bookIDs[i];
-              var author = authors[i];
-              if (author == null) {
-                author = "Unknown";
-              }
-              //console.log(title);
-              //console.log(bookID);
-              var btn = document.createElement("BUTTON");
-              btn.id = i;
-              btn.innerHTML = title + "<br /><br />By: " + author;
-              btn.setAttribute("value", bookID);
-              btn.setAttribute("index", i);
-              btn.setAttribute("text", title);
-              document.body.appendChild(btn);
-              btn.style.width = '200px';
-              btn.style.marginLeft = '50%';
-              btn.style.position = 'relative';
-              btn.style.left = '-100px';
-              btn.onclick = (function(id) {
-                return function() {
-                  //console.log(id)
-                  deleteBooksNeeded(id)
-                };
-              }(bookIDs[i]));
-              // btn.onclick = (function(title) {
-              //   return function() {
-              //     searchOnBarnes(title)
-              //   };
-              // }(titles[i]));
+            for (var i = 0; i < books.length; i++) {
+              document.getElementById("slider").appendChild(this.createListing(books[i]))
             }
           });
         });
@@ -54,33 +50,87 @@ class BooksNeeded extends Component {
     });
   }
 
+  //Create listing element 
+  createListing(book) {
+    var listing = document.createElement('img')
+    listing.src = book.child("bookImg").val()
+    listing.className = "listing"
+    listing.alt = book.child("title").val()
+ 
+    listing.onclick = () => {
+      this.setState({isModalOpen: true, currBook: book})
+    }
+    return listing
+  }
 
+  deleteCurrentBook(e) {
+    e.preventDefault()
+    if(this.state.currBook) 
+    deleteBooksNeeded(this.state.currBook.key)
+  }
+
+  searchOnBarnes(e) {
+    window.open('https://www.barnesandnoble.com/s/'+this.state.currBook.child("title").val());
+  }
+
+  searchOnFollets(e) {
+    window.open('https://www.bkstr.com/purduestore/search/keyword/'+this.state.currBook.child("title").val());
+  }
+
+  searchOnAmazon(e) {
+    window.open('https://www.amazon.com/s?k='+this.state.currBook.child("title").val()+"&i=stripbooks&ref=nb_sb_noss"); 
+  }
+  
+  afterOpenModal() {}
+  closeModal() {
+    this.setState({isModalOpen: false})
+  }
+ 
   render() {
     return (
-      <div>
+      <div className={styles.moddedWrap}>
+      <div className={styles.moddedFormWrap}>
+        <Modal 
+          contentLabel="Upload profile image"
+          isOpen={this.state.isModalOpen}
+          onAfterOpen={this.afterOpenModal}
+          onRequestClose={this.closeModal}
+          style={customStyles}
+          >
+
+          <button onClick={(e) => this.deleteCurrentBook(e)}>Remove Needed Book</button>   
+
+          <p><br></br>Or purchase online:</p>
+          <button onClick={(e) => this.searchOnBarnes(e)}>Barnes</button>
+          <button onClick={(e) => this.searchOnFollets(e)}>Follets</button>
+          <button onClick={(e) => this.searchOnAmazon(e)}>Amazon</button>
+        </Modal>
+ 
         <h1>Books Needed</h1>
-        <p1>Select a book to see options!<br></br></p1>
-        <p1>Click here to remove a book from your list of books needed.<br></br></p1>
-        <p1>Select a retailer here to search for the book being sold online.<br></br></p1>
+
+        <p>Select a book to see options!<br></br></p>
+        <p>You may remove a book that you no longer need or search for a book you still need online.<br></br></p>
+        <div id="slider" className="slider">
+
+        </div>
+      </div>
       </div>
     );
   }
 }
 
 //get ALL booksNeeded from database     
-function getBooksNeeded(authors, titles, userID, callback) {
+function getBooksNeeded(books, userID, callback) {
   var booksNeededPath = app.database().ref('users/' + userID + '/booksNeeded/');
   booksNeededPath.once('value')
     .then(function (snapshot) {
       snapshot.forEach(function (child) {
-        var title = child.child("title").val();
-        var author = child.child("author").child("0").val();       
-        titles.push(title);
-        authors.push(author);
+        books.push(child)
       });
       callback();
     });
 }
+
 //get ALL booksNeeded IDs from database     
 function getBooksNeededIDs(bookIDs, userID, callback) {
   var booksNeededPath = app.database().ref('users/' + userID + '/booksNeeded/');
@@ -116,14 +166,5 @@ function deleteBooksNeeded(bookID) {
   });
 }
 
-function searchOnBarnes(title) {
-  window.open('https://www.barnesandnoble.com/s/'+title);
-}
-function searchOnAmazon(title) {
-  window.open('https://www.amazon.com/s?k='+title);
-}
-function searchOnFollets(title) {
-  window.open('https://www.bkstr.com/purduestore/search/keyword/'+title);
-}
 
 export default BooksNeeded;

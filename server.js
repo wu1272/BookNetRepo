@@ -75,33 +75,37 @@ app.get('/api/getBooksNeeded', (req, res) => {
 
 //SET BOOKSNEEDED
 //write booksNeeded to database
-function setBooksNeeded(userID, bookID, title, author) {
+function setBooksNeeded(userID, bookID, title, author, img) {
   admin.database().ref('users/' + userID + '/booksNeeded/' + bookID).set({
     title: title,
-    author: author
+    author: author,
+    bookImg: img,
+    bookID: bookID 
   });
 }
 
 app.post('/api/setBooksNeeded', urlParser, function (req, res) {
-  setBooksNeeded(req.body.userid, req.body.bookID, req.body.title, req.body.author);
+  setBooksNeeded(req.body.userid, req.body.bookID, req.body.title, req.body.author, req.body.bookImg);
 });
 
 
 
 
 //SET BOOKS AVAILABLE
-function setBooksAvailable(userID, bookID, title, author, sale, donate, trade) {
+function setBooksAvailable(userID, bookID, title, author, sale, donate, trade, bookImg) {
   admin.database().ref('users/' + userID + '/booksAvailable/' + bookID).set({
     author: author,
     title: title,
     sale: sale,
     donate: donate,
     trade: trade,
+    bookImg: bookImg,
+    bookID: bookID
   });
 }
 
 app.post('/api/setBooksAvailable', urlParser, function (req, res) {
-  setBooksAvailable(req.body.userid, req.body.bookID, req.body.title, req.body.author, req.body.sale, req.body.donate, req.body.trade);
+  setBooksAvailable(req.body.userid, req.body.bookID, req.body.title, req.body.author, req.body.sale, req.body.donate, req.body.trade, req.body.bookImg);
 });
 
 
@@ -170,6 +174,8 @@ function removePendingOneWay(userNeededID, userAvailableID, bookNeededID, bookAv
     admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID + "/confirmed").remove();
     admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/confirmed").remove();
   }
+  admin.database().ref('users/' + userNeededID + "/messages/" + userAvailableID).remove();
+  admin.database().ref('users/' + userAvailableID + "/messages/" + userNeededID).remove();
 }
 
 app.post('/api/removePendingOneWay', urlParser, function (req, res) {
@@ -196,6 +202,8 @@ function removePendingOneWay2(userNeededID, userAvailableID, bookNeededID, bookA
     admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID + "/confirmed").remove();
     admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/confirmed").remove();
   }
+  admin.database().ref('users/' + userNeededID + "/messages/" + userAvailableID).remove();
+  admin.database().ref('users/' + userAvailableID + "/messages/" + userNeededID).remove();
 }
 
 app.post('/api/removePendingOneWay2', urlParser, function (req, res) {
@@ -205,8 +213,8 @@ app.post('/api/removePendingOneWay2', urlParser, function (req, res) {
 
 //REMOVES PENDING STATUS
 function removePending(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
-  admin.database().ref('users/' + userNeededID + "/messages").remove();
-  admin.database().ref('users/' + userAvailableID + "/messages").remove();
+  admin.database().ref('users/' + userNeededID + "/messages/" + userAvailableID).remove();
+  admin.database().ref('users/' + userAvailableID + "/messages/" + userNeededID).remove();
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/pending").remove();
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/trade").remove();
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID + "/tradePartner").remove();
@@ -226,8 +234,8 @@ app.post('/api/removePending', urlParser, function (req, res) {
 
 //REMOVES ALL POTENTIAL TRADES
 function removeTrade(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
-  admin.database().ref('users/' + userNeededID + "/messages").remove();
-  admin.database().ref('users/' + userAvailableID + "/messages").remove();
+  admin.database().ref('users/' + userNeededID + "/messages/" + userAvailableID).remove();
+  admin.database().ref('users/' + userAvailableID + "/messages/" + userNeededID).remove();
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).remove();
   admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID).remove();
   admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID).remove();
@@ -248,6 +256,8 @@ function removeSale(userNeededID, userAvailableID, bookNeededID, bookAvailableID
     admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).remove();
     admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID).remove();
   }
+  admin.database().ref('users/' + userNeededID + "/messages/" + userAvailableID).remove();
+  admin.database().ref('users/' + userAvailableID + "/messages/" + userNeededID).remove();
 }
 
 app.post('/api/removeSale', urlParser, function (req, res) {

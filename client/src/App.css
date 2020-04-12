@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css?family=Oswald');
 
 
-/* html {
+html {
     background:url('./landing_background.jpg');
     min-height: 500px;
     background-attachment: fixed;
@@ -51,7 +51,7 @@ input {
 div {
   width: 100%;
   text-align: center;
-} */
+}
 
 
 
@@ -142,3 +142,20 @@ input.error {
  .modalInput {
    width: 25%;
  }
+
+
+ /*Global Slider Code */
+ .slider {
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.listing {
+  width: 128px;
+  height: auto;
+  display: inline-block;
+  margin-right: auto;
+  margin-left: auto;
+  padding: .2em;
+  
+}
