@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import app from "./base.js";
 import axios from "axios";
+import styles from "./search.module.css"
 
 class BooksAvailable extends Component {
 
@@ -27,12 +28,14 @@ class BooksAvailable extends Component {
 
   render() {
     return (
-      <div>
+      <div className={styles.moddedWrap}>
+      <div className={styles.moddedFormWrap}>
         <h1>Books Available</h1>
         <p>Click a book to remove it from your list of available books.</p>
         <div id="slider" className="slider">
 
         </div>
+      </div>
       </div>
     );
   }

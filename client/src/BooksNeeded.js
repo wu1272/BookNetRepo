@@ -2,6 +2,7 @@ import React, { Component, useState } from 'react';
 import app from "./base.js";
 import axios from "axios";
 import Modal from "react-modal"
+import styles from "./search.module.css"
 
 // CSS style for modal popout 
 
@@ -87,7 +88,8 @@ class BooksNeeded extends Component {
  
   render() {
     return (
-      <div>
+      <div className={styles.moddedWrap}>
+      <div className={styles.moddedFormWrap}>
         <Modal 
           contentLabel="Upload profile image"
           isOpen={this.state.isModalOpen}
@@ -96,9 +98,9 @@ class BooksNeeded extends Component {
           style={customStyles}
           >
 
-          <h3>Please Choose an Option</h3>
+          <button onClick={(e) => this.deleteCurrentBook(e)}>Remove Needed Book</button>   
 
-          <button onClick={(e) => this.deleteCurrentBook(e)}>Remove Needed Book</button>     
+          <p><br></br>Or purchase online:</p>
           <button onClick={(e) => this.searchOnBarnes(e)}>Barnes</button>
           <button onClick={(e) => this.searchOnFollets(e)}>Follets</button>
           <button onClick={(e) => this.searchOnAmazon(e)}>Amazon</button>
@@ -107,11 +109,11 @@ class BooksNeeded extends Component {
         <h1>Books Needed</h1>
 
         <p>Select a book to see options!<br></br></p>
-        <p>Click here to remove a book from your list of books needed.<br></br></p>
-        <p>Select a retailer here to search for the book being sold online.<br></br></p>
+        <p>You may remove a book that you no longer need or search for a book you still need online.<br></br></p>
         <div id="slider" className="slider">
 
         </div>
+      </div>
       </div>
     );
   }
