@@ -47,7 +47,7 @@ class Home extends Component {
                 }
 
                 if (donate) {
-                  donate_titles.push(childSnapshot.child("donate").val())
+                  donate_titles.push(childSnapshot.child("title").val())
                 }
                 console.log("pending counter : " + pendingCounter)
               }
@@ -79,11 +79,11 @@ class Home extends Component {
           }
 
           if (sale_titles.length != 0) {
-            NotificationManager.info('Donation: ' + sale_titles, "", 6000);
+            NotificationManager.info('Sale: ' + sale_titles, "", 6000);
           }
 
           if (donate_titles.length != 0) {
-            NotificationManager.info('Sale: ' + donate_titles , "", 6000);
+            NotificationManager.info('Donation: ' + donate_titles , "", 6000);
           }
           break;
         case 'success':
