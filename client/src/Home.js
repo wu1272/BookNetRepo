@@ -5,7 +5,11 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 var pendingCounter = 0;
-var titles = [];
+
+var trade_titles = [];
+var sale_titles = [];
+var donate_titles = [];
+var titles2;
 
 class Home extends Component {
 
@@ -26,18 +30,37 @@ class Home extends Component {
           .then(function(snapshot) {
             snapshot.forEach(function(childSnapshot) {
               var pendinExist = childSnapshot.child("pending").exists();
-              console.log("pending exist: " + pendinExist)
+              var trade = childSnapshot.child("trade").exists();
+              var sell = childSnapshot.child("sale").exists();
+              var donate = childSnapshot.child("donate").exists();
+              console.log("pending exist: " + pendinExist + "    trade: " + donate)
               if (pendinExist) {
                 pendingCounter++;
-                console.log(childSnapshot.child("title").val())
-                titles.push(childSnapshot.child("title").val())
+                
+                if (trade) {
+                  console.log(childSnapshot.child("title").val())
+                  trade_titles.push(childSnapshot.child("title").val())
+                }
+
+                if (sell) {
+                  sale_titles.push(childSnapshot.child("title").val())
+                }
+
+                if (donate) {
+                  donate_titles.push(childSnapshot.child("donate").val())
+                }
                 console.log("pending counter : " + pendingCounter)
               }
             });
           });
       }
     });
+
+    //var titles = titles.join(",", "<br />");
   }
+
+
+  
 
   /*
   * Here we are displaying the notification according to the button 
@@ -48,7 +71,20 @@ class Home extends Component {
     return () => {
       switch (type) {
         case 'info':
-          NotificationManager.info('You have ' + pendingCounter + ' pending trades for the following books: ' + titles, 'Info message');
+
+        
+          NotificationManager.info('You have ' + pendingCounter + ' pending books:', 'Info message', 6000);
+          if (trade_titles.length != 0) {
+            NotificationManager.info('Trade: ' + trade_titles, "", 6000);
+          }
+
+          if (sale_titles.length != 0) {
+            NotificationManager.info('Donation: ' + sale_titles, "", 6000);
+          }
+
+          if (donate_titles.length != 0) {
+            NotificationManager.info('Sale: ' + donate_titles , "", 6000);
+          }
           break;
         case 'success':
           NotificationManager.success('Success message', 'Title here');
