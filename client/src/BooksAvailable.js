@@ -16,7 +16,7 @@ class BooksAvailable extends Component {
             //document.getElementById("p3").innerHTML = titles;
           
             for (var i = 0; i < books.length; i++) {
-                console.log(books[i].child("title").val())
+                document.getElementById("slider").appendChild(createListing(books[i]))
             }
           });
         });
@@ -30,12 +30,27 @@ class BooksAvailable extends Component {
       <div>
         <h1>Books Available</h1>
         <p>Click a book to remove it from your list of available books.</p>
-        <div id="slider">
+        <div id="slider" className="slider">
 
         </div>
       </div>
     );
   }
+}
+
+//Create listing element 
+function createListing(book) {
+
+  var listing = document.createElement('img')
+  listing.src = book.child("bookImg").val()
+  listing.className = "listing"
+  listing.alt = book.child("title").val()
+  
+  listing.onclick = () => {
+    deleteBooksAvailable(book.key)
+  }
+  return listing
+
 }
 
 //get ALL booksAvailable from database     
