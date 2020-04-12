@@ -59,9 +59,9 @@ class BooksNeeded extends Component {
     return (
       <div>
         <h1>Books Needed</h1>
-        <p1>Select a book to see options!<br></br></p1>
-        <p1>Click here to remove a book from your list of books needed.<br></br></p1>
-        <p1>Select a retailer here to search for the book being sold online.<br></br></p1>
+        <p>Select a book to see options!<br></br></p>
+        <p>Click here to remove a book from your list of books needed.<br></br></p>
+        <p>Select a retailer here to search for the book being sold online.<br></br></p>
       </div>
     );
   }
