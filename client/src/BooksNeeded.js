@@ -16,7 +16,7 @@ class BooksNeeded extends Component {
           getBooksNeeded(books, user.uid, function () {
             //document.getElementById("p3").innerHTML = titles;
             for (var i = 0; i < books.length; i++) {
-              
+              document.getElementById("slider").appendChild(createListing(books[i]))
             }
           });
         });
@@ -38,6 +38,22 @@ class BooksNeeded extends Component {
       </div>
     );
   }
+}
+
+
+//Create listing element 
+function createListing(book) {
+
+  var listing = document.createElement('img')
+  listing.src = book.child("bookImg").val()
+  listing.className = "listing"
+  listing.alt = book.child("title").val()
+  
+  listing.onclick = () => {
+    deleteBooksNeeded(book.key)
+  }
+  return listing
+
 }
 
 //get ALL booksNeeded from database     
