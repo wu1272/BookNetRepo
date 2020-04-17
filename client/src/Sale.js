@@ -177,9 +177,6 @@ class Sale extends Component {
               <ListItemText primary="Book you will receive"></ListItemText>
             </ListItem>
             <ListItem button>
-              <ListItemAvatar>
-                <Avatar>T</Avatar>
-              </ListItemAvatar>
               <ListItemText id="title1"></ListItemText>
               <h3 id="book1"></h3>
             </ListItem>
@@ -190,9 +187,6 @@ class Sale extends Component {
               <ListItemText primary="Book you will sell"></ListItemText>
             </ListItem>
             <ListItem button>
-              <ListItemAvatar>
-                <Avatar>T</Avatar>
-              </ListItemAvatar>
               <ListItemText id="title2"></ListItemText>
               <h3 id="book2"></h3>
               <h3 id="user2"></h3>
