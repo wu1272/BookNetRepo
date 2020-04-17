@@ -171,9 +171,6 @@ class Donate extends Component {
               <ListItemText primary="Book you will receive"></ListItemText>
             </ListItem>
             <ListItem button>
-              <ListItemAvatar>
-                <Avatar>T</Avatar>
-              </ListItemAvatar>
               <ListItemText id="title1"></ListItemText>
               <h3 id="book1"></h3>
             </ListItem>
@@ -184,9 +181,6 @@ class Donate extends Component {
               <ListItemText primary="Book you will donate"></ListItemText>
             </ListItem>
             <ListItem button>
-              <ListItemAvatar>
-                <Avatar>T</Avatar>
-              </ListItemAvatar>
               <ListItemText id="title2"></ListItemText>
               <h3 id="book2"></h3>
               <h3 id="user2"></h3>
