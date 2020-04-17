@@ -1,8 +1,18 @@
 /* Overwrite global css */
-html {
+/* html {
     background: white;
 }
 
+div {
+    all: revert
+}
+
+button {
+    all: revert
+} */
+
+
+/* Custom styles for chat containers */
 .container {
     flex: 1;
     display: "flex";

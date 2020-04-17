@@ -153,8 +153,8 @@ class Trade extends Component {
 
   render() {
     return (
-      <div style={styles.container}>
-        <div style={styles.channelList}>
+      <div className={styles.container}>
+        <div className={styles.channelList}>
           {this.renderBooksHeader()}
           <List>
             <ListItem>
@@ -184,7 +184,7 @@ class Trade extends Component {
             </ListItem>
           </List>
         </div>
-        <div style={styles.chat}>
+        <div className={styles.chat}>
           <AppBar position="static" color="default">
             <Toolbar>
               <Typography variant="h6" color="inherit">
@@ -196,7 +196,7 @@ class Trade extends Component {
           </AppBar>
           {this.renderChat()}
         </div>
-        <div style={styles.settings}>
+        <div className={styles.settings}>
           {this.renderOptionsHeader()}
           {this.renderAcceptButton()}
           {this.renderCancelButton()}
