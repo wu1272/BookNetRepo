@@ -1,0 +1,10 @@
+/* Overwrite global css */
+
+.overwrites div{
+    width: auto;
+    text-align: revert;
+}
+
+.overwrites {
+    background: white;
+}

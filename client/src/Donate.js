@@ -13,6 +13,7 @@ import Dialog from "@material-ui/core/Dialog";
 import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+import overwrites from "./chat.module.css"
 
 
 var tradePartnerIDs = [];
@@ -162,7 +163,7 @@ class Donate extends Component {
 
   render() {
     return (
-      <div style={styles.container}>
+      <div className={overwrites.overwrites} style={styles.container}>
         <div style={styles.channelList}>
           {this.renderBooksHeader()}
           <List>
@@ -411,7 +412,7 @@ const styles = {
     flex: 1,
     display: "flex",
     flexDirection: "row",
-    height: "100vh",
+    height: "97vh",
   },
   channelList: {
     display: "flex",
