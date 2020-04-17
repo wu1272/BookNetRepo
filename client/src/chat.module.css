@@ -1,3 +1,7 @@
+/* Overwrite global css */
+html {
+    background: white;
+}
 
 .container {
     flex: 1;
