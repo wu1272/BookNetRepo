@@ -1,38 +1,5 @@
 /* Overwrite global css */
 
-
-/* Custom styles for chat containers */
-/* .container {
-    background: white;
-    flex: 1;
-    display: "flex";
-    flex-direction: "row";
-    height: "100vh";
-}
-
-.container div {
+.overwrites div{
     width: auto;
 }
-
-.channelList {
-    display: "flex";
-    flex: 1;
-    flex-direction: "column";
-}
-
-.chat {
-    display: "flex";
-    flex: 3;
-    flex-direction: "column";
-    border-width: "1px";
-    border-color: "#ccc";
-    border-right-style: "solid";
-    border-left-style: "solid";
-}
-
-
-.settings {
-    display: "flex";
-    flex: 1;
-    flex-direction: "column";
-} */

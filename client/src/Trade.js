@@ -14,7 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 
-//import styles from "./chat.module.css"
+import overwrites from "./chat.module.css"
 
 
 var tradePartnerIDs = [];
@@ -153,7 +153,7 @@ class Trade extends Component {
 
   render() {
     return (
-      <div style={styles.container}>
+      <div className={overwrites.overwrites} style={styles.container}>
         <div style={styles.channelList}>
           {this.renderBooksHeader()}
           <List>
