@@ -372,7 +372,7 @@ const styles = {
     flex: 1,
     display: "flex",
     flexDirection: "row",
-    height: "100vh",
+    height: "95vh",
   },
   channelList: {
     display: "flex",
