@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css?family=Oswald');
 
 
-/*html {
+html {
     background:url('./landing_background.jpg');
     min-height: 500px;
     background-attachment: fixed;
@@ -17,12 +17,12 @@
   
 }
 
-
 form {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
 }
+
 
 h1 {
   text-align: center;
@@ -47,7 +47,7 @@ input {
   outline: none;
   border: 1px solid #cfcfcf;
 }
-*/
+
 
 div {
   width: 100%;
