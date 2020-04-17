@@ -14,6 +14,8 @@ import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 
+import styles from "./chat.module.css"
+
 
 var tradePartnerIDs = [];
 var currentUser;
@@ -365,32 +367,32 @@ function confirmTrade(userAvailableID, bookNeededID, bookAvailableID) {
   });
 }
 
-const styles = {
-  container: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "row",
-    height: "100vh",
-  },
-  channelList: {
-    display: "flex",
-    flex: 1,
-    flexDirection: "column",
-  },
-  chat: {
-    display: "flex",
-    flex: 3,
-    flexDirection: "column",
-    borderWidth: "1px",
-    borderColor: "#ccc",
-    borderRightStyle: "solid",
-    borderLeftStyle: "solid",
-  },
-  settings: {
-    display: "flex",
-    flex: 1,
-    flexDirection: "column",
-  },
-};
+// const styles = {
+//   container: {
+//     flex: 1,
+//     display: "flex",
+//     flexDirection: "row",
+//     height: "100vh",
+//   },
+//   channelList: {
+//     display: "flex",
+//     flex: 1,
+//     flexDirection: "column",
+//   },
+//   chat: {
+//     display: "flex",
+//     flex: 3,
+//     flexDirection: "column",
+//     borderWidth: "1px",
+//     borderColor: "#ccc",
+//     borderRightStyle: "solid",
+//     borderLeftStyle: "solid",
+//   },
+//   settings: {
+//     display: "flex",
+//     flex: 1,
+//     flexDirection: "column",
+//   },
+// };
 
 export default Trade;

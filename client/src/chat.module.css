@@ -1,0 +1,30 @@
+
+.container {
+    flex: 1;
+    display: "flex";
+    flexDirection: "row";
+    height: "100vh";
+}
+
+.channelList {
+    display: "flex";
+    flex: 1;
+    flexDirection: "column";
+}
+
+.chat {
+    display: "flex";
+    flex: 3;
+    flexDirection: "column";
+    borderWidth: "1px";
+    borderColor: "#ccc";
+    borderRightStyle: "solid";
+    borderLeftStyle: "solid";
+}
+
+
+.settings {
+    display: "flex";
+    flex: 1;
+    flexDirection: "column";
+}
