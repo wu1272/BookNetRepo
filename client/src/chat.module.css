@@ -1,44 +1,38 @@
 /* Overwrite global css */
-/* html {
-    background: white;
-}
-
-div {
-    all: revert
-}
-
-button {
-    all: revert
-} */
 
 
 /* Custom styles for chat containers */
-.container {
+/* .container {
+    background: white;
     flex: 1;
     display: "flex";
-    flexDirection: "row";
+    flex-direction: "row";
     height: "100vh";
+}
+
+.container div {
+    width: auto;
 }
 
 .channelList {
     display: "flex";
     flex: 1;
-    flexDirection: "column";
+    flex-direction: "column";
 }
 
 .chat {
     display: "flex";
     flex: 3;
-    flexDirection: "column";
-    borderWidth: "1px";
-    borderColor: "#ccc";
-    borderRightStyle: "solid";
-    borderLeftStyle: "solid";
+    flex-direction: "column";
+    border-width: "1px";
+    border-color: "#ccc";
+    border-right-style: "solid";
+    border-left-style: "solid";
 }
 
 
 .settings {
     display: "flex";
     flex: 1;
-    flexDirection: "column";
-}
+    flex-direction: "column";
+} */

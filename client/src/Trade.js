@@ -14,7 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 
-import styles from "./chat.module.css"
+//import styles from "./chat.module.css"
 
 
 var tradePartnerIDs = [];
@@ -153,8 +153,8 @@ class Trade extends Component {
 
   render() {
     return (
-      <div className={styles.container}>
-        <div className={styles.channelList}>
+      <div style={styles.container}>
+        <div style={styles.channelList}>
           {this.renderBooksHeader()}
           <List>
             <ListItem>
@@ -184,7 +184,7 @@ class Trade extends Component {
             </ListItem>
           </List>
         </div>
-        <div className={styles.chat}>
+        <div style={styles.chat}>
           <AppBar position="static" color="default">
             <Toolbar>
               <Typography variant="h6" color="inherit">
@@ -196,7 +196,7 @@ class Trade extends Component {
           </AppBar>
           {this.renderChat()}
         </div>
-        <div className={styles.settings}>
+        <div style={styles.settings}>
           {this.renderOptionsHeader()}
           {this.renderAcceptButton()}
           {this.renderCancelButton()}
@@ -367,32 +367,32 @@ function confirmTrade(userAvailableID, bookNeededID, bookAvailableID) {
   });
 }
 
-// const styles = {
-//   container: {
-//     flex: 1,
-//     display: "flex",
-//     flexDirection: "row",
-//     height: "100vh",
-//   },
-//   channelList: {
-//     display: "flex",
-//     flex: 1,
-//     flexDirection: "column",
-//   },
-//   chat: {
-//     display: "flex",
-//     flex: 3,
-//     flexDirection: "column",
-//     borderWidth: "1px",
-//     borderColor: "#ccc",
-//     borderRightStyle: "solid",
-//     borderLeftStyle: "solid",
-//   },
-//   settings: {
-//     display: "flex",
-//     flex: 1,
-//     flexDirection: "column",
-//   },
-// };
+const styles = {
+  container: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "row",
+    height: "100vh",
+  },
+  channelList: {
+    display: "flex",
+    flex: 1,
+    flexDirection: "column",
+  },
+  chat: {
+    display: "flex",
+    flex: 3,
+    flexDirection: "column",
+    borderWidth: "1px",
+    borderColor: "#ccc",
+    borderRightStyle: "solid",
+    borderLeftStyle: "solid",
+  },
+  settings: {
+    display: "flex",
+    flex: 1,
+    flexDirection: "column",
+  },
+};
 
 export default Trade;
