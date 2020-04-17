@@ -43,6 +43,7 @@ class Donate extends Component {
       var bookIDs1 = [];
       var goto2 = [];
       goto2[0] = 'false';
+      var tradePartnerNames = [];
       getPending1(goto2, bookIDs1, title1, function () {
         if (goto2[0] === 'true') {
           getPending2(bookIDs1, title1, function () {
@@ -53,6 +54,9 @@ class Donate extends Component {
                 }
               }
               else {
+                getTradePartnerName(tradePartnerNames, tradePartnerIDs[0], function() {
+                  console.log(tradePartnerNames[0] + tradePartnerNames[1]);
+                });
                 saveState.loadMessages();
               }
             });
@@ -66,6 +70,9 @@ class Donate extends Component {
               }
             }
             else {
+              getTradePartnerName(tradePartnerNames, tradePartnerIDs[0], function() {
+                console.log(tradePartnerNames[0] + tradePartnerNames[1]);
+              });
               saveState.loadMessages();
             }
           });
@@ -190,8 +197,10 @@ class Donate extends Component {
           <AppBar position="static" color="default">
             <Toolbar>
               <Typography variant="h6" color="inherit">
-                Chat
-          </Typography>
+                <p id="fullname"></p>
+                <p id="user2firstname"></p>
+                <p id="user2lastname"></p>
+              </Typography>
             </Toolbar>
           </AppBar>
           {this.renderChat()}
@@ -305,6 +314,24 @@ function getTradePartnerID2(tradePartnerIDs, bookID, callback) {
         tradePartnerIDs.push(snapshot.child("tradePartner").val());
         document.getElementById("user2").innerHTML = tradePartnerIDs[0];
         document.getElementById("user2").style.display = "none";
+        callback();
+      });
+  });
+}
+
+
+function getTradePartnerName(tradePartnerNames, user2id, callback) {
+  app.auth().onAuthStateChanged(function (user) {
+    var tradePartnerPath = app.database().ref('users/' + user2id);
+    tradePartnerPath.once('value')
+      .then(function (snapshot) {
+        tradePartnerNames.push(snapshot.child("firstname").val());
+        tradePartnerNames.push(snapshot.child("lastname").val());
+        document.getElementById("user2firstname").innerHTML = tradePartnerNames[0];
+        document.getElementById("user2lastname").innerHTML = tradePartnerNames[1];
+        document.getElementById("user2firstname").style.display = "none";
+        document.getElementById("user2lastname").style.display = "none";
+        document.getElementById("fullname").innerHTML = "Chat with " + tradePartnerNames[0] + " " + tradePartnerNames[1];
         callback();
       });
   });

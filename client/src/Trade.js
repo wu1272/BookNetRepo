@@ -46,7 +46,7 @@ class Trade extends Component {
       var title2;
       var bookIDs1 = [];
       var bookIDs2 = [];
-      // var tradePartnerIDs = [];
+      var tradePartnerNames = [];
       getPending1(bookIDs1, title1, function () {
         getTradePartnerID(tradePartnerIDs, bookIDs1[0], function () {
           if (!tradePartnerIDs[0]) {
@@ -55,6 +55,9 @@ class Trade extends Component {
             }
           }
           else {
+            getTradePartnerName(tradePartnerNames, tradePartnerIDs[0], function() {
+              console.log(tradePartnerNames[0] + tradePartnerNames[1]);
+            });
             saveState.loadMessages();
           }
         });
@@ -183,8 +186,10 @@ class Trade extends Component {
           <AppBar position="static" color="default">
             <Toolbar>
               <Typography variant="h6" color="inherit">
-                Chat
-          </Typography>
+                <p id="fullname"></p>
+                <p id="user2firstname"></p>
+                <p id="user2lastname"></p>
+              </Typography>
             </Toolbar>
           </AppBar>
           {this.renderChat()}
@@ -289,8 +294,11 @@ function getTradePartnerName(tradePartnerNames, user2id, callback) {
         tradePartnerNames.push(snapshot.child("lastname").val());
         document.getElementById("user2firstname").innerHTML = tradePartnerNames[0];
         document.getElementById("user2lastname").innerHTML = tradePartnerNames[1];
+        document.getElementById("user2firstname").style.display = "none";
+        document.getElementById("user2lastname").style.display = "none";
+        document.getElementById("fullname").innerHTML = "Chat with " + tradePartnerNames[0] + " " + tradePartnerNames[1];
+        callback();
       });
-    callback();
   });
 }
 
