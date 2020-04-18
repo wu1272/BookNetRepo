@@ -1,3 +1,5 @@
+"use strict";
+const nodemailer = require("nodemailer");
 var express = require('express');
 var app = express();
 var firebase = require('firebase/app');
@@ -113,7 +115,7 @@ app.post('/api/setBooksAvailable', urlParser, function (req, res) {
 
 
 //SET BOOKS AS PENDING
-function setPending(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
+function setPending(userNeededID, userAvailableID, bookNeededID, bookAvailableID, email) {
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"pending":"true"})
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"trade":"true"})
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"tradePartner":userAvailableID})
@@ -122,10 +124,12 @@ function setPending(userNeededID, userAvailableID, bookNeededID, bookAvailableID
   admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID).update({"pending":"true"})
   admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID).update({"trade":"true"})
   admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookNeededID).update({"pending":"true"})
+  admin.database().ref('users/' + userNeededID).update({"email":email})
+  console.log("user email: "  + email);
 }
 
 app.post('/api/setPending', urlParser, function (req, res) {
-  setPending(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
+  setPending(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID, req.body.email)
 });
 
 //SET BOOKS AS PENDING (ONE WAY FOR SALE)
@@ -243,7 +247,58 @@ function removeTrade(userNeededID, userAvailableID, bookNeededID, bookAvailableI
 }
 
 app.post('/api/removeTrade', urlParser, function (req, res) {
+
+  /*
+   * This is using nodemailer which generates emails to users when 
+   * a trade has been accepted. It works with most providers that support 
+   * SMTP protocol for email communication.
+   * Requires installing nodemailer dependency: npm install nodemailer
+   */
   removeTrade(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
+  var user_neededID;
+  var user_availableID
+
+  var ref1 = admin.database().ref("users/" + req.body.userNeededID);  
+  ref1.once("value")
+  .then(function(snapshot) {
+    user_neededID = snapshot.child("email").val(); 
+  });
+
+  var ref2 = admin.database().ref("users/" + req.body.userAvailableID);  
+  ref2.once("value")
+  .then(function(snapshot) {
+    user_availableID = snapshot.child("email").val(); 
+  });
+
+
+  // create reusable transporter object using the gmail SMTP transport
+  let transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: "booknet132020@gmail.com",
+      pass: "CS307@purdue" 
+    },
+    pool: true
+  });
+
+  // send mail with defined transport object
+  let info = transporter.sendMail({
+    from: '"BookNet Team" <booknet132020@gmail.com>', // sender address
+    to: "vkovtoun@purdue.edu" + "," + user_availableID, // list of receivers
+    subject: "Trade Has Been Accepted", // Subject line
+    text: "Greetings,", // plain text body
+    html: "<b>Greetings,</b> <br>Your trade has been accepted!<br/> <b>BookNet Team</b>" // html body
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+  // Preview only available when sending through an Ethereal account
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+
+  removeTrade().catch(console.error);
+
 });
 
 //REMOVES ALL POTENTIAL SALES
