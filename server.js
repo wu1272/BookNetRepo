@@ -1,5 +1,7 @@
 "use strict";
 const nodemailer = require("nodemailer");
+const dotenv = require('dotenv');
+dotenv.config();
 var express = require('express');
 var app = express();
 var firebase = require('firebase/app');
@@ -133,29 +135,31 @@ app.post('/api/setPending', urlParser, function (req, res) {
 });
 
 //SET BOOKS AS PENDING (ONE WAY FOR SALE)
-function setPendingOneWay(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
+function setPendingOneWay(userNeededID, userAvailableID, bookNeededID, bookAvailableID, email) {
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"pending":"true"})
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"sale":"true"})
   admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookAvailableID).update({"pending":"true"})
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"tradePartner":userAvailableID})
   admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookAvailableID).update({"tradePartner":userNeededID})
+  admin.database().ref('users/' + userNeededID).update({"email":email})
 }
 
 app.post('/api/setPendingOneWay', urlParser, function (req, res) {
-  setPendingOneWay(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
+  setPendingOneWay(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID, res.body.email)
 });
 
 //SET BOOKS AS PENDING (ONE WAY FOR DONATE)
-function setPendingOneWay2(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
+function setPendingOneWay2(userNeededID, userAvailableID, bookNeededID, bookAvailableID, email) {
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"pending":"true"})
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"donate":"true"})
   admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookAvailableID).update({"pending":"true"})
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"tradePartner":userAvailableID})
   admin.database().ref('users/' + userAvailableID + '/booksAvailable/' + bookAvailableID).update({"tradePartner":userNeededID})
+  admin.database().ref('users/' + userNeededID).update({"email":email})
 }
 
 app.post('/api/setPendingOneWay2', urlParser, function (req, res) {
-  setPendingOneWay2(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
+  setPendingOneWay2(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID, res.body.email)
 });
 
 
@@ -255,19 +259,21 @@ app.post('/api/removeTrade', urlParser, function (req, res) {
    * Requires installing nodemailer dependency: npm install nodemailer
    */
   removeTrade(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
-  var user_neededID;
-  var user_availableID
+  var user_needed_email;
+  var user_available_email
 
+  // Extract user1 email
   var ref1 = admin.database().ref("users/" + req.body.userNeededID);  
   ref1.once("value")
   .then(function(snapshot) {
-    user_neededID = snapshot.child("email").val(); 
+    user_needed_email = snapshot.child("email").val(); 
   });
 
+  // Extract user2 email
   var ref2 = admin.database().ref("users/" + req.body.userAvailableID);  
   ref2.once("value")
   .then(function(snapshot) {
-    user_availableID = snapshot.child("email").val(); 
+    user_available_email = snapshot.child("email").val(); 
   });
 
 
@@ -275,8 +281,8 @@ app.post('/api/removeTrade', urlParser, function (req, res) {
   let transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
-      user: "booknet132020@gmail.com",
-      pass: "CS307@purdue" 
+      user: process.env.GMAIL,
+      pass: process.env.PASS 
     },
     pool: true
   });
@@ -284,7 +290,7 @@ app.post('/api/removeTrade', urlParser, function (req, res) {
   // send mail with defined transport object
   let info = transporter.sendMail({
     from: '"BookNet Team" <booknet132020@gmail.com>', // sender address
-    to: "vkovtoun@purdue.edu" + "," + user_availableID, // list of receivers
+    to: user_needed_email + "," + user_available_email, // list of receivers
     subject: "Trade Has Been Accepted", // Subject line
     text: "Greetings,", // plain text body
     html: "<b>Greetings,</b> <br>Your trade has been accepted!<br/> <b>BookNet Team</b>" // html body
@@ -297,12 +303,12 @@ app.post('/api/removeTrade', urlParser, function (req, res) {
   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
 
-  removeTrade().catch(console.error);
+  //removeTrade().catch(console.error);
 
 });
 
 //REMOVES ALL POTENTIAL SALES
-function removeSale(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
+function removeSale(userNeededID, userAvailableID, bookNeededID, bookAvailableID, email) {
   if (bookAvailableID) {
     admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID).remove();
     admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID).remove();
@@ -317,6 +323,52 @@ function removeSale(userNeededID, userAvailableID, bookNeededID, bookAvailableID
 
 app.post('/api/removeSale', urlParser, function (req, res) {
   removeSale(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID)
+
+  var user_needed_email;
+  var user_available_email;
+
+  // Extract user1 email
+  var ref1 = admin.database().ref("users/" + req.body.userNeededID);  
+  ref1.once("value")
+  .then(function(snapshot) {
+    user_needed_email = snapshot.child("email").val(); 
+  });
+
+  // Extract user2 email
+  var ref2 = admin.database().ref("users/" + req.body.userAvailableID);  
+  ref2.once("value")
+  .then(function(snapshot) {
+    user_available_email = snapshot.child("email").val(); 
+  });
+
+
+  // create reusable transporter object using the gmail SMTP transport
+  let transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: process.env.GMAIL,
+      pass: process.env.PASS 
+    },
+    pool: true
+  });
+
+  // send mail with defined transport object
+  let info = transporter.sendMail({
+    from: '"BookNet Team" <booknet132020@gmail.com>', // sender address
+    to: user_needed_email + "," + user_available_email, // list of receivers
+    subject: "Trade Has Been Accepted", // Subject line
+    text: "Greetings,", // plain text body
+    html: "<b>Greetings,</b> <br>Congratulations! You can proceed with selling/buying/donation!<br/> <b>BookNet Team</b>" // html body
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+  // Preview only available when sending through an Ethereal account
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+
+  //removeTrade().catch(console.error);
 });
 
 
@@ -325,6 +377,8 @@ app.post('/api/removeSale', urlParser, function (req, res) {
 function confirmTrade(userNeededID, bookNeededID) {
   //console.log('users/' + userNeededID + '/booksNeeded/' + bookNeededID)
   admin.database().ref('users/' + userNeededID + '/booksNeeded/' + bookNeededID).update({"confirmed":"true"})
+
+
 }
 
 app.post('/api/confirmTrade', urlParser, function (req, res) {

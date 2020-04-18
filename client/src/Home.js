@@ -121,7 +121,7 @@ class Home extends Component {
             <button onClick={() => window.location.href = '/donate'}>Current Donation</button>
             <button onClick={() => window.location.href = '/profile'}>Profile</button>
             <button onClick={() => app.auth().signOut()}>Sign out</button>
-            <button className='btn btn-info' onClick={this.createNotification('info')}>Notification {pendingCounter}</button>
+            <button className='btn btn-info' onClick={this.createNotification('info')}>Notification</button>
             <NotificationContainer/>
           </div>
         </div>

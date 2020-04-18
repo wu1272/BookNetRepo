@@ -441,7 +441,7 @@ function setPendingSale(userAvailableID, bookNeededID, bookAvailableID) {
         userAvailableID: userAvailableID,
         bookNeededID: bookNeededID,
         bookAvailableID: bookAvailableID,
-        //email: user.email
+        email: user.email
       })
         .then(function (response) {
           console.log(response);
@@ -464,7 +464,7 @@ function setPendingDonate(userAvailableID, bookNeededID, bookAvailableID) {
         userAvailableID: userAvailableID,
         bookNeededID: bookNeededID,
         bookAvailableID: bookAvailableID,
-        //email: user.email
+        email: user.email
       })
         .then(function (response) {
           console.log(response);
