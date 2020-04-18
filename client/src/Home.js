@@ -74,15 +74,15 @@ class Home extends Component {
 
         
           NotificationManager.info('You have ' + pendingCounter + ' pending books:', 'Info message', 6000);
-          if (trade_titles.length != 0) {
+          if (trade_titles.length !== 0) {
             NotificationManager.info('Trade: ' + trade_titles, "", 6000);
           }
 
-          if (sale_titles.length != 0) {
+          if (sale_titles.length !== 0) {
             NotificationManager.info('Sale: ' + sale_titles, "", 6000);
           }
 
-          if (donate_titles.length != 0) {
+          if (donate_titles.length !== 0) {
             NotificationManager.info('Donation: ' + donate_titles , "", 6000);
           }
           break;
