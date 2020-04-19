@@ -107,6 +107,9 @@ class BooksNeeded extends Component {
         </Modal>
  
         <h1>Books Needed</h1>
+        <div>
+          <button className={styles.headerButtons} onClick={() => window.location.href = '/home'}>Home</button>
+        </div>
 
         <p>Select a book to see options!<br></br></p>
         <p>You may remove a book that you no longer need or search for a book you still need online.<br></br></p>

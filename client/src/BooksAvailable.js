@@ -31,6 +31,10 @@ class BooksAvailable extends Component {
       <div className={styles.moddedWrap}>
       <div className={styles.moddedFormWrap}>
         <h1>Books Available</h1>
+        <div>
+          <button className={styles.headerButtons} onClick={() => window.location.href = '/home'}>Home</button>
+        </div>
+        
         <p>Click a book to remove it from your list of available books.</p>
         <div id="slider" className="slider">
 
