@@ -202,7 +202,7 @@ class Match extends Component {
         listing.className = styles.listing
         listing.alt = book.title
         if (userName !== null) {
-          listing.title = userName
+          listing.title = "Current Owner: " + userName + "\nBook Condition: " + book.condition
         }
         listing.onclick = () => {
             this.listingCallBack(userId, bNeedId, book.bookID, method, tradeBooks, userName)
