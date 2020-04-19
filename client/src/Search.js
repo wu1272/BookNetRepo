@@ -157,17 +157,17 @@ function Search() {
                         <h4 className={styles.modalHeader3}> Please also select the book condition before selecting Trade It/Donate It/Sell It </h4>
                         <div className={styles.radio1}>
                           <input id="poor-qualiy" name="how" type="radio" onChange={handleRadio1Change}/>
-                          <label>Poor Quality</label>
+                          <label>Poor Condition</label>
                         </div>
 
                         <div className={styles.radio2}>
                             <input id="ok-quality" name="how" type="radio" onChange={handleRadio2Change}/>
-                            <label>Ok Quality</label>
+                            <label>Normal Condition</label>
                         </div>
 
                         <div className={styles.radio3}>
                             <input id="high-quality" name="how" type="radio" onChange={handleRadio3Change}/>
-                            <label>High Quality</label>
+                            <label>Great Condition</label>
                         </div>
                         
                         <button className={styles.tradeIt}  onClick={(e) => {handleAvailableBook("T")}}>Trade It</button>
