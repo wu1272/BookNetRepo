@@ -92,7 +92,7 @@ app.post('/api/setBooksNeeded', urlParser, function (req, res) {
 
 
 //SET BOOKS AVAILABLE
-function setBooksAvailable(userID, bookID, title, author, sale, donate, trade, bookImg) {
+function setBooksAvailable(userID, bookID, title, author, sale, donate, trade, bookImg, condition) {
   admin.database().ref('users/' + userID + '/booksAvailable/' + bookID).set({
     author: author,
     title: title,
@@ -100,12 +100,13 @@ function setBooksAvailable(userID, bookID, title, author, sale, donate, trade, b
     donate: donate,
     trade: trade,
     bookImg: bookImg,
-    bookID: bookID
+    bookID: bookID,
+    condition: condition
   });
 }
 
 app.post('/api/setBooksAvailable', urlParser, function (req, res) {
-  setBooksAvailable(req.body.userid, req.body.bookID, req.body.title, req.body.author, req.body.sale, req.body.donate, req.body.trade, req.body.bookImg);
+  setBooksAvailable(req.body.userid, req.body.bookID, req.body.title, req.body.author, req.body.sale, req.body.donate, req.body.trade, req.body.bookImg, req.body.condition);
 });
 
 

@@ -10,28 +10,24 @@ let defaultBookPic = "https://static.vecteezy.com/system/resources/thumbnails/00
 //Method of availability (Trade, Sale, Donate)
 let availMethod = ""
 
+//Condition of Book Parameter
+let condition = "Normal Condition"
 
 /*
  * functions to handle change in the checkbox
  */
-// function handleTradeChange(e) {
-//     const trade = e.target.checked
-//     for_trade = trade;
-//     console.log("for_trade" + for_trade)
-// }
+function handleRadio1Change(e) {
+    condition = "Poor Condition"
+}
 
-// function handleDonationChange(e) {
-//     const donate = e.target.checked
-//     for_donation = donate;
-//     console.log("for_donation:" + for_donation )
-// }
+function handleRadio2Change(e) {
+    condition = "Normal Condition"
+}
 
-// function handleSellChange(e) {
-//     const sell = e.target.checked
-//     for_sale = sell;
-//     console.log("for_sale:" + for_sale )
+function handleRadio3Change(e) {
+    condition = "Great Condition"
+}
 
-// }
 
 // CSS style for modal popout 
 const customStyles = {
@@ -89,7 +85,7 @@ function Search() {
 
         function handleAvailableBook(method) {
             availMethod = method
-            setBooksAvailable(null, currBook.bookID, currBook.name, currBook.author, currBook.img)
+            setBooksAvailable(null, currBook.bookID, currBook.name, currBook.author, currBook.img, condition)
         }
 
         //End of Modal functions
@@ -144,7 +140,7 @@ function Search() {
             
             <div className={styles.moddedWrap}>
             <div className={styles.moddedFormWrap}>
-
+                
                 <Modal 
                     id="availBookModal"
                     contentLabel="Select book option"
@@ -152,11 +148,28 @@ function Search() {
                     onAfterOpen={afterOpenModal}
                     onRequestClose={closeModal}
                     style={customStyles}
-                >
-                    <div className={styles.modalContainer}>
+                >                    
+                    <div className={styles.modalContainer}>                
                         <h3 className={styles.modalHeader} >{currBook.name} by</h3>
                         <h3 className={styles.modalHeader2}>{formatAuthors(currBook.author)}</h3>
                         <img className={styles.bookImg} src={currBook.img}></img>
+                        
+                        <h4 className={styles.modalHeader3}> Please also select the book condition before selecting Trade It/Donate It/Sell It </h4>
+                        <div className={styles.radio1}>
+                          <input id="poor-qualiy" name="how" type="radio" onChange={handleRadio1Change}/>
+                          <label>Poor Quality</label>
+                        </div>
+
+                        <div className={styles.radio2}>
+                            <input id="ok-quality" name="how" type="radio" onChange={handleRadio2Change}/>
+                            <label>Ok Quality</label>
+                        </div>
+
+                        <div className={styles.radio3}>
+                            <input id="high-quality" name="how" type="radio" onChange={handleRadio3Change}/>
+                            <label>High Quality</label>
+                        </div>
+                        
                         <button className={styles.tradeIt}  onClick={(e) => {handleAvailableBook("T")}}>Trade It</button>
                         <button className={styles.sellIt}   onClick={(e) => {handleAvailableBook("S")}}>Sell It</button>
                         <button className={styles.donateIt} onClick={(e) => {handleAvailableBook("D")}}>Donate It</button>
@@ -200,19 +213,6 @@ function Search() {
         );
     }
 
-
-    //<button className={styles.bookHave} onClick={ (e) => { setBooksAvailable(e, book.id, book.volumeInfo.title, book.volumeInfo.authors)}}> Book Available</button>
-
-
-    // <input type="checkbox" class="hidden" id="trade"   onChange={handleTradeChange}/>
-    //                     <label>For Trade</label>
-
-    //                     <input type="checkbox" class="hidden" id="donation" onChange={handleDonationChange}/>
-    //                     <label>For Donation</label>
-
-    //                     <input type="checkbox" class="hidden" id="sale"  onChange={handleSellChange}/>
-    //                     <label>For Sale</label>
-
     function setBooksNeeded(e, book_id, book_title, book_authors, book_img) {   
         app.auth().onAuthStateChanged(function (user) {
             if (user) {
@@ -243,7 +243,7 @@ function Search() {
 
 
     
-function setBooksAvailable(e, book_id, book_title, book_authors, book_img) {
+function setBooksAvailable(e, book_id, book_title, book_authors, book_img, condition) {
     app.auth().onAuthStateChanged(function (user) {
         if (user) {
 
@@ -251,7 +251,7 @@ function setBooksAvailable(e, book_id, book_title, book_authors, book_img) {
             var sale = false
             var donate = false
 
-            if(availMethod === "T") {
+            if(availMethod === "T") {      
                 trade = true
             }
             else if(availMethod === "S") {
@@ -274,6 +274,7 @@ function setBooksAvailable(e, book_id, book_title, book_authors, book_img) {
                     donate: donate,
                     trade: trade,
                     bookImg: book_img,
+                    condition: condition,
                     event: e
             })
                 .then(function (response) {

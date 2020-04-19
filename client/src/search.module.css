@@ -36,6 +36,10 @@ label {
   grid-area: header2;
 }
 
+.modalHeader3 {
+  grid-area: header3;
+}
+
 .tradeIt {
   grid-area: topButton;
 }
@@ -46,6 +50,18 @@ label {
 
 .donateIt {
   grid-area: botButton;
+}
+
+.radio1 {
+  grid-area: radio1;
+}
+
+.radio2 {
+  grid-area: radio2;
+}
+
+.radio3 {
+  grid-area: radio3;
 }
 
 .bookImg {
@@ -110,11 +126,13 @@ label {
   grid-template-columns: auto;
   grid-template-rows: auto;
   grid-template-areas: 
-    "header   header" 
-    "header2  header2"
-    "bookImg  topButton"
-    "bookImg  midButton"
-    "bookImg  botButton";
+    "header   header   header" 
+    "header2  header2  header2"
+    "bookImg  topButton  topButton"
+    "bookImg  midButton  midButton"
+    "bookImg  botButton  botButton"
+    "header3  header3  header3"
+    "radio1   radio2   radio3"
 }
 
 
