@@ -49,7 +49,8 @@ class Donate extends Component {
         if (goto2[0] === 'true') {
           getPending2(bookIDs1, title1, function () {
             getTradePartnerID2(tradePartnerIDs, bookIDs1[0], function () {
-              if (!tradePartnerIDs[0]) {
+              console.log(tradePartnerIDs[0])
+              if (tradePartnerIDs[0] === null) {
                 if (!alert("You do not have a current donation!")) {
                   window.location.href = "/home"
                 }
@@ -251,6 +252,7 @@ function getPending1(goto2, bookIDs, title, callback) {
           if (book.child("pending").val()) {
 
             if (book.child("donate").val()) {
+              console.log(book.key)
               bookIDs.push(book.key)
               title = book.child("title").val();
 
@@ -294,6 +296,7 @@ function getTradePartnerID(tradePartnerIDs, bookID, callback) {
     var tradePartnerPath = app.database().ref('users/' + user.uid + '/booksNeeded/' + bookID);
     tradePartnerPath.once('value')
       .then(function (snapshot) {
+        console.log("partner 1: " + snapshot.child("tradePartner").val())
         tradePartnerIDs.push(snapshot.child("tradePartner").val());
         document.getElementById("user2").innerHTML = tradePartnerIDs[0];
         document.getElementById("user2").style.display = "none";
@@ -307,6 +310,7 @@ function getTradePartnerID2(tradePartnerIDs, bookID, callback) {
     var tradePartnerPath = app.database().ref('users/' + user.uid + '/booksAvailable/' + bookID);
     tradePartnerPath.once('value')
       .then(function (snapshot) {
+        console.log("partner 2: " + snapshot.child("tradePartner").val())
         tradePartnerIDs.push(snapshot.child("tradePartner").val());
         document.getElementById("user2").innerHTML = tradePartnerIDs[0];
         document.getElementById("user2").style.display = "none";
@@ -321,6 +325,8 @@ function getTradePartnerName(tradePartnerNames, user2id, callback) {
     var tradePartnerPath = app.database().ref('users/' + user2id);
     tradePartnerPath.once('value')
       .then(function (snapshot) {
+        console.log(snapshot.child("firstname").val())
+        console.log(snapshot.child("lastname").val())
         tradePartnerNames.push(snapshot.child("firstname").val());
         tradePartnerNames.push(snapshot.child("lastname").val());
         document.getElementById("user2firstname").innerHTML = tradePartnerNames[0];

@@ -146,7 +146,7 @@ function setPendingOneWay(userNeededID, userAvailableID, bookNeededID, bookAvail
 }
 
 app.post('/api/setPendingOneWay', urlParser, function (req, res) {
-  setPendingOneWay(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID, res.body.email)
+  setPendingOneWay(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID, req.body.email)
 });
 
 //SET BOOKS AS PENDING (ONE WAY FOR DONATE)
@@ -160,7 +160,7 @@ function setPendingOneWay2(userNeededID, userAvailableID, bookNeededID, bookAvai
 }
 
 app.post('/api/setPendingOneWay2', urlParser, function (req, res) {
-  setPendingOneWay2(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID, res.body.email)
+  setPendingOneWay2(req.body.userNeededID, req.body.userAvailableID, req.body.bookNeededID, req.body.bookAvailableID, req.body.email)
 });
 
 
@@ -304,12 +304,12 @@ app.post('/api/removeTrade', urlParser, function (req, res) {
   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
 
-  //removeTrade().catch(console.error);
+  info.catch(console.error);
 
 });
 
 //REMOVES ALL POTENTIAL SALES
-function removeSale(userNeededID, userAvailableID, bookNeededID, bookAvailableID, email) {
+function removeSale(userNeededID, userAvailableID, bookNeededID, bookAvailableID) {
   if (bookAvailableID) {
     admin.database().ref('users/' + userNeededID + '/booksAvailable/' + bookAvailableID).remove();
     admin.database().ref('users/' + userAvailableID + '/booksNeeded/' + bookAvailableID).remove();
@@ -369,7 +369,7 @@ app.post('/api/removeSale', urlParser, function (req, res) {
   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
 
-  //removeTrade().catch(console.error);
+  info.catch(console.error);
 });
 
 

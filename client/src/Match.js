@@ -3,6 +3,7 @@ import app from "./base.js";
 import styles from "./matches.module.css"
 import axios from "axios";
 import Modal from "react-modal"
+import SelectInput from '@material-ui/core/Select/SelectInput';
 
 
 var tradeMatches = []
@@ -452,6 +453,7 @@ function setPendingSale(userAvailableID, bookNeededID, bookAvailableID) {
       if (!alert("Please proceed with the sale")) {
         window.location.href = "/sale"
       }
+    
     }
   });
 }
