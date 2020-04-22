@@ -52,6 +52,7 @@ function createListing(book) {
   listing.src = book.child("bookImg").val()
   listing.className = "listing"
   listing.alt = book.child("title").val()
+  listing.title = "Book Condition: " + book.child("condition").val()
   
   listing.onclick = () => {
     deleteBooksAvailable(book.key)
