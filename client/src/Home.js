@@ -74,6 +74,7 @@ class Home extends Component {
                 pendingCounter++;
                 
                 if (trade2) {
+                  pendingCounter--;
                   console.log(childSnapshot2.child("title").val())
                   av_trade_titles.push(childSnapshot2.child("title").val())
                 }
@@ -111,7 +112,7 @@ class Home extends Component {
         
           NotificationManager.info('You have ' + pendingCounter + ' pending books:', 'Info message', 6000);
           if (trade_titles.length !== 0) {
-            NotificationManager.info('Trade: ' + trade_titles, "", 6000);
+            NotificationManager.info('You will trade: ' + trade_titles, "", 6000);
           }
 
           if (av_trade_titles.length !== 0) {
@@ -119,7 +120,7 @@ class Home extends Component {
           }
 
           if (sale_titles.length !== 0) {
-            NotificationManager.info('Sale: ' + sale_titles, "", 6000);
+            NotificationManager.info('You will sell: ' + sale_titles, "", 6000);
             
           }
 
@@ -128,7 +129,7 @@ class Home extends Component {
           }
 
           if (donate_titles.length !== 0) {
-            NotificationManager.info('Donation: ' + donate_titles , "", 6000);
+            NotificationManager.info('You will donate: ' + donate_titles , "", 6000);
           }
 
           if (av_donate_titles.length !== 0) {

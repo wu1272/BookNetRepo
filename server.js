@@ -137,9 +137,9 @@ function setPending(userNeededID, userAvailableID, bookNeededID, bookAvailableID
   admin.database().ref('users/' + userNeededID).update({"email":email})
   admin.database().ref('users/' + userNeededID).update({"book_name_n":book_name_n})
   admin.database().ref('users/' + userAvailableID).update({"book_name_a":book_name_a})
-  console.log("user email: "  + email);
-  console.log("book_name_a: " + book_a)
-  console.log("book_name_n: " + book_n )
+  // console.log("user email: "  + email);
+  // console.log("book_name_a: " + book_a)
+  // console.log("book_name_n: " + book_n )
 }
 
 app.post('/api/setPending', urlParser, function (req, res) {
