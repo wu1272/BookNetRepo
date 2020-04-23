@@ -296,7 +296,7 @@ function send_email_user_needed_trade(userNeededID, userAvailableID, bookNeededI
           // send mail with defined transport object
           let info = transporter.sendMail({
             from: '"BookNet Team" <booknet132020@gmail.com>', // sender address
-            to: "vkovtoun@purdue.edu, " + user_available_email, // list of receivers
+            to: user_needed_email, // list of receivers
             subject: "Trade Has Been Accepted", // Subject line
             text: body // plain text body
           });
@@ -355,7 +355,7 @@ function send_email_user_available_trade(userNeededID, userAvailableID, bookNeed
         // send mail with defined transport object
         let info = transporter.sendMail({
           from: '"BookNet Team" <booknet132020@gmail.com>', // sender address
-          to: "vkovtoun@purdue.edu, " + user_available_email, // list of receivers
+          to: user_available_email, // list of receivers
           subject: "Trade Has Been Accepted", // Subject line
           text: body // plain text body
         });
@@ -430,7 +430,7 @@ function send_email_user_needed(userNeededID, userAvailableID, bookNeededID, boo
           console.log(user_available_name)
         
           var body = 'Greetings ' + user_needed_name + ',\n'
-          + user_available_name + ' has accpted your request of purchasing/receiving "' + book_1 + '" book.\n'
+          + user_available_name + ' has accepted your request of purchasing/receiving "' + book_1 + '" book.\n'
           + 'Your trade has been completed!\n'
           + 'Best, \n'
           + 'BookNet Team'
@@ -438,7 +438,7 @@ function send_email_user_needed(userNeededID, userAvailableID, bookNeededID, boo
           // send mail with defined transport object
           let info = transporter.sendMail({
             from: '"BookNet Team" <booknet132020@gmail.com>', // sender address
-            to: "vkovtoun@purdue.edu, " + user_available_email, // list of receivers
+            to: user_available_email, // list of receivers
             subject: "Trade Has Been Accepted", // Subject line
             text: body // plain text body
           });
@@ -495,7 +495,7 @@ function send_email_user_available(userNeededID, userAvailableID, bookNeededID, 
         // send mail with defined transport object
         let info = transporter.sendMail({
           from: '"BookNet Team" <booknet132020@gmail.com>', // sender address
-          to: "vkovtoun@purdue.edu, " + user_available_email, // list of receivers
+          to: user_available_email, // list of receivers
           subject: "Trade Has Been Accepted", // Subject line
           text: body // plain text body
         });
