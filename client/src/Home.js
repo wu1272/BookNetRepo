@@ -9,6 +9,10 @@ var pendingCounter = 0;
 var trade_titles = [];
 var sale_titles = [];
 var donate_titles = [];
+
+var av_trade_titles = [];
+var av_sale_titles = [];
+var av_donate_titles = [];
 var titles2;
 
 class Home extends Component {
@@ -53,6 +57,38 @@ class Home extends Component {
               }
             });
           });
+
+
+          var ref2 = app.database().ref("users/" + user.uid + "/booksAvailable");  
+          ref2.once("value")
+          .then(function(snapshot2) {
+            snapshot2.forEach(function(childSnapshot2) {
+              var pendinExist = childSnapshot2.child("pending").val();
+              var trade2 = childSnapshot2.child("trade").val();
+              var sell2 = childSnapshot2.child("sale").val();
+              var donate2 = childSnapshot2.child("donate").val();
+              console.log("pending exist: " + pendinExist + "    donate: " + donate2)
+              console.log("pending exist: " + pendinExist + "    trade : " + trade2)
+              console.log("pending exist: " + pendinExist + "    sell : " + donate2)
+              if (pendinExist) {
+                pendingCounter++;
+                
+                if (trade2) {
+                  console.log(childSnapshot2.child("title").val())
+                  av_trade_titles.push(childSnapshot2.child("title").val())
+                }
+
+                if (sell2) {
+                  av_sale_titles.push(childSnapshot2.child("title").val())
+                }
+
+                if (donate2) {
+                  av_donate_titles.push(childSnapshot2.child("title").val())
+                }
+                console.log("pending counter : " + pendingCounter)
+              }
+            });
+          });
       }
     });
 
@@ -78,12 +114,25 @@ class Home extends Component {
             NotificationManager.info('Trade: ' + trade_titles, "", 6000);
           }
 
+          if (av_trade_titles.length !== 0) {
+            NotificationManager.info('Trade Available: ' + av_trade_titles, "", 6000);
+          }
+
           if (sale_titles.length !== 0) {
             NotificationManager.info('Sale: ' + sale_titles, "", 6000);
+            
+          }
+
+          if (av_sale_titles.length !== 0) {
+            NotificationManager.info('Sale Available: ' + av_sale_titles, "", 6000);
           }
 
           if (donate_titles.length !== 0) {
             NotificationManager.info('Donation: ' + donate_titles , "", 6000);
+          }
+
+          if (av_donate_titles.length !== 0) {
+            NotificationManager.info('Donation Available: ' + av_donate_titles, "", 6000);
           }
           break;
         case 'success':

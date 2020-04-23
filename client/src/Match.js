@@ -414,22 +414,34 @@ function getEverySingleDamnBookNeeded(allBookIDsNeeded, callback) {
 function setPending(userAvailableID, bookNeededID, bookAvailableID) {
   app.auth().onAuthStateChanged(function (user) {
     if (user) {
-      axios.post('/api/setPending', {
-        userNeededID: user.uid,
-        userAvailableID: userAvailableID,
-        bookNeededID: bookNeededID,
-        bookAvailableID: bookAvailableID,
-        email: user.email
-      })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-      if (!alert("Please proceed with your trade")) {
-        window.location.href = "/trade"
-      }
+      var ref = app.database().ref("users/" + user.uid + "/booksNeeded/" + bookNeededID);  
+      ref.once("value")
+          .then(function(snapshot) {
+            var ref2 = app.database().ref("users/" + userAvailableID + "/booksAvailable/" + bookNeededID);  
+            ref2.once("value")
+            .then(function(snapshot2) {
+              var book_name_n = snapshot.child("title").val();
+              var book_name_a = snapshot2.child("title").val();
+              axios.post('/api/setPending', {
+                userNeededID: user.uid,
+                userAvailableID: userAvailableID,
+                bookNeededID: bookNeededID,
+                bookAvailableID: bookAvailableID,
+                email: user.email,
+                book_name_n: book_name_n,
+                book_name_a: book_name_a
+              })
+                .then(function (response) {
+                  console.log(response);
+                })
+                .catch(function (error) {
+                  console.log(error);
+                })
+              if (!alert("Please proceed with your trade")) {
+                window.location.href = "/trade"
+              }
+            });
+          });
     }
   });
 }
@@ -437,47 +449,59 @@ function setPending(userAvailableID, bookNeededID, bookAvailableID) {
 function setPendingSale(userAvailableID, bookNeededID, bookAvailableID) {
   app.auth().onAuthStateChanged(function (user) {
     if (user) {
-      axios.post('/api/setPendingOneWay', {
-        userNeededID: user.uid,
-        userAvailableID: userAvailableID,
-        bookNeededID: bookNeededID,
-        bookAvailableID: bookAvailableID,
-        email: user.email
-      })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-      if (!alert("Please proceed with the sale")) {
-        window.location.href = "/sale"
+        var ref = app.database().ref("users/" + user.uid + "/booksNeeded/" + bookNeededID);  
+        ref.once("value")
+          .then(function(snapshot) {
+            var book_name_n = snapshot.child("title").val();
+            
+            axios.post('/api/setPendingOneWay', {
+              userNeededID: user.uid,
+              userAvailableID: userAvailableID,
+              bookNeededID: bookNeededID,
+              bookAvailableID: bookAvailableID,
+              email: user.email,
+              book_name_n: book_name_n,
+            })
+              .then(function (response) {
+                console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              })
+            if (!alert("Please proceed with the sale")) {
+              window.location.href = "/sale"
+            }
+          });
+          
       }
-    
-    }
   });
 }
 
 function setPendingDonate(userAvailableID, bookNeededID, bookAvailableID) {
   app.auth().onAuthStateChanged(function (user) {
-    if (user) {
-      axios.post('/api/setPendingOneWay2', {
-        userNeededID: user.uid,
-        userAvailableID: userAvailableID,
-        bookNeededID: bookNeededID,
-        bookAvailableID: bookAvailableID,
-        email: user.email
-      })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-      if (!alert("Please proceed with the donation")) {
-        window.location.href = "/donate"
-      }
-    }
+    var ref = app.database().ref("users/" + user.uid + "/booksNeeded/" + bookNeededID);  
+        ref.once("value")
+          .then(function(snapshot) {
+            var book_name_n = snapshot.child("title").val();
+            
+            axios.post('/api/setPendingOneWay2', {
+              userNeededID: user.uid,
+              userAvailableID: userAvailableID,
+              bookNeededID: bookNeededID,
+              bookAvailableID: bookAvailableID,
+              email: user.email,
+              book_name_n: book_name_n,
+            })
+              .then(function (response) {
+                console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              })
+            if (!alert("Please proceed with the donation")) {
+              window.location.href = "/sale"
+            }
+          });
   });
 }
 
