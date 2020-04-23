@@ -499,7 +499,7 @@ function setPendingDonate(userAvailableID, bookNeededID, bookAvailableID) {
                 console.log(error);
               })
             if (!alert("Please proceed with the donation")) {
-              window.location.href = "/sale"
+              window.location.href = "/donate"
             }
           });
   });
