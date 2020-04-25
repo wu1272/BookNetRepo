@@ -417,7 +417,7 @@ function setPending(userAvailableID, bookNeededID, bookAvailableID) {
       var ref = app.database().ref("users/" + user.uid + "/booksNeeded/" + bookNeededID);  
       ref.once("value")
           .then(function(snapshot) {
-            var ref2 = app.database().ref("users/" + userAvailableID + "/booksAvailable/" + bookNeededID);  
+            var ref2 = app.database().ref("users/" + user.uid + "/booksAvailable/" + bookAvailableID);  
             ref2.once("value")
             .then(function(snapshot2) {
               var book_name_n = snapshot.child("title").val();
@@ -499,7 +499,7 @@ function setPendingDonate(userAvailableID, bookNeededID, bookAvailableID) {
                 console.log(error);
               })
             if (!alert("Please proceed with the donation")) {
-              window.location.href = "/sale"
+              window.location.href = "/donate"
             }
           });
   });

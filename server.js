@@ -137,6 +137,8 @@ function setPending(userNeededID, userAvailableID, bookNeededID, bookAvailableID
   admin.database().ref('users/' + userNeededID).update({"email":email})
   admin.database().ref('users/' + userNeededID).update({"book_name_n":book_name_n})
   admin.database().ref('users/' + userAvailableID).update({"book_name_a":book_name_a})
+  admin.database().ref('users/' + userNeededID).update({"book_name_a":book_name_a})
+  admin.database().ref('users/' + userAvailableID).update({"book_name_n":book_name_n})
   // console.log("user email: "  + email);
   // console.log("book_name_a: " + book_a)
   // console.log("book_name_n: " + book_n )
@@ -438,7 +440,7 @@ function send_email_user_needed(userNeededID, userAvailableID, bookNeededID, boo
           // send mail with defined transport object
           let info = transporter.sendMail({
             from: '"BookNet Team" <booknet132020@gmail.com>', // sender address
-            to: user_available_email, // list of receivers
+            to: user_needed_email, // list of receivers
             subject: "Trade Has Been Accepted", // Subject line
             text: body // plain text body
           });
