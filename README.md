@@ -1,4 +1,5 @@
 # BookNetRepo
+`BookNet is web app for Purdue students that allows them to buy, sell and trade books.`
 
 ## Setup
 `npm install`
